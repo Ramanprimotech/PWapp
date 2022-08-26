@@ -57,6 +57,7 @@ class InputTextField extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           color: Color.fromRGBO(255, 255, 255, 0.12)),
       child: TextField(
+        autocorrect: false,
         controller: controller,
         obscureText: obscureText,
         readOnly: readOnly,
