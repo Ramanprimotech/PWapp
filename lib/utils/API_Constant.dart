@@ -5,7 +5,7 @@ class Webservice {
 
   /// Live Store
   final apiUrl = "https://perks.physiciansweekly.com/api/";
-  final imagePath = "perks.physiciansweekly.com/images/";
+  final imagePath = "https://perks.physiciansweekly.com/images/";
 
   /// SandBox Tango
   //final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";
