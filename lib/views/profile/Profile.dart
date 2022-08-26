@@ -1,22 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
-import 'package:async/async.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
-import 'dart:convert';
+
+import '../../Model/profile/ProfileData.dart';
 import '../../utils/API_Constant.dart';
 import '../../validators/Message.dart';
-import '../../Model/profile/ProfileData.dart';
 import '../../widgets/utility/Utility.dart';
-import 'package:path/path.dart' as path;
 
 typedef VoidWithIntCallback = void Function(int);
 
