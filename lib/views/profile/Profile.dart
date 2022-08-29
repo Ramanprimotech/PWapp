@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -153,12 +155,21 @@ class _ProfileState extends State<Profile> {
   }
 
   Future getImage() async {
-    var image = await ImagePicker()
-        .pickImage(source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
-    setState(() {
-      _image = image!;
-      _uploadImage();
-    });
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
+      if (image == null) {
+        return;
+      } else {
+        final imageTemp = XFile(image.path);
+        setState(() {
+          _image = imageTemp;
+          _uploadImage();
+        });
+      }
+    } on PlatformException catch (e) {
+      log('Failed to pick image : $e');
+    }
   }
 
   Future getGallery() async {
