@@ -29,8 +29,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String amount = "0";
-  String points = "0";
+  String amount = "";
+  String points = "";
   int pointInt = 0;
   MoneyData? moneyData;
   double moneyD = 0.0;

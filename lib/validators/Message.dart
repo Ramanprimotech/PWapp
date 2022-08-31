@@ -18,15 +18,18 @@ class Message {
   final SuccessMsg = "Success Thanks for the detail.";
   final ErrorMsg = "Something went wrong, please try again!";
   final Inprogress = "Work In-Progress.";
-  final RedeemConfirmMsg =
-      "Are you sure you want to redeem your earned points?";
+  final RedeemConfirmMsg = "Are you sure want to redeem your earned points?";
+  // "Are you sure you want to redeem your earned points?";
   final noMoneyMsg = "Please scan poster to earn more points!";
   final tNcMsg = "Please agree to our Terms & Conditions.";
   final phoneNumberMsg = "Please enter your phone number.";
   final InvalidphoneNumberMsg = "Please enter your valid phone number.";
+  final phoneNumberUpdate = "Phone number Updated Scuccessfully.";
+  final phoneNumberExists = "Phone number is same.";
   final NoDataFound = "No data found!";
   final internetTitleMsg = "Check your internet connection and try again";
   final internetSubTtleMsg = "We couldn't connect to the server.";
-final imageuploadErorMgs = "Something went wrong, Please try again";
-final redeptionMsg = "Redemption unsuccessful, Please try again.";
+  final imageuploadErorMgs = "Something went wrong, Please try again";
+  final redeptionMsg = "Redemption unsuccessful, Please try again.";
+  final profilePictureUpdate = "Profile picture updated sucessfully";
 }

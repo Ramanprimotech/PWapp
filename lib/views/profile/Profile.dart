@@ -1,22 +1,24 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:async/async.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
-import 'dart:convert';
+
+import '../../Model/profile/ProfileData.dart';
 import '../../utils/API_Constant.dart';
 import '../../validators/Message.dart';
-import '../../Model/profile/ProfileData.dart';
 import '../../widgets/utility/Utility.dart';
-import 'package:path/path.dart' as path;
 
 typedef VoidWithIntCallback = void Function(int);
 
@@ -53,13 +55,8 @@ class _ProfileState extends State<Profile> {
     var response = await http.post(
         Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
         body: data);
-
-    log(response.body.toString());
-
-    log(response.statusCode.toString());
     if (response.statusCode == 200) {
       profileData = ProfileData.fromJson(json.decode(response.body));
-
       setState(() {
         userName =
             "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
@@ -77,7 +74,6 @@ class _ProfileState extends State<Profile> {
         } else {
           profilePicStr = "${Webservice().imagePath}user_default.png";
         }
-        log(profilePicStr);
         rewardCardStr = "${profileData.data!.reward}";
         scannedNoStr = "${profileData.data!.scannedPosters}";
       });
@@ -86,188 +82,195 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  getProfileAPISec() async {
+    Utility().onLoading(context, true);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+    Map data = {
+      'user_id': sharedPreferences.getString("userID"),
+    };
+    log(data.toString());
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
+        body: data);
+
+    Utility().onLoading(context, false);
+
+    if (response.statusCode == 200) {
+      profileData = ProfileData.fromJson(json.decode(response.body));
+      setState(() {
+        userName =
+            "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
+        specialityStr = profileData.data!.userProfile![0].specialty;
+        addressStr = profileData.data!.userProfile![0].address;
+        emailStr = profileData.data!.userProfile![0].email;
+        phoneStr = profileData.data!.userProfile![0].phone;
+        if (phoneStr == "") {
+          phoneStr = "xxx-xxxx-xxx";
+        }
+        pointsStr = profileData.data!.userProfile![0].points;
+
+        if (profileData.data!.userProfile![0].profilePic.toString() != "") {
+          profilePicStr = Webservice().imagePath +
+              profileData.data!.userProfile![0].profilePic!;
+        } else {
+          profilePicStr = "${Webservice().imagePath}user_default.png";
+        }
+        rewardCardStr = "${profileData.data!.reward}";
+        scannedNoStr = "${profileData.data!.scannedPosters}";
+      });
+    } else {
+      log("Failure API");
+      Utility().toast(context, Message().ErrorMsg);
+    }
+  }
+
+  void _uploadImage() async {
+    Utility().onLoading(context, true);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+    var stream = http.ByteStream(_image.openRead());
+    var length = await _image.length();
+    var uri = Uri.parse(Webservice().apiUrl + Webservice().update_profile_pic);
+    var request = http.MultipartRequest("POST", uri);
+    var multipartFile = http.MultipartFile('profile_pic', stream, length,
+        filename: path.basename(_image.path));
+    request.files.add(multipartFile);
+    request.fields["user_id"] = sharedPreferences.getString("userID")!;
+
+    var response = await request.send();
+
+    Utility().onLoading(context, false);
+    if (response.statusCode == 200) {
+      Utility().toast(context, Message().profilePictureUpdate);
+      getProfileAPISec();
+    } else {
+      Utility().onLoading(context, false);
+      Utility().toast(context, Message().imageuploadErorMgs);
+    }
+
+    response.stream.transform(utf8.decoder).listen((value) {});
+  }
+
+  Future getImage() async {
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
+      if (image == null) {
+        return;
+      } else {
+        final imageTemp = XFile(image.path);
+        setState(() {
+          _image = imageTemp;
+          _uploadImage();
+        });
+      }
+    } on PlatformException catch (e) {
+      log('Failed to pick image : $e');
+    }
+  }
+
+  Future getGallery() async {
+    try {
+      var imageFile = await ImagePicker().pickImage(
+          source: ImageSource.gallery, maxHeight: 300, maxWidth: 300);
+      setState(() {
+        _image = imageFile!;
+        _uploadImage();
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  actionSheetMethod(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: const Text(
+          'PW Partner Perks',
+          style: TextStyle(
+              fontSize: 20.0,
+              color: Color(0xff4725a3),
+              fontFamily: 'texgyreadventor-regular'),
+        ),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: const Text("Open Camera"),
+            onPressed: () {
+              getImage();
+              Navigator.pop(context, 'About Us');
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Open Gallery'),
+            onPressed: () {
+              getGallery();
+              Navigator.pop(context, 'About Us');
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context, 'Cancel');
+          },
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+                fontFamily: 'texgyreadventor-regular', color: Colors.red),
+          ),
+        ),
+      ),
+    );
+  }
+
+  phoneNumberAPI() async {
+    Utility().onLoading(context, true);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    Map data = {
+      'user_id': sharedPreferences.getString("userID"),
+      'phone': _phoneNumber.text,
+    };
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().update_profile),
+        body: data);
+
+    Utility().onLoading(context, false);
+    if (response.statusCode == 200) {
+      setState(() {
+        _phoneNumber.text = "";
+      });
+      getProfileAPI();
+    } else {
+      log("Failure API");
+      Utility().toast(context, Message().ErrorMsg);
+    }
+  }
+
+  validatePhoneNo() {
+    if (_phoneNumber.text.isEmpty) {
+      Utility().toast(context, Message().phoneNumberMsg);
+    } else if (_phoneNumber.text.length != 10) {
+      Utility().toast(context, Message().InvalidphoneNumberMsg);
+    } else if (_phoneNumber.text == phoneStr!) {
+      Utility().toast(context, Message().phoneNumberExists);
+    } else {
+      Utility().toast(context, Message().phoneNumberUpdate);
+      phoneNumberAPI();
+    }
+  }
+
   @override
   void initState() {
-    getProfileAPI();
     super.initState();
+    getProfileAPI();
+    ToastContext().init(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    ToastContext().init(context);
-    getProfileAPISec() async {
-      Utility().onLoading(context, true);
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      sharedPreferences = await SharedPreferences.getInstance();
-      Map data = {
-        'user_id': sharedPreferences.getString("userID"),
-      };
-      log(data.toString());
-      var response = await http.post(
-          Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
-          body: data);
-
-      Utility().onLoading(context, false);
-
-      if (response.statusCode == 200) {
-        profileData = ProfileData.fromJson(json.decode(response.body));
-        setState(() {
-          userName =
-              "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
-          specialityStr = profileData.data!.userProfile![0].specialty;
-          addressStr = profileData.data!.userProfile![0].address;
-          emailStr = profileData.data!.userProfile![0].email;
-          phoneStr = profileData.data!.userProfile![0].phone;
-          if (phoneStr == "") {
-            phoneStr = "xxx-xxxx-xxx";
-          }
-          pointsStr = profileData.data!.userProfile![0].points;
-
-          if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-            profilePicStr = Webservice().imagePath +
-                profileData.data!.userProfile![0].profilePic!;
-          } else {
-            profilePicStr = "${Webservice().imagePath}user_default.png";
-          }
-          log(profilePicStr);
-          rewardCardStr = "${profileData.data!.reward}";
-          scannedNoStr = "${profileData.data!.scannedPosters}";
-        });
-      } else {
-        log("Failure API");
-        Utility().toast(context, Message().ErrorMsg);
-      }
-    }
-
-    void _uploadImage() async {
-      Utility().onLoading(context, true);
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      sharedPreferences = await SharedPreferences.getInstance();
-      var stream = http.ByteStream(_image.openRead());
-      var length = await _image.length();
-      var uri =
-          Uri.parse(Webservice().apiUrl + Webservice().update_profile_pic);
-      var request = http.MultipartRequest("POST", uri);
-      var multipartFile = http.MultipartFile('profile_pic', stream, length,
-          filename: path.basename(_image.path));
-      request.files.add(multipartFile);
-      request.fields["user_id"] = sharedPreferences.getString("userID")!;
-
-      var response = await request.send();
-
-      Utility().onLoading(context, false);
-      if (response.statusCode == 200) {
-        log("Upload Profile pic successfully....");
-        getProfileAPISec();
-      } else {
-        Utility().onLoading(context, false);
-        Utility().toast(context, Message().imageuploadErorMgs);
-      }
-
-      response.stream.transform(utf8.decoder).listen((value) {});
-    }
-
-    Future getImage() async {
-      var image = await ImagePicker()
-          .pickImage(source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
-      setState(() {
-        _image = image!;
-        _uploadImage();
-      });
-    }
-
-    Future getGallery() async {
-      try {
-        var imageFile = await ImagePicker().pickImage(
-            source: ImageSource.gallery, maxHeight: 300, maxWidth: 300);
-        setState(() {
-          _image = imageFile!;
-          _uploadImage();
-        });
-      } catch (e) {
-        log(e.toString());
-      }
-    }
-
-    actionSheetMethod(BuildContext context) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
-          title: const Text(
-            'PW Partner Perks',
-            style: TextStyle(
-                fontSize: 20.0,
-                color: Color(0xff4725a3),
-                fontFamily: 'texgyreadventor-regular'),
-          ),
-          actions: <Widget>[
-            CupertinoActionSheetAction(
-              child: const Text("Open Camera"),
-              onPressed: () {
-                getImage();
-                Navigator.pop(context, 'About Us');
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: const Text('Open Gallery'),
-              onPressed: () {
-                getGallery();
-                Navigator.pop(context, 'About Us');
-              },
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Navigator.pop(context, 'Cancel');
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(
-                  fontFamily: 'texgyreadventor-regular', color: Colors.red),
-            ),
-          ),
-        ),
-      );
-    }
-
-    phoneNumberAPI() async {
-      Utility().onLoading(context, true);
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-
-      Map data = {
-        'user_id': sharedPreferences.getString("userID"),
-        'phone': _phoneNumber.text,
-      };
-      var response = await http.post(
-          Uri.parse(Webservice().apiUrl + Webservice().update_profile),
-          body: data);
-
-      Utility().onLoading(context, false);
-      if (response.statusCode == 200) {
-        setState(() {
-          _phoneNumber.text = "";
-        });
-        getProfileAPI();
-      } else {
-        log("Failure API");
-        Utility().toast(context, Message().ErrorMsg);
-      }
-    }
-
-    validatePhoneNo() {
-      if (_phoneNumber.text.isEmpty) {
-        Utility().toast(context, Message().phoneNumberMsg);
-      } else if (_phoneNumber.text.length != 10) {
-        Utility().toast(context, Message().InvalidphoneNumberMsg);
-      } else {
-        phoneNumberAPI();
-      }
-    }
-
     final userDetailCont = Container(
       height: 278.0,
       margin: const EdgeInsets.only(top: 80.0, left: 15.0, right: 15.0),
@@ -278,45 +281,39 @@ class _ProfileState extends State<Profile> {
           color: Color.fromRGBO(255, 255, 255, 0.15)),
       child: Column(
         children: <Widget>[
-          Container(
-            child: Center(
-              child: Text(
-                userName,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w400),
-                overflow: TextOverflow.ellipsis,
-              ),
+          Center(
+            child: Text(
+              userName,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontFamily: 'texgyreadventor-regular',
+                  fontWeight: FontWeight.w400),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Container(
-            child: Center(
-              child: Text(
-                specialityStr!,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 19,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w200),
-                textAlign: TextAlign.center,
-              ),
+          Center(
+            child: Text(
+              specialityStr!,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 19,
+                  fontFamily: 'texgyreadventor-regular',
+                  fontWeight: FontWeight.w200),
+              textAlign: TextAlign.center,
             ),
           ),
-          Container(
-            child: Center(
-              child: Text(
-                addressStr!,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w200),
-                maxLines: 3,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
+          Center(
+            child: Text(
+              addressStr!,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontFamily: 'texgyreadventor-regular',
+                  fontWeight: FontWeight.w200),
+              maxLines: 3,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(
@@ -429,7 +426,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
 
-    final threeBoxCont = Container(
+    final pointsCard = Container(
       margin: const EdgeInsets.only(
         top: 15.0,
         left: 15.0,
@@ -584,22 +581,21 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
-
     return OfflineBuilder(
-        debounceDuration: Duration.zero,
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          if (connectivity == ConnectivityResult.none) {
-            return const ConnectivityMessage();
-          }
-          return child;
-        },
-        child: Scaffold(
-          body: Container(
-              child: Stack(children: <Widget>[
+      debounceDuration: Duration.zero,
+      connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
+        if (connectivity == ConnectivityResult.none) {
+          return const ConnectivityMessage();
+        }
+        return child;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -609,19 +605,17 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ),
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  userDetailCont,
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  threeBoxCont,
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                ],
-              ),
+            Column(
+              children: <Widget>[
+                userDetailCont,
+                const SizedBox(
+                  height: 15.0,
+                ),
+                pointsCard,
+                const SizedBox(
+                  height: 30.0,
+                ),
+              ],
             ),
             Container(
               height: 130.0,
@@ -635,15 +629,17 @@ class _ProfileState extends State<Profile> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Stack(fit: StackFit.loose, children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 140.0,
-                      height: 140.0,
-                      decoration: BoxDecoration(
+              child: Stack(
+                fit: StackFit.loose,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 140.0,
+                        height: 140.0,
+                        decoration: BoxDecoration(
                           color: Colors.white70,
                           shape: BoxShape.circle,
                           boxShadow: const [
@@ -651,18 +647,20 @@ class _ProfileState extends State<Profile> {
                               color: Colors.white,
                               blurRadius: 1.0,
                               spreadRadius: 0.5,
-                            )
+                            ),
                           ],
                           image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: (profilePicStr == ""
-                                      ? const AssetImage('Assets/as.png')
-                                      : NetworkImage(profilePicStr))
-                                  as ImageProvider<Object>)),
-                    ),
-                  ],
-                ),
-                Padding(
+                            fit: BoxFit.cover,
+                            image: (profilePicStr == ""
+                                    ? const AssetImage('Assets/as.png')
+                                    : NetworkImage(profilePicStr))
+                                as ImageProvider<Object>,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(top: 90.0, left: 100.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -682,10 +680,14 @@ class _ProfileState extends State<Profile> {
                           },
                         ),
                       ],
-                    )),
-              ]),
-            )
-          ])),
-        ));
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

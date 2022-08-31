@@ -31,7 +31,6 @@ class _WalletState extends State<Wallet> {
     var response = await http.post(
         Uri.parse("${Webservice().apiUrl}" + "${Webservice().get_user_wallet}"),
         body: data);
-
     if (response.statusCode == 200) {
       setState(() {
         walletData = WalletData.fromJson(json.decode(response.body));

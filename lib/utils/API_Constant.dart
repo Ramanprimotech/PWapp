@@ -1,20 +1,19 @@
 class Webservice {
-  //Staging
-  //final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
+  /// Staging
+  // final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
+  // final imagePath = "https://stage-perks.physiciansweekly.com/images/";
 
-//Live Store
+  /// Live Store
   final apiUrl = "https://perks.physiciansweekly.com/api/";
+  final imagePath = "https://perks.physiciansweekly.com/images/";
 
-  final imagePath = "http://35.237.42.164/images/";
-//final imagePath = "https://stage-perks.physiciansweekly.com/";
+  /// SandBox Tango
+  //final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";
 
-//SandBox Tango
-//final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";
-
-//Production Tango
+  /// Production Tango
   final tangoCardBaseUrl = "https://api.tangocard.com/raas/v2/";
 
-  //Method Name
+  /// Method Name
   final get_address = "get_address";
   final userregister = "userregister";
   final login = "login";
@@ -30,6 +29,7 @@ class Webservice {
   final update_profile_pic = "update_profile_pic";
   final get_speciality = "get_speciality";
   final forget_password = "forget_password";
-  //Tango Card Method Name
+
+  /// Tango Card Method Name
   final orders = "orders";
 }
