@@ -55,10 +55,8 @@ class _ProfileState extends State<Profile> {
     var response = await http.post(
         Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
         body: data);
-
     if (response.statusCode == 200) {
       profileData = ProfileData.fromJson(json.decode(response.body));
-
       setState(() {
         userName =
             "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
@@ -144,7 +142,7 @@ class _ProfileState extends State<Profile> {
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
-      log("Upload Profile pic successfully....");
+      Utility().toast(context, Message().profilePictureUpdate);
       getProfileAPISec();
     } else {
       Utility().onLoading(context, false);
@@ -256,7 +254,10 @@ class _ProfileState extends State<Profile> {
       Utility().toast(context, Message().phoneNumberMsg);
     } else if (_phoneNumber.text.length != 10) {
       Utility().toast(context, Message().InvalidphoneNumberMsg);
+    } else if (_phoneNumber.text == phoneStr!) {
+      Utility().toast(context, Message().phoneNumberExists);
     } else {
+      Utility().toast(context, Message().phoneNumberUpdate);
       phoneNumberAPI();
     }
   }
