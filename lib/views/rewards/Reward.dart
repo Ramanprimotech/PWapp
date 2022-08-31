@@ -172,6 +172,7 @@ class _RewardState extends State<Reward> {
           'authorization': basicAuth,
           "Content-Type": "application/json"
         });
+    log(body.toString());
     Utility().onLoading(context, false);
     if (response.statusCode == 201) {
       placeOrderData =

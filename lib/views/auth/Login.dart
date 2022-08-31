@@ -169,9 +169,7 @@ class _LoginState extends State<Login> {
                     color: Colors.white,
                     fontFamily: 'texgyreadventor-regular'),
               ),
-              const SizedBox(
-                height: 50,
-              ),
+              const SizedBox(height: 50),
               Container(
                 padding: const EdgeInsets.only(
                   top: 15.0,

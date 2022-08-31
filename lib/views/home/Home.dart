@@ -185,7 +185,35 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     ToastContext().init(context);
-    final giftCardContainer = Container(
+
+    return OfflineBuilder(
+        debounceDuration: Duration.zero,
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          if (connectivity == ConnectivityResult.none) {
+            return const ConnectivityMessage();
+          }
+          return child;
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('Assets/dashboard-bg.png'),
+              fit: BoxFit.fill,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          child: ListView(
+            children: [pointCard(), redeemCard()],
+          ),
+        ));
+  }
+
+  Widget pointCard() {
+    return Container(
       margin: const EdgeInsets.only(left: 12.0, top: 20.0, right: 12.0),
       child: Stack(
         children: <Widget>[
@@ -242,9 +270,7 @@ class _HomeState extends State<Home> {
                               fontFamily: "Garamond",
                               fontWeight: FontWeight.w200),
                         ),
-                        SizedBox(
-                          height: 7.0,
-                        ),
+                        SizedBox(height: 7),
                         Text(
                           "Partner",
                           style: TextStyle(
@@ -266,9 +292,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 10.0,
-              ),
+              const SizedBox(height: 10),
               Row(
                 children: <Widget>[
                   const Flexible(
@@ -309,7 +333,10 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-    final ThridContainer = Container(
+  }
+
+  Widget redeemCard() {
+    return Container(
         margin: const EdgeInsets.only(left: 15.0, top: 15.0, right: 15.0),
         padding: const EdgeInsets.only(
             left: 20.0, top: 20.0, right: 20.0, bottom: 20.0),
@@ -324,55 +351,16 @@ class _HomeState extends State<Home> {
               onTap: () {
                 pointsAPI();
               },
-              imageAsset: Image.asset('Assets/redeem.png'),
+              imageAsset: "Assets/redeem.png",
             ),
-            const SizedBox(
-              height: 10.0,
-            ),
+            const SizedBox(height: 10.0),
             PosterCard(
               mainTitle: "Scan Poster",
               subTitle: "To earn More Points",
               onTap: () {
                 widget.changeScreen!(2);
               },
-              imageAsset: Image.asset('Assets/scan.png'),
-            ),
-          ],
-        ));
-
-    return OfflineBuilder(
-        debounceDuration: Duration.zero,
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          if (connectivity == ConnectivityResult.none) {
-            return const ConnectivityMessage();
-          }
-          return child;
-        },
-        child: Stack(
-          children: <Widget>[
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('Assets/dashboard-bg.png'),
-                  fit: BoxFit.fill,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  giftCardContainer,
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  ThridContainer,
-                ],
-              ),
+              imageAsset: "Assets/scan.png",
             ),
           ],
         ));
