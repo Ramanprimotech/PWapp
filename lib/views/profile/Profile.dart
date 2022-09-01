@@ -152,10 +152,10 @@ class _ProfileState extends State<Profile> {
     response.stream.transform(utf8.decoder).listen((value) {});
   }
 
-  Future getImage() async {
+  Future getImage( ImageSource source) async {
     try {
       final image = await ImagePicker()
-          .pickImage(source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
+          .pickImage(source:source, maxHeight: 300, maxWidth: 300);
       if (image == null) {
         return;
       } else {
@@ -167,19 +167,6 @@ class _ProfileState extends State<Profile> {
       }
     } on PlatformException catch (e) {
       log('Failed to pick image : $e');
-    }
-  }
-
-  Future getGallery() async {
-    try {
-      var imageFile = await ImagePicker().pickImage(
-          source: ImageSource.gallery, maxHeight: 300, maxWidth: 300);
-      setState(() {
-        _image = imageFile!;
-        _uploadImage();
-      });
-    } catch (e) {
-      log(e.toString());
     }
   }
 
@@ -198,14 +185,14 @@ class _ProfileState extends State<Profile> {
           CupertinoActionSheetAction(
             child: const Text("Open Camera"),
             onPressed: () {
-              getImage();
+              getImage( ImageSource.camera);
               Navigator.pop(context, 'About Us');
             },
           ),
           CupertinoActionSheetAction(
             child: const Text('Open Gallery'),
             onPressed: () {
-              getGallery();
+              getImage( ImageSource.gallery);
               Navigator.pop(context, 'About Us');
             },
           ),

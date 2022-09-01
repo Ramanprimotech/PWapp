@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pwlp/views/notification/notification.dart';
+import 'package:pwlp/views/wallboard%20Image/wallboard_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../home/Home.dart';
@@ -67,7 +69,9 @@ class _DashboardState extends State<Dashboard> {
       const Wallet(),
       Scanner(changeScreen: changeScreen),
       Reward(changeScreen: changeScreen),
-      Profile(changeScreen: changeScreen)
+      Profile(changeScreen: changeScreen),
+      Wallboard(changeScreen: changeScreen),
+      PwNotification(changeScreen: changeScreen)
     ];
   }
 
@@ -103,6 +107,16 @@ class _DashboardState extends State<Dashboard> {
                 },
               ),
               CupertinoActionSheetAction(
+                child: const Text('Notification'),
+                onPressed: () {
+                  setState((){
+                  _selectedTab = 6;
+                  });
+                  Navigator.pop(context, "Notification");
+                },
+
+              ),
+              CupertinoActionSheetAction(
                 child: const Text('About Us'),
                 onPressed: () {
                   _aboutUsURL();
@@ -121,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
                 onPressed: () {
                   logout();
                 },
-              )
+              ),
             ],
             cancelButton: CupertinoActionSheetAction(
               isDefaultAction: true,

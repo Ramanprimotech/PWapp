@@ -26,14 +26,14 @@ class PosterCard extends StatelessWidget {
               title:  Text(
                 mainTitle,
                 style: const TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 24.0,
                     color: Color(0xff4725a3),
                     fontFamily: 'texgyreadventor-regular'),
               ),
               subtitle:  Text(
                 subTitle,
                 style: const TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 12.0,
                     color: Colors.black,
                     fontFamily: 'texgyreadventor-regular'),
               ),

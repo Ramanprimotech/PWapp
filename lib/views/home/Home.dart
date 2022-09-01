@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pwlp/widgets/poster.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -213,6 +214,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget pointCard() {
+    double percentage = (double.parse('${'0.$amount'}'));
     return Container(
       margin: const EdgeInsets.only(left: 12.0, top: 20.0, right: 12.0),
       child: Stack(
@@ -236,9 +238,12 @@ class _HomeState extends State<Home> {
                           alignment: Alignment.center,
                           children: <Widget>[
                             Center(
-                              child: Image.asset(
-                                'Assets/point.png',
-                                fit: BoxFit.fill,
+                              child:CircularPercentIndicator(
+                                radius: 50.0,
+                                animation: true,
+                                lineWidth: 8.0,
+                                percent: percentage,
+                                progressColor: Colors.green,
                               ),
                             ),
                             Text(
@@ -359,6 +364,15 @@ class _HomeState extends State<Home> {
               subTitle: "To earn More Points",
               onTap: () {
                 widget.changeScreen!(2);
+              },
+              imageAsset: "Assets/scan.png",
+            ),
+            const SizedBox(height: 10.0),
+            PosterCard(
+              mainTitle: "Wallboard Image",
+              subTitle: "To earn Bonus Points",
+              onTap: () {
+                widget.changeScreen!(5);
               },
               imageAsset: "Assets/scan.png",
             ),

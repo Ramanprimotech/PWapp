@@ -1,11 +1,11 @@
 class Webservice {
   /// Staging
-  // final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
-  // final imagePath = "https://stage-perks.physiciansweekly.com/images/";
+  final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
+  final imagePath = "https://stage-perks.physiciansweekly.com/images/";
 
   /// Live Store
-  final apiUrl = "https://perks.physiciansweekly.com/api/";
-  final imagePath = "https://perks.physiciansweekly.com/images/";
+  // final apiUrl = "https://perks.physiciansweekly.com/api/";
+  // final imagePath = "https://perks.physiciansweekly.com/images/";
 
   /// SandBox Tango
   //final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";
@@ -29,6 +29,7 @@ class Webservice {
   final update_profile_pic = "update_profile_pic";
   final get_speciality = "get_speciality";
   final forget_password = "forget_password";
+  final add_poster_image = "add_poster_image";
 
   /// Tango Card Method Name
   final orders = "orders";

@@ -1,142 +1,160 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:pwlp/utils/API_Constant.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/Utility.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'dart:convert';
-import '../../utils/API_Constant.dart';
 import '../../Model/scanner/QRCodeCheckData.dart';
 // ignore_for_file: deprecated_member_use
 
 typedef VoidWithIntCallback = void Function(int);
 
-class Scanner extends StatefulWidget {
+class Wallboard extends StatefulWidget {
   final VoidWithIntCallback? changeScreen;
-  const Scanner({Key? key, this.changeScreen}) : super(key: key);
+  const Wallboard({Key? key, this.changeScreen}) : super(key: key);
   @override
-  _ScannerState createState() => _ScannerState();
+  _WallboardState createState() => _WallboardState();
 }
 
-class _ScannerState extends State<Scanner> {
+class _WallboardState extends State<Wallboard> {
   bool _isVisible = true;
-  bool _isVisibleScannedCont = false;
-  String result = "Scanner Screen";
+  bool _isImageVisible = false;
   String imageStr = "";
-  late QrCodeCheckData qrCodeCheckData;
-  //Check Poster API
-  scanMatchAPI(String name) async {
+
+  //Check Image API
+  imageMatchAPI(String image) async {
+    log('this is imge url $image');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
     Utility().onLoading(context, true);
 
     Map data = {
-      'name': name,
+      'user_id': sharedPreferences.getString("userID"),
+      'poster_image': image,
       'specialty': sharedPreferences.getString("specialty"),
-      'device_id': "1234568iOSdummyValue123456789",
+      'device_id': '1234568iOSdummyValue123456789',
     };
-    log('This is the qr code ${data.toString()}');
-
+    log(data.toString());
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().check_qr_code),
+        Uri.parse(Webservice().apiUrl + Webservice().add_poster_image),
         body: data);
-    log(response.toString());
-
+    log('this is response ${response.statusCode}');
+    log('this is response body ${response.body.toString()}');
     Utility().onLoading(context, false);
-    log('This is the Response ${response.statusCode.toString()}');
     if (response.statusCode == 200) {
-      log('This is the Response ${response.body.toString()}');
-
-      qrCodeCheckData = QrCodeCheckData.fromJson(json.decode(response.body));
       setState(() {
-        imageStr = "${Webservice().imagePath}" +
-            "${qrCodeCheckData.data![0].posterImage.toString()}";
-        _isVisibleScannedCont = true;
+        _isImageVisible = true;
         _isVisible = false;
       });
     } else {
-      final qRCodeMatchError =
-          QrCodeMatchError.fromJson(json.decode(response.body));
       setState(() {
-        _isVisibleScannedCont = false;
+        _isImageVisible = false;
         _isVisible = true;
       });
-      Utility().toast(context, qRCodeMatchError.message.toString());
     }
   }
 
-  posterConfirmAPI() async {
-    Utility().onLoading(context, true);
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {
-      'name': "${qrCodeCheckData.data![0].name}",
-      'user_id': sharedPreferences.getString("userID"),
-      'qr_code_id': "${qrCodeCheckData.data![0].id.toString()}",
-      'specialty': "${qrCodeCheckData.data![0].specialty.toString()}",
-      'points': "${qrCodeCheckData.data![0].point.toString()}"
-    };
+  submitWallboardImage() async {
+    setState(() {
+      _isImageVisible = false;
+      _isVisible = true;
 
-    var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" + "${Webservice().save_poster}"),
-        body: data);
-    Utility().onLoading(context, false);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        _isVisibleScannedCont = false;
-        _isVisible = true;
-
-        Alert(
-          context: context,
-          title: "Partner Perks",
-          desc:
-              "${qrCodeCheckData.data![0].point.toString()} points added successfully.",
-          buttons: [
-            DialogButton(
-              color: const Color(0xffc22ea1),
-              onPressed: () {
-                widget.changeScreen!(0);
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-              width: 120,
-              child: const Text(
-                "Ok",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: 'texgyreadventor-regular'),
-              ),
+      Alert(
+        // alertAnimation: ,
+        context: context,
+        title: "Partner Perks",
+        desc:
+            " Thank you for sbumitting the Wallboard Image. We'll review the submission and notify you soon.",
+        buttons: [
+          DialogButton(
+            color: const Color(0xffc22ea1),
+            onPressed: () {
+              widget.changeScreen!(0);
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            width: 120,
+            child: const Text(
+              "Ok",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'texgyreadventor-regular'),
             ),
-          ],
-        ).show();
-      });
-    } else {
-      log("Failure API");
-
-      Utility().toast(context, "This QR-code is not available");
-    }
+          ),
+        ],
+      ).show();
+    });
   }
 
-  Future<void> _scanQR() async {
+  Future getImageFromSource(ImageSource source) async {
     try {
-      String result = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      if (result != "-1") {
+      final image = await ImagePicker()
+          .pickImage(source: source, maxHeight: 300, maxWidth: 300);
+      if (image == null) {
+        return;
+      } else {
+        final imageCamera = image.path;
         setState(() {
-          scanMatchAPI(result);
+          imageMatchAPI(imageCamera);
         });
       }
-    } catch (e) {
-      log('error $e');
+    } on PlatformException catch (e) {
+      log('Failed to pick image : $e');
     }
+  }
+
+  actionSheetForImage(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: const Text(
+          'PW Partner Perks',
+          style: TextStyle(
+              fontSize: 20.0,
+              color: Color(0xff4725a3),
+              fontFamily: 'texgyreadventor-regular'),
+        ),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: const Text("Open Camera"),
+            onPressed: () {
+              getImageFromSource(ImageSource.camera);
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Open Gallery'),
+            onPressed: () {
+              getImageFromSource(ImageSource.gallery);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+                fontFamily: 'texgyreadventor-regular', color: Colors.red),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -151,7 +169,7 @@ class _ScannerState extends State<Scanner> {
             child: Container(
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: const Text(
-                "Scan QR Code",
+                "Wallboard Image",
                 style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.white,
@@ -186,16 +204,16 @@ class _ScannerState extends State<Scanner> {
                 height: 55.0,
                 width: 250.0,
                 child: CustomBtn(
-                    btnLable: 'Scan Poster',
+                    btnLable: 'Choose Picture',
                     onPressed: () {
-                      _scanQR();
+                      actionSheetForImage(context);
                     })),
           ),
         ],
       ),
     );
-    final scannedScreen = Visibility(
-      visible: _isVisibleScannedCont,
+    final imageScreen = Visibility(
+      visible: _isImageVisible,
       child: Column(
         children: <Widget>[
           Flexible(
@@ -203,7 +221,7 @@ class _ScannerState extends State<Scanner> {
             child: Container(
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: const Text(
-                "Scanned Successfully",
+                "Successfully Uploaded",
                 style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.white,
@@ -218,7 +236,8 @@ class _ScannerState extends State<Scanner> {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Image.network(
-                imageStr,
+                //  imageStr,
+                'https://i.pinimg.com/736x/c1/9d/79/c19d7964360a0144b39a0e4b67ca2cfb.jpg',
                 fit: BoxFit.fill,
               ),
             ),
@@ -237,9 +256,9 @@ class _ScannerState extends State<Scanner> {
                     height: 55.0,
                     width: 150.0,
                     child: CustomBtn(
-                        btnLable: 'Scan Again',
+                        btnLable: 'Retake',
                         onPressed: () {
-                          _scanQR();
+                          actionSheetForImage(context);
                         }),
                   ),
                 ),
@@ -249,9 +268,9 @@ class _ScannerState extends State<Scanner> {
                     height: 55.0,
                     width: 150.0,
                     child: CustomBtn(
-                        btnLable: 'Confirm',
+                        btnLable: 'Submit',
                         onPressed: () {
-                          posterConfirmAPI();
+                          submitWallboardImage();
                         }),
                   ),
                 )
@@ -285,7 +304,7 @@ class _ScannerState extends State<Scanner> {
               ),
             ),
             helpCont,
-            scannedScreen
+            imageScreen
           ]),
         ));
   }
