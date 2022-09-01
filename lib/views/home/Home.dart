@@ -214,7 +214,15 @@ class _HomeState extends State<Home> {
   }
 
   Widget pointCard() {
+    double pointLimit = double.parse('${'$points.0'}');
+
     double percentage = (double.parse('${'0.$amount'}'));
+    if (pointLimit >= 100) {
+      percentage = 1.0;
+    } else {
+      percentage = percentage;
+    }
+
     return Container(
       margin: const EdgeInsets.only(left: 12.0, top: 20.0, right: 12.0),
       child: Stack(
@@ -238,7 +246,7 @@ class _HomeState extends State<Home> {
                           alignment: Alignment.center,
                           children: <Widget>[
                             Center(
-                              child:CircularPercentIndicator(
+                              child: CircularPercentIndicator(
                                 radius: 50.0,
                                 animation: true,
                                 lineWidth: 8.0,
