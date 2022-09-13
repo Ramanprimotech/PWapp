@@ -15,7 +15,7 @@ class Webservice {
 
   /// Method Name
   final get_address = "get_address";
-  final userregister = "userregister";
+  final userRegister = "userregister";
   final login = "login";
   final user_dashboard = "user_dashboard";
   final check_qr_code = "check_qr_code";

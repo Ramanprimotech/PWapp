@@ -165,7 +165,7 @@ class _RegisterVCState extends State<RegisterVC> {
       };
       log('data---register----------$data');
       var response = await http.post(
-          Uri.parse("${Webservice().apiUrl}" "${Webservice().userregister}"),
+          Uri.parse("${Webservice().apiUrl}" "${Webservice().userRegister}"),
           body: data);
       Utility().onLoading(context, false);
       if (response.statusCode == 200) {
@@ -296,9 +296,7 @@ class _RegisterVCState extends State<RegisterVC> {
     final welcomeContainer = Center(
       child: Column(
         children: <Widget>[
-          const SizedBox(
-            height: 40,
-          ),
+          const SizedBox(height: 40),
           const Text(
             'Welcome',
             style: TextStyle(
@@ -778,12 +776,10 @@ class _RegisterVCState extends State<RegisterVC> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 100.0,
-                ),
+                const SizedBox(height: 100),
                 SizedBox(
-                    height: 55.0,
-                    width: 320.0,
+                    height: 55,
+                    width: 320,
                     child: CustomBtn(
                         btnLable: 'Submit',
                         onPressed: () {
