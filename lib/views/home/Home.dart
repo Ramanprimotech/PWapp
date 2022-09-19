@@ -344,7 +344,7 @@ class _HomeState extends State<Home> {
       child: Column(
         children: <Widget>[
           PosterCard(
-            mainTitle: "Redeem",
+            title: "Redeem",
             subTitle: "For Gift Cards",
             onTap: () {
               pointsAPI();
@@ -353,7 +353,7 @@ class _HomeState extends State<Home> {
           ),
           const SizedBox(height: 15.0),
           PosterCard(
-            mainTitle: "Scan Poster",
+            title: "Scan Poster",
             subTitle: "To earn More Points",
             onTap: () {
               widget.changeScreen!(2);
@@ -362,12 +362,13 @@ class _HomeState extends State<Home> {
           ),
           const SizedBox(height: 15.0),
           PosterCard(
-            mainTitle: "Wallboard Image",
+            title: "Wallboard Image",
             subTitle: "To earn Bonus Points",
             onTap: () {
               widget.changeScreen!(5);
             },
             imageAsset: "Assets/scan.png",
+
           ),
         ],
       ),

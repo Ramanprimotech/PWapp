@@ -21,7 +21,9 @@ typedef VoidWithIntCallback = void Function(int);
 
 class Wallboard extends StatefulWidget {
   final VoidWithIntCallback? changeScreen;
+
   const Wallboard({Key? key, this.changeScreen}) : super(key: key);
+
   @override
   _WallboardState createState() => _WallboardState();
 }
@@ -45,7 +47,9 @@ class _WallboardState extends State<Wallboard> {
       'device_id': '1234568iOSdummyValue123456789',
     };
     log(data.toString());
-    var response = await http.post(Uri.parse(Webservice().apiUrl + Webservice().add_poster_image), body: data);
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().add_poster_image),
+        body: data);
     log('this is response ${response.statusCode}');
     log('this is response body ${response.body.toString()}');
     Utility().onLoading(context, false);
@@ -71,7 +75,8 @@ class _WallboardState extends State<Wallboard> {
         // alertAnimation: ,
         context: context,
         title: "Partner Perks",
-        desc: " Thank you for sbumitting the Wallboard Image. We'll review the submission and notify you soon.",
+        desc:
+            " Thank you for sbumitting the Wallboard Image. We'll review the submission and notify you soon.",
         buttons: [
           DialogButton(
             color: const Color(0xffc22ea1),
@@ -82,7 +87,10 @@ class _WallboardState extends State<Wallboard> {
             width: 120,
             child: const Text(
               "Ok",
-              style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'texgyreadventor-regular'),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'texgyreadventor-regular'),
             ),
           ),
         ],
@@ -92,7 +100,8 @@ class _WallboardState extends State<Wallboard> {
 
   Future getImageFromSource(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source, maxHeight: 300, maxWidth: 300);
+      final image = await ImagePicker()
+          .pickImage(source: source, maxHeight: 300, maxWidth: 300);
       if (image == null) {
         return;
       } else {
@@ -112,7 +121,10 @@ class _WallboardState extends State<Wallboard> {
       builder: (BuildContext context) => CupertinoActionSheet(
         title: const Text(
           'PW Partner Perks',
-          style: TextStyle(fontSize: 20.0, color: Color(0xff4725a3), fontFamily: 'texgyreadventor-regular'),
+          style: TextStyle(
+              fontSize: 20.0,
+              color: Color(0xff4725a3),
+              fontFamily: 'texgyreadventor-regular'),
         ),
         actions: <Widget>[
           CupertinoActionSheetAction(
@@ -137,7 +149,8 @@ class _WallboardState extends State<Wallboard> {
           },
           child: const Text(
             'Cancel',
-            style: TextStyle(fontFamily: 'texgyreadventor-regular', color: Colors.red),
+            style: TextStyle(
+                fontFamily: 'texgyreadventor-regular', color: Colors.red),
           ),
         ),
       ),
@@ -169,21 +182,20 @@ class _WallboardState extends State<Wallboard> {
           Flexible(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.only(top: 10.0, right: 30.0, bottom: 10.0, left: 30.0),
+              padding: const EdgeInsets.only(
+                  top: 10.0, right: 30.0, bottom: 10.0, left: 30.0),
               child: Container(
                 margin: const EdgeInsets.only(right: 40.0, left: 40.0),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('Assets/helpBG.png'),
+                    image: AssetImage('Assets/wallboard.jpeg'),
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20.0),
           Flexible(
             flex: 3,
             child: SizedBox(
