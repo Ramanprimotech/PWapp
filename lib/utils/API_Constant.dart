@@ -30,6 +30,7 @@ class Webservice {
   final get_speciality = "get_speciality";
   final forget_password = "forget_password";
   final add_poster_image = "add_poster_image";
+  final get_notification = "get_notification";
 
   /// Tango Card Method Name
   final orders = "orders";
