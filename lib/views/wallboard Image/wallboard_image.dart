@@ -22,7 +22,9 @@ typedef VoidWithIntCallback = void Function(int);
 
 class Wallboard extends StatefulWidget {
   final VoidWithIntCallback? changeScreen;
+
   const Wallboard({Key? key, this.changeScreen}) : super(key: key);
+
   @override
   _WallboardState createState() => _WallboardState();
 }
@@ -183,16 +185,14 @@ class _WallboardState extends State<Wallboard> {
                 margin: const EdgeInsets.only(right: 40.0, left: 40.0),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('Assets/helpBG.png'),
+                    image: AssetImage('Assets/wallboard.jpeg'),
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20.0),
           Flexible(
             flex: 3,
             child: SizedBox(

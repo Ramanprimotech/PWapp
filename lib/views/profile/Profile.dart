@@ -52,11 +52,15 @@ class _ProfileState extends State<Profile> {
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(Uri.parse(Webservice().apiUrl + Webservice().get_user_profile), body: data);
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
+        body: data);
+    print(data.toString());
     if (response.statusCode == 200) {
       profileData = ProfileData.fromJson(json.decode(response.body));
       setState(() {
-        userName = "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
+        userName =
+            "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
         specialityStr = profileData.data!.userProfile![0].specialty;
         addressStr = profileData.data!.userProfile![0].address;
         emailStr = profileData.data!.userProfile![0].email;
@@ -66,7 +70,8 @@ class _ProfileState extends State<Profile> {
         }
         pointsStr = profileData.data!.userProfile![0].points;
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Webservice().imagePath + profileData.data!.userProfile![0].profilePic!;
+          profilePicStr = Webservice().imagePath +
+              profileData.data!.userProfile![0].profilePic!;
         } else {
           profilePicStr = "${Webservice().imagePath}user_default.png";
         }
@@ -86,14 +91,17 @@ class _ProfileState extends State<Profile> {
       'user_id': sharedPreferences.getString("userID"),
     };
     log(data.toString());
-    var response = await http.post(Uri.parse(Webservice().apiUrl + Webservice().get_user_profile), body: data);
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
+        body: data);
 
     Utility().onLoading(context, false);
 
     if (response.statusCode == 200) {
       profileData = ProfileData.fromJson(json.decode(response.body));
       setState(() {
-        userName = "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
+        userName =
+            "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
         specialityStr = profileData.data!.userProfile![0].specialty;
         addressStr = profileData.data!.userProfile![0].address;
         emailStr = profileData.data!.userProfile![0].email;
@@ -104,7 +112,8 @@ class _ProfileState extends State<Profile> {
         pointsStr = profileData.data!.userProfile![0].points;
 
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Webservice().imagePath + profileData.data!.userProfile![0].profilePic!;
+          profilePicStr = Webservice().imagePath +
+              profileData.data!.userProfile![0].profilePic!;
         } else {
           profilePicStr = "${Webservice().imagePath}user_default.png";
         }
@@ -125,7 +134,8 @@ class _ProfileState extends State<Profile> {
     var length = await _image.length();
     var uri = Uri.parse(Webservice().apiUrl + Webservice().update_profile_pic);
     var request = http.MultipartRequest("POST", uri);
-    var multipartFile = http.MultipartFile('profile_pic', stream, length, filename: path.basename(_image.path));
+    var multipartFile = http.MultipartFile('profile_pic', stream, length,
+        filename: path.basename(_image.path));
     request.files.add(multipartFile);
     request.fields["user_id"] = sharedPreferences.getString("userID")!;
 
@@ -145,7 +155,8 @@ class _ProfileState extends State<Profile> {
 
   Future getImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source, maxHeight: 300, maxWidth: 300);
+      final image = await ImagePicker()
+          .pickImage(source: source, maxHeight: 300, maxWidth: 300);
       if (image == null) {
         return;
       } else {
@@ -166,7 +177,10 @@ class _ProfileState extends State<Profile> {
       builder: (BuildContext context) => CupertinoActionSheet(
         title: const Text(
           'PW Partner Perks',
-          style: TextStyle(fontSize: 20.0, color: Color(0xff4725a3), fontFamily: 'texgyreadventor-regular'),
+          style: TextStyle(
+              fontSize: 20.0,
+              color: Color(0xff4725a3),
+              fontFamily: 'texgyreadventor-regular'),
         ),
         actions: <Widget>[
           CupertinoActionSheetAction(
@@ -191,7 +205,8 @@ class _ProfileState extends State<Profile> {
           },
           child: const Text(
             'Cancel',
-            style: TextStyle(fontFamily: 'texgyreadventor-regular', color: Colors.red),
+            style: TextStyle(
+                fontFamily: 'texgyreadventor-regular', color: Colors.red),
           ),
         ),
       ),
@@ -206,7 +221,9 @@ class _ProfileState extends State<Profile> {
       'user_id': sharedPreferences.getString("userID"),
       'phone': _phoneNumber.text,
     };
-    var response = await http.post(Uri.parse(Webservice().apiUrl + Webservice().update_profile), body: data);
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().update_profile),
+        body: data);
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
@@ -247,7 +264,8 @@ class _ProfileState extends State<Profile> {
             TextField(
               controller: _phoneNumber,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   hintText: "Phone Number"),
               keyboardType: TextInputType.phone,
               maxLength: 10,
@@ -263,7 +281,10 @@ class _ProfileState extends State<Profile> {
             },
             child: const Text(
               "Update",
-              style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'texgyreadventor-regular'),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'texgyreadventor-regular'),
             ),
           )
         ]).show();
@@ -285,7 +306,8 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final userDetailCont = Container(
       margin: const EdgeInsets.only(top: 80.0, left: 15.0, right: 15.0),
-      padding: const EdgeInsets.only(top: 83.0, left: 10.0, right: 10.0, bottom: 15),
+      padding:
+          const EdgeInsets.only(top: 83.0, left: 10.0, right: 10.0, bottom: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: const Color(0x1AFFFFFF),
@@ -403,13 +425,12 @@ class _ProfileState extends State<Profile> {
                   Column(
                     children: <Widget>[
                       userDetailCont,
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      PointsCard(pointsStr: pointsStr, rewardCardStr: rewardCardStr, scannedNoStr: scannedNoStr),
-                      const SizedBox(
-                        height: 30.0,
-                      ),
+                      const SizedBox(height: 15),
+                      PointsCard(
+                          pointsStr: pointsStr,
+                          rewardCardStr: rewardCardStr,
+                          scannedNoStr: scannedNoStr),
+                      const SizedBox(height: 30),
                     ],
                   ),
                   Container(
@@ -447,15 +468,17 @@ class _ProfileState extends State<Profile> {
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: (profilePicStr == ""
-                                      ? const AssetImage('Assets/as.png')
-                                      : NetworkImage(profilePicStr)) as ImageProvider<Object>,
+                                          ? const AssetImage('Assets/as.png')
+                                          : NetworkImage(profilePicStr))
+                                      as ImageProvider<Object>,
                                 ),
                               ),
                             ),
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 90.0, left: 100.0),
+                          padding:
+                              const EdgeInsets.only(top: 90.0, left: 100.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[

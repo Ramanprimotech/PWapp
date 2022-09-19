@@ -159,7 +159,7 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: const Color(0xff4725a3),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.menu),
               onPressed: () {
                 actionSheetMethod(context);
               },
