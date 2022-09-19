@@ -29,6 +29,7 @@ dependencies:
   date_format:
   flutter_offline:
   flutter_barcode_scanner: ^2.0.0
+  path: ^1.8.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

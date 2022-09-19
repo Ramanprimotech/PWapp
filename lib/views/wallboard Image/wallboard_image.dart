@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:pwlp/utils/API_Constant.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/Utility.dart';
@@ -33,22 +34,30 @@ class _WallboardState extends State<Wallboard> {
 
   //Check Image API
   imageMatchAPI(String image) async {
-    log('this is imge url $image');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
     Utility().onLoading(context, true);
+    http.MultipartRequest request =
+        http.MultipartRequest("POST", Uri.parse(Webservice().apiUrl + Webservice().add_poster_image));
 
-    Map data = {
-      'user_id': sharedPreferences.getString("userID"),
-      'poster_image': image,
-      'specialty': sharedPreferences.getString("specialty"),
-      'device_id': '1234568iOSdummyValue123456789',
-    };
-    log(data.toString());
-    var response = await http.post(Uri.parse(Webservice().apiUrl + Webservice().add_poster_image), body: data);
-    log('this is response ${response.statusCode}');
-    log('this is response body ${response.body.toString()}');
+    request.fields["user_id"] = sharedPreferences.getString("userID").toString();
+    request.fields["specialty"] = "asvasdvdsvdsvdsccdsvsdvdsvdvzcxzvsvsdvdsvsvdsvds";
+    // request.fields["specialty"] = sharedPreferences.getString("specialty").toString();
+    request.fields["device_id"] = "1234568iOSdummyValue123456789";
+
+    http.ByteStream stream = http.ByteStream(File(image).openRead().cast());
+    int length = await File(image).length();
+    http.MultipartFile multipartFile =
+        http.MultipartFile('poster_image', stream, length, filename: path.basename(image));
+    request.files.add(multipartFile);
+
+    http.StreamedResponse responseStream = await request.send();
+
+    http.Response response = await http.Response.fromStream(responseStream);
     Utility().onLoading(context, false);
+    log('this is response ${response.statusCode}');
+    log(response.body);
+    // log('this is response body ${json.decode(response.body)}');
     if (response.statusCode == 200) {
       setState(() {
         _isImageVisible = true;
