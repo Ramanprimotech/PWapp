@@ -20,7 +20,9 @@ typedef VoidWithIntCallback = void Function(int);
 
 class Scanner extends StatefulWidget {
   final VoidWithIntCallback? changeScreen;
+
   const Scanner({Key? key, this.changeScreen}) : super(key: key);
+
   @override
   _ScannerState createState() => _ScannerState();
 }
@@ -31,6 +33,7 @@ class _ScannerState extends State<Scanner> {
   String result = "Scanner Screen";
   String imageStr = "";
   late QrCodeCheckData qrCodeCheckData;
+
   //Check Poster API
   scanMatchAPI(String name) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -163,11 +166,10 @@ class _ScannerState extends State<Scanner> {
           ),
           Flexible(
             flex: 7,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 10.0, right: 30.0, bottom: 10.0, left: 30.0),
+            child: Center(
               child: Container(
-                margin: const EdgeInsets.only(right: 40.0, left: 40.0),
+                width: 250.0,
+                margin: const EdgeInsets.only(top: 10, bottom: 10),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('Assets/helpBG.png'),
@@ -177,9 +179,7 @@ class _ScannerState extends State<Scanner> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20),
           Flexible(
             flex: 3,
             child: SizedBox(
@@ -262,19 +262,20 @@ class _ScannerState extends State<Scanner> {
       ),
     );
     return OfflineBuilder(
-        debounceDuration: Duration.zero,
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          if (connectivity == ConnectivityResult.none) {
-            return const ConnectivityMessage();
-          }
-          return child;
-        },
-        child: Scaffold(
-          body: Stack(children: <Widget>[
+      debounceDuration: Duration.zero,
+      connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
+        if (connectivity == ConnectivityResult.none) {
+          return const ConnectivityMessage();
+        }
+        return child;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -286,7 +287,9 @@ class _ScannerState extends State<Scanner> {
             ),
             helpCont,
             scannedScreen
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -258,15 +258,17 @@ class _ProfileState extends State<Profile> {
         title: "Phone Number",
         content: Column(
           children: <Widget>[
-            const SizedBox(
-              height: 10.0,
-            ),
+            const SizedBox(height: 10),
             TextField(
               controller: _phoneNumber,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  hintText: "Phone Number"),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                ),
+                hintText: "Phone Number",
+              ),
               keyboardType: TextInputType.phone,
               maxLength: 10,
             ),
@@ -282,9 +284,10 @@ class _ProfileState extends State<Profile> {
             child: const Text(
               "Update",
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'texgyreadventor-regular'),
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'texgyreadventor-regular',
+              ),
             ),
           )
         ]).show();
@@ -348,6 +351,7 @@ class _ProfileState extends State<Profile> {
                 fontWeight: FontWeight.w200,
               ),
               maxLines: 3,
+              textAlign: TextAlign.center,
             ),
           const SizedBox(height: 8),
           const Divider(

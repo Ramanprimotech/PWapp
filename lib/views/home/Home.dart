@@ -49,9 +49,12 @@ class _HomeState extends State<Home> {
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(Uri.parse("${Webservice().apiUrl}" "${Webservice().user_dashboard}"), body: data);
+    var response = await http.post(
+        Uri.parse("${Webservice().apiUrl}" "${Webservice().user_dashboard}"),
+        body: data);
     if (response.statusCode == 200) {
-      final user_dashboardData = DashboardData.fromJson(json.decode(response.body));
+      final user_dashboardData =
+          DashboardData.fromJson(json.decode(response.body));
       double moneyD = double.parse(user_dashboardData.data!.money!);
       if (mounted) {
         setState(() {
@@ -87,7 +90,10 @@ class _HomeState extends State<Home> {
           width: 120,
           child: const Text(
             "Yes",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'texgyreadventor-regular'),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontFamily: 'texgyreadventor-regular'),
           ),
         ),
         DialogButton(
@@ -97,7 +103,10 @@ class _HomeState extends State<Home> {
           color: Colors.grey,
           child: const Text(
             "Cancel",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'texgyreadventor-regular'),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontFamily: 'texgyreadventor-regular'),
           ),
         ),
       ],
@@ -118,7 +127,10 @@ class _HomeState extends State<Home> {
           width: 120,
           child: const Text(
             "Ok",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'texgyreadventor-regular'),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontFamily: 'texgyreadventor-regular'),
           ),
         ),
       ],
@@ -132,7 +144,9 @@ class _HomeState extends State<Home> {
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(Uri.parse("${Webservice().apiUrl}" "${Webservice().get_points}"), body: data);
+    var response = await http.post(
+        Uri.parse("${Webservice().apiUrl}" "${Webservice().get_points}"),
+        body: data);
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       pointsData = PointsData.fromJson(json.decode(response.body));
@@ -143,7 +157,8 @@ class _HomeState extends State<Home> {
           if (pointInt < 100) {
             int remainPoint = 100 - pointInt;
             setState(() {
-              pointCheckDialog(context, "You are just ${remainPoint.toString()} points away.");
+              pointCheckDialog(context,
+                  "You are just ${remainPoint.toString()} points away.");
             });
           } else {
             dialogAlert(context, Message().RedeemConfirmMsg);
@@ -152,7 +167,8 @@ class _HomeState extends State<Home> {
           if (pointInt < 50) {
             int remainPoint = 50 - pointInt;
             setState(() {
-              pointCheckDialog(context, "You are just ${remainPoint.toString()} points away.");
+              pointCheckDialog(context,
+                  "You are just ${remainPoint.toString()} points away.");
             });
           } else {
             dialogAlert(context, Message().RedeemConfirmMsg);
@@ -367,8 +383,6 @@ class _HomeState extends State<Home> {
             onTap: () {
               widget.changeScreen!(5);
             },
-            imageAsset: "Assets/scan.png",
-
           ),
         ],
       ),
