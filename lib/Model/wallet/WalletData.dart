@@ -27,26 +27,26 @@ class WalletModel {
 
   WalletModel copyWith({
     int? id,
-    int? user_id,
-    String? poster_image,
+    int? userId,
+    String? posterImage,
     String? points,
     String? amount,
     String? specialty,
-    String? is_approved,
+    String? isApproved,
     String? catgory,
-    String? created_at,
+    String? createdAt,
     String? message,
   }) {
     return WalletModel(
       id: id ?? this.id,
-      userId: user_id ?? this.userId,
-      posterImage: poster_image ?? this.posterImage,
+      userId: userId ?? this.userId,
+      posterImage: posterImage ?? this.posterImage,
       points: points ?? this.points,
       amount: amount ?? this.amount,
       specialty: specialty ?? this.specialty,
-      isApproved: is_approved ?? this.isApproved,
+      isApproved: isApproved ?? this.isApproved,
       catgory: catgory ?? this.catgory,
-      createdAt: created_at ?? this.createdAt,
+      createdAt: createdAt ?? this.createdAt,
       message: message ?? this.message,
     );
   }
