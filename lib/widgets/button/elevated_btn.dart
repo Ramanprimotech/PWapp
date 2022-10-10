@@ -20,8 +20,9 @@ class CustomBtn extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           "$btnLable",
+          textAlign: TextAlign.center,
           style: const TextStyle(
-              fontSize: 22,
+              fontSize: 20,
               color: Colors.white,
               fontFamily: 'texgyreadventor-regular'),
         ));

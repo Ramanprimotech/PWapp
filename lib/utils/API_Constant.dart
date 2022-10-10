@@ -1,11 +1,11 @@
 class Webservice {
   /// Staging
-  final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
-  final imagePath = "https://stage-perks.physiciansweekly.com/images/";
+  // final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
+  // final imagePath = "https://stage-perks.physiciansweekly.com/images/";
 
   /// Live Store
-  // final apiUrl = "https://perks.physiciansweekly.com/api/";
-  // final imagePath = "https://perks.physiciansweekly.com/images/";
+  final apiUrl = "https://perks.physiciansweekly.com/api/";
+  final imagePath = "https://perks.physiciansweekly.com/images/";
 
   /// SandBox Tango
   //final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";

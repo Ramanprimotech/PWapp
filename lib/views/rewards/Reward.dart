@@ -127,6 +127,7 @@ class _RewardState extends State<Reward> {
         Uri.parse("${Webservice().apiUrl}" + "${Webservice().save_oder}"),
         body: data);
     if (response.statusCode == 200) {
+      print("save order");
       sharedPreferences.setString("is_first", "1");
     } else {
       log("Failure API save order");
@@ -175,6 +176,7 @@ class _RewardState extends State<Reward> {
     log(body.toString());
     Utility().onLoading(context, false);
     if (response.statusCode == 201) {
+      print("send mail");
       placeOrderData =
           PlaceOrderData.fromJson(json.decode(response.body.toString()));
       dateStr = placeOrderData.createdAt.toString();
@@ -242,9 +244,7 @@ class _RewardState extends State<Reward> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20),
           Container(
             margin: const EdgeInsets.only(left: 12.0, top: 20.0, right: 12.0),
             child: Container(
@@ -252,10 +252,8 @@ class _RewardState extends State<Reward> {
                 children: <Widget>[
                   Container(
                     child: Center(
-                      child: Image.asset(
-                        'Assets/redeemBG.png',
-                        fit: BoxFit.fill,
-                      ),
+                      child:
+                          Image.asset('Assets/redeemBG.png', fit: BoxFit.fill),
                     ),
                   ),
                   Column(
@@ -355,9 +353,7 @@ class _RewardState extends State<Reward> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 30.0,
-          ),
+          const SizedBox(height: 30.0),
           Container(
             margin: const EdgeInsets.only(
                 left: 12.0, top: 10.0, right: 12.0, bottom: 15.0),
