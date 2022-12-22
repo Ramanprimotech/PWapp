@@ -159,9 +159,7 @@ class _LoginState extends State<Login> {
         Center(
           child: Column(
             children: <Widget>[
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               const Text(
                 'Welcome',
                 style: TextStyle(
@@ -171,9 +169,7 @@ class _LoginState extends State<Login> {
               ),
               const SizedBox(height: 50),
               Container(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                ),
+                padding: const EdgeInsets.only(top: 15.0),
                 child: Column(
                   children: <Widget>[
                     InputTextField(

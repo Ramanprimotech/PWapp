@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pwlp/views/contact_us/view.dart';
 import 'package:pwlp/views/notification/notification.dart';
 import 'package:pwlp/views/wallboard%20Image/wallboard_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -122,8 +123,15 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text('Contact Us'),
                 onPressed: () {
-                  _contactUsURL();
-                  Navigator.pop(context, 'Contact Us');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const ContactUs(),
+                    ),
+                  );
+                  // _contactUsURL();
+                  // Navigator.pop(context, 'Contact Us');
                 },
               ),
               CupertinoActionSheetAction(
