@@ -9,6 +9,9 @@ class InputTextField extends StatelessWidget {
     this.readOnly = false,
     this.isDescription = false,
     this.onTap,
+    this.height = 48.0,
+    this.maxLines = 1,
+    this.minLines = 1,
     this.keyboardType,
     this.inputFormatters,
     this.maxLength,
@@ -33,6 +36,9 @@ class InputTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLength;
+  final int? maxLines;
+  final int? minLines;
+  final double? height;
   final bool isDescription;
   final bool showBorder;
   final bool obscureText;
@@ -50,7 +56,7 @@ class InputTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48.0,
+      height: height,
       margin: const EdgeInsets.only(left: 25.0, right: 25.0),
       padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
       decoration: const BoxDecoration(
@@ -61,6 +67,8 @@ class InputTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         readOnly: readOnly,
+        maxLines: maxLines,
+        minLines: minLines,
         cursorColor: Colors.white,
         inputFormatters: inputFormatters,
         style: const TextStyle(

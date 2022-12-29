@@ -4,6 +4,7 @@ class Message {
   final Speciality = "Please select your specialty";
   final Location = "Please enter your Location";
   final Fname = "Please enter your first name";
+  final Name = "Please enter your first name";
   final FnameCharacterValid =
       "First name must contain minimum of 2 characters and maximum of 26 characters";
   final Lname = "Please enter your last name";
@@ -27,6 +28,7 @@ class Message {
   final phoneNumberUpdate = "Phone number Updated Scuccessfully.";
   final phoneNumberExists = "Phone number is same.";
   final NoDataFound = "No data found!";
+  final MessageEmpty = "This field is required";
   final internetTitleMsg = "Check your internet connection and try again";
   final internetSubTtleMsg = "We couldn't connect to the server.";
   final imageuploadErorMgs = "Something went wrong, Please try again";
