@@ -28,7 +28,7 @@ class Message {
   final phoneNumberUpdate = "Phone number Updated Scuccessfully.";
   final phoneNumberExists = "Phone number is same.";
   final NoDataFound = "No data found!";
-  final MessageEmpty = "This field is required";
+  final MessageEmpty = "Message field is required";
   final internetTitleMsg = "Check your internet connection and try again";
   final internetSubTtleMsg = "We couldn't connect to the server.";
   final imageuploadErorMgs = "Something went wrong, Please try again";

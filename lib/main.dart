@@ -1,15 +1,16 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:pwlp/views/auth/Login.dart';
 import 'package:pwlp/views/auth/RegisterVC.dart';
 import 'package:pwlp/views/common/CongratulationVC.dart';
 import 'package:pwlp/views/common/SplashScreen.dart';
+import 'package:pwlp/views/contact_us/Contact_Us.dart';
 import 'package:pwlp/views/dashboard/Dashboard.dart';
 import 'package:pwlp/views/search/LocationSearch.dart';
 import 'package:pwlp/widgets/utility/updateUI.dart';
-
-import 'package:flutter/services.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ Future main() async {
           '/LocationSearch': (BuildContext context) => const LocationSearch(),
           '/congratulationVC': (BuildContext context) => congratulationVC(),
           '/Dashboard': (BuildContext context) => const Dashboard(),
+          '/ContactUs': (BuildContext context) => const ContactUs(),
         }),
   ));
 }

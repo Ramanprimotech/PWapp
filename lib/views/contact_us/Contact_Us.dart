@@ -1,14 +1,21 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:http/http.dart' as http;
+import 'package:pwlp/Model/contactUs/ContactUsFailedResponse.dart';
 import 'package:pwlp/validators/Message.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/textField/text_field.dart';
 import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:toast/toast.dart';
+
+import '../../Model/contactUs/ContactUsResponse.dart';
+import '../../utils/API_Constant.dart';
+import '../../widgets/utility/Utility.dart';
 
 class ContactUs extends StatefulWidget {
   const ContactUs({Key? key}) : super(key: key);
@@ -41,6 +48,45 @@ class _ContactUsState extends State<ContactUs> {
     super.dispose();
   }
 
+  /// API------> Contact Us
+  Future<void> contactUsAPI() async {
+    Utility().onLoading(context, true);
+
+    Map data = {
+      'name': _EmailTF.text,
+      'email': _NameTF.text,
+      'phone': _ContactTF.text,
+      'message': _MessageTF.text,
+      'device_id': "1234568iOSdummyValue123456789",
+    };
+
+    var response = await http.post(
+        Uri.parse(Webservice().apiUrl + Webservice().contact_us),
+        body: data);
+
+    Utility().onLoading(context, false);
+    if (response.statusCode == 200) {
+      var result = json.decode(response.body);
+
+      log(result.toString(), name: "Response");
+      if (result['success'] == true) {
+        log(result['success'].toString(), name: "Response sccuc");
+        final contactUsResponse =
+            ContactUsResponse.fromJson(json.decode(response.body));
+        Utility().toast(context, contactUsResponse.message!);
+      } else {
+        final contactUsFailedResponse =
+            ContactUsFailedResponse.fromJson(json.decode(response.body));
+        Utility().toast(context, contactUsFailedResponse.message!);
+      }
+      Navigator.of(context).pop();
+    } else {
+      log("Failure API");
+
+      Utility().toast(context, "Something went wrong");
+    }
+  }
+
   toast(String message) {
     Toast.show(message,
         duration: Toast.lengthShort,
@@ -58,11 +104,12 @@ class _ContactUsState extends State<ContactUs> {
       toast(Message().Email);
     } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
-    } else if (_ContactTF.text.isNotEmpty && _ContactTF.text.length != 10) {
+    } else if (_ContactTF.text.isEmpty || _ContactTF.text.length != 10) {
       toast(Message().InvalidphoneNumberMsg);
     } else if (_MessageTF.text.isEmpty) {
       toast(Message().MessageEmpty);
     } else {
+      contactUsAPI();
       log("contact Sent");
     }
   }

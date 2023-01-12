@@ -58,7 +58,8 @@ class _DashboardState extends State<Dashboard> {
   logout() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
-    Navigator.of(context).pushNamedAndRemoveUntil('/Login', (Route<dynamic> route) => false);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/Login', (Route<dynamic> route) => false);
   }
 
   @override
@@ -83,7 +84,10 @@ class _DashboardState extends State<Dashboard> {
         builder: (BuildContext context) => CupertinoActionSheet(
             title: const Text(
               'PW Partner Perks',
-              style: TextStyle(fontSize: 20.0, color: Color(0xff4725a3), fontFamily: 'texgyreadventor-regular'),
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Color(0xff4725a3),
+                  fontFamily: 'texgyreadventor-regular'),
             ),
             actions: <Widget>[
               CupertinoActionSheetAction(
@@ -122,8 +126,9 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text('Contact Us'),
                 onPressed: () {
-                  _contactUsURL();
-                  Navigator.pop(context, 'Contact Us');
+                  // _contactUsURL();
+                  // Navigator.pop(context, 'Contact Us');
+                  Navigator.of(context).popAndPushNamed("/ContactUs");
                 },
               ),
               CupertinoActionSheetAction(
@@ -140,7 +145,8 @@ class _DashboardState extends State<Dashboard> {
               },
               child: const Text(
                 'Cancel',
-                style: TextStyle(fontFamily: 'texgyreadventor-regular', color: Colors.red),
+                style: TextStyle(
+                    fontFamily: 'texgyreadventor-regular', color: Colors.red),
               ),
             )),
       );
@@ -154,7 +160,8 @@ class _DashboardState extends State<Dashboard> {
         appBar: AppBar(
           title: Text(
             Message().AppBarTitle,
-            style: const TextStyle(fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
+            style: const TextStyle(
+                fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
           ),
           backgroundColor: const Color(0xff4725a3),
           actions: <Widget>[
@@ -200,7 +207,9 @@ class _DashboardState extends State<Dashboard> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               IconButton(
-                icon: _selectedTab == 0 ? Image.asset("Assets/home-active.png") : Image.asset("Assets/home.png"),
+                icon: _selectedTab == 0
+                    ? Image.asset("Assets/home-active.png")
+                    : Image.asset("Assets/home.png"),
                 onPressed: () {
                   setState(() {
                     _selectedTab = 0;
@@ -211,7 +220,9 @@ class _DashboardState extends State<Dashboard> {
                 width: 15.0,
               ),
               IconButton(
-                icon: _selectedTab == 1 ? Image.asset("Assets/reward-active.png") : Image.asset("Assets/reward.png"),
+                icon: _selectedTab == 1
+                    ? Image.asset("Assets/reward-active.png")
+                    : Image.asset("Assets/reward.png"),
                 onPressed: () {
                   setState(() {
                     _selectedTab = 1;
