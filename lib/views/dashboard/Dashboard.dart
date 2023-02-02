@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pwlp/views/notification/notification.dart';
 import 'package:pwlp/views/wallboard%20Image/wallboard_image.dart';
+import 'package:pwlp/widgets/utility/alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -134,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text('Logout'),
                 onPressed: () {
-                  logout();
+                  dialogLogoutAlert(context, "Do you want to Logout?", logout);
                 },
               ),
             ],
@@ -202,6 +203,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           color: const Color.fromRGBO(255, 255, 255, 1.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

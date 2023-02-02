@@ -13,8 +13,8 @@ class ContactUsFailedResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
+    data['success'] = success;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -41,11 +41,11 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['device_id'] = this.deviceId;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['phone'] = this.phone;
-    data['message'] = this.message;
+    data['device_id'] = deviceId;
+    data['name'] = name;
+    data['email'] = email;
+    data['phone'] = phone;
+    data['message'] = message;
     return data;
   }
 }

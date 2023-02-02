@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:pwlp/validators/Message.dart';
+import 'package:http/http.dart' as http;
 import 'package:pwlp/utils/API_Constant.dart';
+import 'package:pwlp/validators/Message.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/textField/text_field.dart';
 import 'package:pwlp/widgets/utility/already_account.dart';
@@ -12,12 +15,10 @@ import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
-import '../../Model/search/SpecialityData.dart';
+
 import '../../Model/auth/UserRegisterData.dart';
+import '../../Model/search/SpecialityData.dart';
 import '../../widgets/utility/Utility.dart';
 
 PageController _myPageView = PageController();
@@ -116,13 +117,13 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   void initState() {
+    ToastContext().init(context);
     specialityAPI();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    ToastContext().init(context);
     toast(String message) {
       Toast.show(message,
           duration: Toast.lengthShort,
@@ -568,8 +569,8 @@ class _RegisterVCState extends State<RegisterVC> {
                   height: 15.0,
                 ),
                 InputTextField(
-                  controller: _FnameTF,
-                  label: 'First Name',
+                  controller: _LnameTF,
+                  label: 'Last Name',
                 ),
                 const SizedBox(
                   height: 15.0,

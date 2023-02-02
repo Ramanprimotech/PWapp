@@ -27,7 +27,9 @@ class _WalletState extends State<Wallet> {
     Map body = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(Uri.parse("${Webservice().apiUrl}${Webservice().get_user_wallet}"), body: body);
+    var response = await http.post(
+        Uri.parse("${Webservice().apiUrl}${Webservice().get_user_wallet}"),
+        body: body);
     dynamic data = json.decode(response.body);
     if (data['success']) {
       return (data['data'] as List).map((e) => WalletModel.fromMap(e)).toList();
@@ -88,17 +90,26 @@ class _WalletState extends State<Wallet> {
                   future: future,
                   builder: (_, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
+                      return Container(
+                        height: MediaQuery.of(context).size.height * .6,
+                        alignment: Alignment.center,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                         ),
                       );
                     }
                     if (snapshot.data == null || snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text(
+                      return Container(
+                        height: MediaQuery.of(context).size.height * .6,
+                        alignment: Alignment.center,
+                        child: const Text(
                           "Here, you can see the posters you scanned and reward amount earned.",
-                          style: TextStyle(fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.w400),
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400),
                           maxLines: 2,
                           textAlign: TextAlign.center,
                         ),
@@ -110,7 +121,8 @@ class _WalletState extends State<Wallet> {
                       itemCount: items.length + 1,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 16),
                       separatorBuilder: (_, __) => const SizedBox(height: 16),
                       itemBuilder: (context, index) {
                         if (index == items.length) {
@@ -139,7 +151,9 @@ class _WalletCard extends StatelessWidget {
 
   final WalletModel wallet;
 
-  String get _date => formatDate(DateTime.parse(wallet.createdAt), [dd, '-', mm, '-', yyyy]).toString();
+  String get _date =>
+      formatDate(DateTime.parse(wallet.createdAt), [dd, '-', mm, '-', yyyy])
+          .toString();
 
   @override
   Widget build(BuildContext context) {

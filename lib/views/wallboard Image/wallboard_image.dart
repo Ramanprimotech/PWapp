@@ -39,18 +39,20 @@ class _WallboardState extends State<Wallboard> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
     Utility().onLoading(context, true);
-    http.MultipartRequest request =
-        http.MultipartRequest("POST", Uri.parse(Webservice().apiUrl + Webservice().add_poster_image));
+    http.MultipartRequest request = http.MultipartRequest(
+        "POST", Uri.parse(Webservice().apiUrl + Webservice().add_poster_image));
 
-    request.fields["user_id"] = sharedPreferences.getString("userID").toString();
-    request.fields["specialty"] = "asvasdvdsvdsvdsccdsvsdvdsvdvzcxzvsvsdvdsvsvdsvds";
-    // request.fields["specialty"] = sharedPreferences.getString("specialty").toString();
+    request.fields["user_id"] =
+        sharedPreferences.getString("userID").toString();
+    request.fields["specialty"] =
+        sharedPreferences.getString("specialty").toString();
     request.fields["device_id"] = "1234568iOSdummyValue123456789";
 
     http.ByteStream stream = http.ByteStream(File(image).openRead().cast());
     int length = await File(image).length();
-    http.MultipartFile multipartFile =
-        http.MultipartFile('poster_image', stream, length, filename: path.basename(image));
+    http.MultipartFile multipartFile = http.MultipartFile(
+        'poster_image', stream, length,
+        filename: path.basename(image));
     request.files.add(multipartFile);
 
     http.StreamedResponse responseStream = await request.send();
@@ -79,10 +81,21 @@ class _WallboardState extends State<Wallboard> {
       _isVisible = true;
 
       Alert(
+        closeIcon: SizedBox(
+          height: 0,
+        ),
         // alertAnimation: ,
         context: context,
         title: "Partner Perks",
-        desc: " Thank you for sbumitting the Wallboard Image. We'll review the submission and notify you soon.",
+        image: Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Image.asset(
+            "Assets/submit_check.png",
+            height: 100,
+          ),
+        ),
+        desc:
+            " Thank you for submitting the Wallboard Image. We'll review the submission and notify you soon.",
         buttons: [
           DialogButton(
             color: const Color(0xffc22ea1),
@@ -93,7 +106,10 @@ class _WallboardState extends State<Wallboard> {
             width: 120,
             child: const Text(
               "Ok",
-              style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: 'texgyreadventor-regular'),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'texgyreadventor-regular'),
             ),
           ),
         ],
@@ -103,7 +119,8 @@ class _WallboardState extends State<Wallboard> {
 
   Future getImageFromSource(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source, maxHeight: 300, maxWidth: 300);
+      final image = await ImagePicker()
+          .pickImage(source: source, maxHeight: 300, maxWidth: 300);
       if (image == null) {
         return;
       } else {
@@ -123,7 +140,10 @@ class _WallboardState extends State<Wallboard> {
       builder: (BuildContext context) => CupertinoActionSheet(
         title: const Text(
           'PW Partner Perks',
-          style: TextStyle(fontSize: 20.0, color: Color(0xff4725a3), fontFamily: 'texgyreadventor-regular'),
+          style: TextStyle(
+              fontSize: 20.0,
+              color: Color(0xff4725a3),
+              fontFamily: 'texgyreadventor-regular'),
         ),
         actions: <Widget>[
           CupertinoActionSheetAction(
@@ -148,7 +168,8 @@ class _WallboardState extends State<Wallboard> {
           },
           child: const Text(
             'Cancel',
-            style: TextStyle(fontFamily: 'texgyreadventor-regular', color: Colors.red),
+            style: TextStyle(
+                fontFamily: 'texgyreadventor-regular', color: Colors.red),
           ),
         ),
       ),
@@ -180,7 +201,8 @@ class _WallboardState extends State<Wallboard> {
           Flexible(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.only(top: 10.0, right: 30.0, bottom: 10.0, left: 30.0),
+              padding: const EdgeInsets.only(
+                  top: 10.0, right: 30.0, bottom: 10.0, left: 30.0),
               child: Container(
                 margin: const EdgeInsets.only(right: 40.0, left: 40.0),
                 decoration: const BoxDecoration(

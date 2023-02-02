@@ -1,9 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/Utility.dart';
@@ -11,9 +12,9 @@ import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import 'dart:convert';
-import '../../utils/API_Constant.dart';
+
 import '../../Model/scanner/QRCodeCheckData.dart';
+import '../../utils/API_Constant.dart';
 // ignore_for_file: deprecated_member_use
 
 typedef VoidWithIntCallback = void Function(int);
@@ -134,6 +135,7 @@ class _ScannerState extends State<Scanner> {
           '#ff6666', 'Cancel', true, ScanMode.QR);
       if (result != "-1") {
         setState(() {
+          debugPrint("result --- $result");
           scanMatchAPI(result);
         });
       }

@@ -248,23 +248,23 @@ class _HomeState extends State<Home> {
           child: Column(
             children: <Widget>[
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Flexible(
                     flex: 2,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                      padding: const EdgeInsets.only(top: 0.0, left: 0.0),
                       child: Center(
                         child: Stack(
                           alignment: Alignment.center,
                           children: <Widget>[
                             Center(
                               child: CircularPercentIndicator(
-                                radius: 50.0,
+                                radius: 55.0,
                                 animation: true,
                                 lineWidth: 8.0,
                                 percent: percentage,
-                                progressColor: Colors.green,
+                                progressColor: Color(0xff31bbd2),
                                 circularStrokeCap: CircularStrokeCap.round,
                               ),
                             ),
@@ -287,36 +287,41 @@ class _HomeState extends State<Home> {
                   ),
                   Flexible(
                     flex: 3,
-                    child: Column(
-                      children: const <Widget>[
-                        Text(
-                          "PHYSICIAN'S WEEKLY",
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            color: Colors.white,
-                            fontFamily: "Garamond",
-                            fontWeight: FontWeight.w200,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const <Widget>[
+                          Text(
+                            "PHYSICIAN'S WEEKLY",
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              color: Colors.white,
+                              fontFamily: "Garamond",
+                              fontWeight: FontWeight.w200,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Partner\nPerks",
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            color: Colors.white,
-                            fontFamily: 'texgyreadventor-regular',
-                            fontWeight: FontWeight.w300,
+                          SizedBox(height: 8),
+                          Text(
+                            "Partner\nPerks",
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              color: Colors.white,
+                              fontFamily: 'texgyreadventor-regular',
+                              fontWeight: FontWeight.w300,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   const Text(
                     "Available Points: ",
