@@ -97,7 +97,7 @@ class _ContactUsState extends State<ContactUs> {
   void _contactValidation() {
     FocusScope.of(context).requestFocus(FocusNode());
     if (_NameTF.text == "") {
-      toast(Message().Name);
+      toast("Please enter your name");
     } else if (_NameTF.text.length < 2) {
       toast(Message().FnameCharacterValid);
     } else if (_EmailTF.text == "") {

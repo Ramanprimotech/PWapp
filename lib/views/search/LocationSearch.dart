@@ -203,10 +203,16 @@ class _LocationSearchState extends State<LocationSearch> {
       names.clear();
       filteredNames.clear();
     });
-    Map data = {'keyword': enteredkeyword, "specialty": specialty};
+    Map data = {
+      'keyword': enteredkeyword,
+      "specialty": specialty,
+      "latitude": "37.0902",
+      "longitude": "95.7129"
+    };
 
     String url = "${Webservice().apiUrl}" + "${Webservice().get_address}";
     var response = await http.post(Uri.parse(url), body: data);
+    print(response.body);
     if (response.statusCode == 200) {
       locationData = LocationData.fromJson(json.decode(response.body));
       List tempList = [];
