@@ -21,7 +21,7 @@ import '../../Model/auth/UserRegisterData.dart';
 import '../../Model/search/SpecialityData.dart';
 import '../../widgets/utility/Utility.dart';
 
-PageController _myPageView = PageController();
+
 TextEditingController _FnameTF = TextEditingController();
 TextEditingController _LnameTF = TextEditingController();
 TextEditingController _EmailTF = TextEditingController();
@@ -52,7 +52,8 @@ class RegisterVC extends StatefulWidget {
 class _RegisterVCState extends State<RegisterVC> {
   bool checkBoxVal = false;
   bool _isVisible = false;
-
+  int _registerBack = 0;
+  PageController _myPageView = PageController();
   SpecialityData? specialityData;
 
   specialityAPI() async {
@@ -118,8 +119,22 @@ class _RegisterVCState extends State<RegisterVC> {
   @override
   void initState() {
     ToastContext().init(context);
+    _myPageView.addListener(() {
+        if (_registerBack != _myPageView.page!.floor()) {
+          _registerBack = _myPageView.page!.floor();
+          setState(() {
+
+          });
+        }
+      });
     specialityAPI();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _myPageView.dispose();
+    super.dispose();
   }
 
   @override
@@ -816,6 +831,7 @@ class _RegisterVCState extends State<RegisterVC> {
         home: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            leading: _registerBack != 0 ?BackButton(onPressed: (){_myPageView.animateToPage(_registerBack-1, duration: Duration(milliseconds: 500), curve: Curves.ease);},):null,
             title: Text(
               Message().AppBarTitle,
               style: const TextStyle(

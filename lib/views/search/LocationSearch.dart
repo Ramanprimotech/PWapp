@@ -203,13 +203,24 @@ class _LocationSearchState extends State<LocationSearch> {
       names.clear();
       filteredNames.clear();
     });
-    Map data = {
-      'keyword': enteredkeyword,
-      "specialty": specialty,
-      "latitude": "37.0902",
-      "longitude": "95.7129"
-    };
 
+    var data = <String, String>{};
+    if (Webservice().apiUrl == stageApiUrl) {
+      data = {
+        'keyword': enteredkeyword,
+        "specialty": "Allergy",
+        "latitude": "0.0",
+        "longitude": "0.0"
+      };
+    } else {
+      data = {
+        'keyword': enteredkeyword,
+        "specialty": specialty!,
+        "latitude": "37.0902",
+        "longitude": "95.7129"
+      };
+    }
+log(data.toString(),name: "Request");
     String url = "${Webservice().apiUrl}" + "${Webservice().get_address}";
     var response = await http.post(Uri.parse(url), body: data);
     print(response.body);

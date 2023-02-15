@@ -1,11 +1,16 @@
-class Webservice {
-  /// Staging
-  final apiUrl = "https://stage-perks.physiciansweekly.com/api/";
-  final imagePath = "https://stage-perks.physiciansweekly.com/images/";
+/// Staging
+ const String stageApiUrl = "https://stage-perks.physiciansweekly.com/api/";
+ const String stageImagePath = "https://stage-perks.physiciansweekly.com/images/";
 
-  /// Live Store
-  // final apiUrl = "https://perks.physiciansweekly.com/api/";
-  // final imagePath = "https://perks.physiciansweekly.com/images/";
+/// Live Store
+ const String liveApiUrl = "https://perks.physiciansweekly.com/api/";
+ const String liveImagePath = "https://perks.physiciansweekly.com/images/";
+
+class Webservice {
+
+  /// URL
+  final String apiUrl = stageApiUrl;
+  final  String imagePath = stageImagePath;
 
   /// SandBox Tango
   //final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";
