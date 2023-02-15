@@ -117,7 +117,6 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   void initState() {
-    ToastContext().init(context);
     _myPageView.addListener(() {
       if (_registerBack != _myPageView.page!.floor()) {
         _registerBack = _myPageView.page!.floor();
@@ -134,17 +133,16 @@ class _RegisterVCState extends State<RegisterVC> {
     super.dispose();
   }
 
+  toast(String message) {
+    Toast.show(message,
+        duration: Toast.lengthShort,
+        gravity: Toast.bottom,
+        backgroundColor: const Color(0xffc22ea1));
+  }
+
   @override
   Widget build(BuildContext context) {
-    toast(String message) {
-      Toast.show(message,
-          //
-          // textStyle: TextStyle(),
-          duration: Toast.lengthShort,
-          gravity: Toast.bottom,
-          backgroundColor: const Color(0xffc22ea1));
-    }
-
+    ToastContext().init(context);
     clearTextFiels() {
       _SpecialityTF.text = "";
       _LocationTF.text = "";
@@ -997,9 +995,9 @@ class _RegisterVCState extends State<RegisterVC> {
                 AssetImages(
                     imageFromAsset: const AssetImage('Assets/Rbg3.png'),
                     widgetName: welcomeContainer3),
-                AssetImages(
-                    imageFromAsset: const AssetImage('Assets/Rbg4.png'),
-                    widgetName: welcomeContainer4),
+                // AssetImages(
+                //     imageFromAsset: const AssetImage('Assets/Rbg4.png'),
+                //     widgetName: welcomeContainer4),
               ],
             ),
           ),
