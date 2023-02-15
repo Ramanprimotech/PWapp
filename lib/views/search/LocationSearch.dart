@@ -220,7 +220,7 @@ class _LocationSearchState extends State<LocationSearch> {
         "longitude": "95.7129"
       };
     }
-log(data.toString(),name: "Request");
+    log(data.toString(), name: "Request");
     String url = "${Webservice().apiUrl}" + "${Webservice().get_address}";
     var response = await http.post(Uri.parse(url), body: data);
     print(response.body);

@@ -21,7 +21,6 @@ import '../../Model/auth/UserRegisterData.dart';
 import '../../Model/search/SpecialityData.dart';
 import '../../widgets/utility/Utility.dart';
 
-
 TextEditingController _FnameTF = TextEditingController();
 TextEditingController _LnameTF = TextEditingController();
 TextEditingController _EmailTF = TextEditingController();
@@ -120,13 +119,11 @@ class _RegisterVCState extends State<RegisterVC> {
   void initState() {
     ToastContext().init(context);
     _myPageView.addListener(() {
-        if (_registerBack != _myPageView.page!.floor()) {
-          _registerBack = _myPageView.page!.floor();
-          setState(() {
-
-          });
-        }
-      });
+      if (_registerBack != _myPageView.page!.floor()) {
+        _registerBack = _myPageView.page!.floor();
+        setState(() {});
+      }
+    });
     specialityAPI();
     super.initState();
   }
@@ -141,6 +138,8 @@ class _RegisterVCState extends State<RegisterVC> {
   Widget build(BuildContext context) {
     toast(String message) {
       Toast.show(message,
+          //
+          // textStyle: TextStyle(),
           duration: Toast.lengthShort,
           gravity: Toast.bottom,
           backgroundColor: const Color(0xffc22ea1));
@@ -175,7 +174,8 @@ class _RegisterVCState extends State<RegisterVC> {
         'address': addressStr,
         'address_id': address_id,
         'specialty': _SpecialityTF.text,
-        'device_id': '1234568iOSdummyValue',
+        // 'device_id': '1234568iOSdummyValue',
+        'device_id': '1234568iOSdummyValuey65675',
         'phone': phoneStr,
         'profile_pic': ""
       };
@@ -222,11 +222,14 @@ class _RegisterVCState extends State<RegisterVC> {
         clearTextFiels();
         Navigator.of(context).pushReplacementNamed('/congratulationVC');
         print("Success API");
+      } else if (response.statusCode == 404) {
+        toast(json.decode(response.body)['message'].toString());
+        log(response.body, name: "register");
       } else {
         print("Failure API");
         final registerErrorData =
             RegisterErrorData.fromJson(json.decode(response.body));
-        toast(registerErrorData.message.toString());
+        // toast(registerErrorData.message.toString());
       }
     }
 
@@ -607,7 +610,140 @@ class _RegisterVCState extends State<RegisterVC> {
                   keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(
-                  height: 80.0,
+                  height: 15.0,
+                ),
+                InputTextField(
+                  controller: _PasswordTF,
+                  label: 'Password',
+                  obscureText: true,
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                InputTextField(
+                  controller: _ConfirmPasswordTF,
+                  label: 'Confirm Password',
+                  obscureText: true,
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                Container(
+                  height: 60.0,
+                  margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 1,
+                        child: IconButton(
+                          icon: checkBoxVal == false
+                              ? const Icon(
+                                  Icons.check_box_outline_blank,
+                                  color: Colors.white,
+                                )
+                              : const Icon(
+                                  Icons.check_box,
+                                  color: Colors.white,
+                                ),
+                          onPressed: () {
+                            if (checkBoxVal == false) {
+                              setState(() {
+                                checkBoxVal = true;
+                              });
+                            } else {
+                              setState(() {
+                                checkBoxVal = false;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      Flexible(
+                        flex: 5,
+                        child: Column(
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 14.0,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                RichText(
+                                  textAlign: TextAlign.left,
+                                  text: TextSpan(
+                                    text: "I have read the ",
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.white,
+                                        fontFamily: 'texgyreadventor-regular',
+                                        fontWeight: FontWeight.w300),
+                                    children: [
+                                      TextSpan(
+                                        text: "Privacy Policy",
+                                        style: const TextStyle(
+                                          fontSize: 15.0,
+                                          color: Colors.white,
+                                          fontFamily: 'texgyreadventor-regular',
+                                          fontWeight: FontWeight.w400,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            _launchURLPnP();
+                                          },
+                                      ),
+                                      const TextSpan(
+                                        text: " and",
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Colors.white,
+                                          fontFamily: 'texgyreadventor-regular',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                RichText(
+                                  textAlign: TextAlign.left,
+                                  text: TextSpan(
+                                    text: "agree to the ",
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.white,
+                                        fontFamily: 'texgyreadventor-regular',
+                                        fontWeight: FontWeight.w300),
+                                    children: [
+                                      TextSpan(
+                                        text: "Terms & Conditions.",
+                                        style: const TextStyle(
+                                          fontSize: 15.0,
+                                          color: Colors.white,
+                                          fontFamily: 'texgyreadventor-regular',
+                                          fontWeight: FontWeight.w400,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            _launchURLTnC();
+                                          },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15.0,
                 ),
                 SizedBox(
                   height: 55.0,
@@ -615,7 +751,8 @@ class _RegisterVCState extends State<RegisterVC> {
                   child: CustomBtn(
                       btnLable: "Next",
                       onPressed: () {
-                        checkUserDetail();
+                        // checkUserDetail();
+                        validationRegister();
                       }),
                 ),
                 AlreadyAcc(
@@ -831,7 +968,15 @@ class _RegisterVCState extends State<RegisterVC> {
         home: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            leading: _registerBack != 0 ?BackButton(onPressed: (){_myPageView.animateToPage(_registerBack-1, duration: Duration(milliseconds: 500), curve: Curves.ease);},):null,
+            leading: _registerBack != 0
+                ? BackButton(
+                    onPressed: () {
+                      _myPageView.animateToPage(_registerBack - 1,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease);
+                    },
+                  )
+                : null,
             title: Text(
               Message().AppBarTitle,
               style: const TextStyle(
