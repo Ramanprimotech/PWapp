@@ -3,9 +3,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/search/LocationData.dart';
 import 'package:pwlp/utils/API_Constant.dart';
+import 'package:pwlp/utils/get_location.dart';
 import 'package:pwlp/views/auth/RegisterVC.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -40,7 +42,8 @@ class _LocationSearchState extends State<LocationSearch> {
   firstCall() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.get("SelctedSpeciality");
-    locAPIFirst("a", sharedPreferences.get("SelctedSpeciality") as String?);
+    locAPIFirst(
+        "a", sharedPreferences.get("SelctedSpeciality") as String?, context);
   }
 
   @override
@@ -52,6 +55,7 @@ class _LocationSearchState extends State<LocationSearch> {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Scaffold(
       appBar: _buildBar(context) as PreferredSizeWidget?,
       body: Container(
@@ -165,12 +169,14 @@ class _LocationSearchState extends State<LocationSearch> {
               hintStyle: TextStyle(
                   color: Colors.white, fontFamily: 'texgyreadventor-regular')),
           onChanged: (text) {
-            locAPIFirst(
-                text, sharedPreferences.get("SelctedSpeciality") as String?);
+            locAPIFirst(text,
+                sharedPreferences.get("SelctedSpeciality") as String?, context);
             checkVal = false;
             if (text.length == 0) {
               locAPIFirst(
-                  "a", sharedPreferences.get("SelctedSpeciality") as String?);
+                  "a",
+                  sharedPreferences.get("SelctedSpeciality") as String?,
+                  context);
             }
           },
         );
@@ -189,8 +195,8 @@ class _LocationSearchState extends State<LocationSearch> {
           filteredNames = names;
         });
         if (_filter.text.isNotEmpty) {
-          locAPIFirst(
-              "a", sharedPreferences.get("SelctedSpeciality") as String?);
+          locAPIFirst("a",
+              sharedPreferences.get("SelctedSpeciality") as String?, context);
         }
 
         _filter.clear();
@@ -198,19 +204,22 @@ class _LocationSearchState extends State<LocationSearch> {
     });
   }
 
-  locAPIFirst(String enteredkeyword, String? specialty) async {
+  locAPIFirst(
+      String enteredkeyword, String? specialty, BuildContext context) async {
     setState(() {
       names.clear();
       filteredNames.clear();
     });
 
+    GetGeoLocation getGeoLocation = GetGeoLocation();
+    Position? position = await getGeoLocation.getCurrentPosition(context);
     var data = <String, String>{};
     if (Webservice().apiUrl == stageApiUrl) {
       data = {
         'keyword': enteredkeyword,
         "specialty": specialty!,
-        "latitude": "0",
-        "longitude": "0"
+        "latitude": "30.71579",
+        "longitude": "76.71283"
         // "specialty": "Primary Care",
         //     "latitude": "30.71383",
         //     "longitude": "76.71283"
