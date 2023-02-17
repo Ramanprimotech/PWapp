@@ -152,7 +152,7 @@ class _WalletCard extends StatelessWidget {
   final WalletModel wallet;
 
   String get _date =>
-      formatDate(DateTime.parse(wallet.createdAt), [dd, '-', mm, '-', yyyy])
+      formatDate(DateTime.parse(wallet.createdAt), [mm, '-', dd, '-', yyyy])
           .toString();
 
   @override

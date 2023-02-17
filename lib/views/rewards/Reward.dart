@@ -46,7 +46,8 @@ class _RewardState extends State<Reward> {
   String redeemMsg = "Redemption";
 
   _launchURL() async {
-    var url = "${placeOrderData.reward!.credentials!.redemptionLink.toString()}";
+    var url =
+        "${placeOrderData.reward!.credentials!.redemptionLink.toString()}";
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
@@ -90,7 +91,10 @@ class _RewardState extends State<Reward> {
     Utility().onLoading(context, true);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {'user_id': sharedPreferences.getString("userID"), 'points': pointStr};
+    Map data = {
+      'user_id': sharedPreferences.getString("userID"),
+      'points': pointStr
+    };
 
     String uri = Webservice().apiUrl + Webservice().get_user_blance;
 
@@ -125,7 +129,8 @@ class _RewardState extends State<Reward> {
       'points': pointsToredeemStr,
       'amount': moneyD.toString(),
       'tc_order_id': placeOrderData.referenceOrderID.toString(),
-      'redemption_link': placeOrderData.reward!.credentials!.redemptionLink.toString(),
+      'redemption_link':
+          placeOrderData.reward!.credentials!.redemptionLink.toString(),
     };
 
     String uri = Webservice().apiUrl + Webservice().save_oder;
@@ -174,7 +179,6 @@ class _RewardState extends State<Reward> {
     String keyPair = '$platformName:$platformKey';
     String base = base64Encode(utf8.encode(keyPair));
     String basicAuth = 'Basic $base';
-
     String uri = Webservice().tangoCardBaseUrl + Webservice().orders;
 
     var response = await http.post(
@@ -188,7 +192,8 @@ class _RewardState extends State<Reward> {
     Utility().onLoading(context, false);
     log(jsonDecode(response.body).toString());
     if (response.statusCode == 201) {
-      placeOrderData = PlaceOrderData.fromJson(json.decode(response.body.toString()));
+      placeOrderData =
+          PlaceOrderData.fromJson(json.decode(response.body.toString()));
       dateStr = placeOrderData.createdAt.toString();
       DateTime todayDate = DateTime.parse(dateStr);
       setState(() {
@@ -274,7 +279,8 @@ class _RewardState extends State<Reward> {
                         Flexible(
                           flex: 5,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                            padding:
+                                const EdgeInsets.only(top: 10.0, left: 10.0),
                             child: Container(
                               child: Center(
                                 child: Stack(
@@ -366,10 +372,13 @@ class _RewardState extends State<Reward> {
           height: 30.0,
         ),
         Container(
-          margin: const EdgeInsets.only(left: 12.0, top: 10.0, right: 12.0, bottom: 15.0),
-          padding: const EdgeInsets.only(left: 10.0, top: 15.0, right: 10.0, bottom: 15.0),
-          decoration:
-              const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5.0)), color: Color(0xffc22ea1)),
+          margin: const EdgeInsets.only(
+              left: 12.0, top: 10.0, right: 12.0, bottom: 15.0),
+          padding: const EdgeInsets.only(
+              left: 10.0, top: 15.0, right: 10.0, bottom: 15.0),
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              color: Color(0xffc22ea1)),
           child: const Text(
             "Please check your registered email for the Reward Card link!",
             style: TextStyle(

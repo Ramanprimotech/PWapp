@@ -208,9 +208,12 @@ class _LocationSearchState extends State<LocationSearch> {
     if (Webservice().apiUrl == stageApiUrl) {
       data = {
         'keyword': enteredkeyword,
-        "specialty": "Primary Care",
-        "latitude": "30.71579",
-        "longitude": "76.71283"
+        "specialty": specialty!,
+        "latitude": "0",
+        "longitude": "0"
+        // "specialty": "Primary Care",
+        //     "latitude": "30.71383",
+        //     "longitude": "76.71283"
       };
     } else {
       data = {
