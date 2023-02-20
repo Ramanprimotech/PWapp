@@ -18,21 +18,23 @@ class GetGeoLocation {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      Utility().toast(context!,
+      Navigator.of(context).pop();
+      Utility().toast(context,
           'Location services are disabled. Please enable the services');
-
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        Utility().toast(context!, 'Location permissions are denied');
+        Navigator.of(context).pop();
+        Utility().toast(context, 'Location permissions are denied');
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      Utility().toast(context!,
+      Navigator.of(context).pop();
+      Utility().toast(context,
           'Location permissions are permanently denied, we cannot request permissions.');
       return false;
     }

@@ -61,7 +61,9 @@ class _RegisterVCState extends State<RegisterVC> {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       print("API SUCCESS.......");
+
       specialityData = SpecialityData.fromJson(json.decode(response.body));
+      setState(() {});
     } else {
       print("API FAIL.......");
       throw Exception('Failed to load post');

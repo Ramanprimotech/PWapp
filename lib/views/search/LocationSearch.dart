@@ -7,10 +7,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/search/LocationData.dart';
 import 'package:pwlp/utils/API_Constant.dart';
-import 'package:pwlp/utils/get_location.dart';
 import 'package:pwlp/views/auth/RegisterVC.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+
+import '../../utils/get_location.dart';
 
 class LocationSearch extends StatefulWidget {
   const LocationSearch({Key? key, fun}) : super(key: key);
@@ -218,18 +219,22 @@ class _LocationSearchState extends State<LocationSearch> {
       data = {
         'keyword': enteredkeyword,
         "specialty": specialty!,
-        "latitude": "30.71579",
-        "longitude": "76.71283"
+        "latitude": "${position!.latitude}",
+        "longitude": "${position!.longitude}"
+        // "latitude": "30.71579",
+        // "longitude": "76.71283"
         // "specialty": "Primary Care",
-        //     "latitude": "30.71383",
-        //     "longitude": "76.71283"
+        // "latitude": "30.71383",
+        // "longitude": "76.71283"
       };
     } else {
       data = {
         'keyword': enteredkeyword,
         "specialty": specialty!,
-        "latitude": "37.0902",
-        "longitude": "95.7129"
+        "latitude": "${position!.latitude}",
+        "longitude": "${position.longitude}"
+        // "latitude": "37.0902",
+        // "longitude": "95.7129"
       };
     }
     log(data.toString(), name: "Request");
