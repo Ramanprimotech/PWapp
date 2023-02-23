@@ -9,21 +9,25 @@ class CustomBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 5.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            primary: const Color(0xffc22ea1),
           ),
-          primary: const Color(0xffc22ea1),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          "$btnLable",
-          style: const TextStyle(
-              fontSize: 22,
-              color: Colors.white,
-              fontFamily: 'texgyreadventor-regular'),
-        ));
+          onPressed: onPressed,
+          child: Text(
+            "$btnLable",
+            style: const TextStyle(
+                fontSize: 22,
+                color: Colors.white,
+                fontFamily: 'texgyreadventor-regular'),
+          )),
+    );
   }
 }

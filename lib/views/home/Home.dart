@@ -147,6 +147,13 @@ class _HomeState extends State<Home> {
     var response = await http.post(
         Uri.parse("${Webservice().apiUrl}" "${Webservice().get_points}"),
         body: data);
+
+
+    print("points Api ------");
+    print(response.body.toString());
+    print("points Api ------");
+
+
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       pointsData = PointsData.fromJson(json.decode(response.body));

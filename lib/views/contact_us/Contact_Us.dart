@@ -197,35 +197,36 @@ class _ContactUsState extends State<ContactUs> {
     );
 
     return OfflineBuilder(
-        debounceDuration: Duration.zero,
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          if (connectivity == ConnectivityResult.none) {
-            return const ConnectivityMessage();
-          }
-          return child;
-        },
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(
-                Message().AppBarTitle,
-                style: const TextStyle(
-                    fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
-              ),
-              backgroundColor: const Color(0xff4725a3),
+      debounceDuration: Duration.zero,
+      connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
+        if (connectivity == ConnectivityResult.none) {
+          return const ConnectivityMessage();
+        }
+        return child;
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              Message().AppBarTitle,
+              style: const TextStyle(
+                  fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
             ),
-            body: Center(
-                child: AssetImages(
-                    imageFromAsset: const AssetImage('Assets/loginBg.png'),
-                    widgetName: contactUsContainer)),
+            backgroundColor: const Color(0xff4725a3),
           ),
-        ));
+          body: BGImageWithChild(
+            imgUrl: "loginBg.png",
+            child: contactUsContainer,
+          ),
+        ),
+      ),
+    );
   }
 }

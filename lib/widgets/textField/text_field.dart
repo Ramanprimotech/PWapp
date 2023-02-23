@@ -26,7 +26,7 @@ class InputTextField extends StatelessWidget {
     this.autofocus = false,
     this.borderWidth,
     this.borderColor,
-    this.validator,
+    this.validator, this.margin,
   }) : super(key: key);
 
   final String label;
@@ -42,6 +42,7 @@ class InputTextField extends StatelessWidget {
   final bool isDescription;
   final bool showBorder;
   final bool obscureText;
+  final EdgeInsets? margin;
   final void Function(String)? onChanged;
   final EdgeInsets? padding;
   final BorderRadius? borderRadius;
@@ -57,7 +58,7 @@ class InputTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+      margin: margin ?? const EdgeInsets.all(0),
       padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
