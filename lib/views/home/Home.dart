@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/poster.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -88,27 +89,14 @@ class _HomeState extends State<Home> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           width: 120,
-          child: const Text(
-            "Yes",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontFamily: 'texgyreadventor-regular'),
-          ),
+          child: const AppText("Yes", fontSize: 18),
         ),
         DialogButton(
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          color: Colors.grey,
-          child: const Text(
-            "Cancel",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontFamily: 'texgyreadventor-regular'),
-          ),
-        ),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+            color: Colors.grey,
+            child: const AppText("Cancel", fontSize: 18)),
       ],
     ).show();
   }
@@ -125,13 +113,7 @@ class _HomeState extends State<Home> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           width: 120,
-          child: const Text(
-            "Ok",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontFamily: 'texgyreadventor-regular'),
-          ),
+          child: const AppText("Ok", fontSize: 18),
         ),
       ],
     ).show();
@@ -148,11 +130,9 @@ class _HomeState extends State<Home> {
         Uri.parse("${Webservice().apiUrl}" "${Webservice().get_points}"),
         body: data);
 
-
     print("points Api ------");
     print(response.body.toString());
     print("points Api ------");
-
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
