@@ -156,7 +156,8 @@ class _RewardState extends State<Reward> {
       "campaign": "Partner Perks",
       "customerIdentifier": sharedPreferences.getString("customer_identifier"),
       "emailSubject": "Partner Perks Reward Card",
-      "etid": sharedPreferences.getString("etid"),
+      //"etid": sharedPreferences.getString("etid"),
+      "etid": "E869211",
       // "externalRefID": "",
       "message": "You have got reward by Partner Perks.",
       "notes": "Partner Perks",
@@ -171,7 +172,8 @@ class _RewardState extends State<Reward> {
         "firstName": sharedPreferences.getString("sender_firstname"),
         "lastName": sharedPreferences.getString("sender_lastname")
       },
-      "utid": "U143628"
+     // "utid": "U143628"
+      "utid": "U561593"
     });
     String? platformName = sharedPreferences.getString("platform_name");
     String? platformKey = sharedPreferences.getString("platform_key");
@@ -179,6 +181,7 @@ class _RewardState extends State<Reward> {
     String keyPair = '$platformName:$platformKey';
     String base = base64Encode(utf8.encode(keyPair));
     String basicAuth = 'Basic $base';
+
     String uri = Api.baseTangoCardUrl + Api().orders;
 
     var response = await http.post(

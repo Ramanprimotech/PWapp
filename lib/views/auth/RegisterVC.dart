@@ -96,6 +96,7 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   void initState() {
+    ToastContext().init(context);
     _myPageView.addListener(() {
       var newPage = _myPageView.page!.floor();
       if (page != newPage) {
@@ -122,7 +123,7 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   Widget build(BuildContext context) {
-    ToastContext().init(context);
+
 
     return OfflineBuilder(
       debounceDuration: Duration.zero,

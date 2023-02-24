@@ -7,11 +7,9 @@ abstract class BaseUrl {
   static const String liveTangoCard = "https://api.tangocard.com/raas/v2/";
 
   // ignore: unused_field
-  static const String stageUrl =
-      "https://stage-perks.physiciansweekly.com/api/";
-  static const String stageImage = "stage-perks.physiciansweekly.com/images/";
-  static const String stageTangoCard =
-      "https://integration-api.tangocard.com/raas/v2/";
+  static const String stageUrl = "https://stage-perks.physiciansweekly.com/api/";
+  static const String stageImage = "https://stage-perks.physiciansweekly.com/images/";
+  static const String stageTangoCard = "https://integration-api.tangocard.com/raas/v2/";
 }
 
 class Api {
