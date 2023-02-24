@@ -66,7 +66,9 @@ class _LoginState extends State<Login> {
         ),
         body: BGImageWithChild(
           imgUrl: "loginBg.png",
-          child: loginView(),
+          child: SizedBox(
+              height: double.infinity,
+              child: loginView()),
         ),
       ),
     );
@@ -75,88 +77,90 @@ class _LoginState extends State<Login> {
   Widget loginView() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const AppText(
-            "Welcome",
-            fontSize: 35,
-            padding: EdgeInsets.only(top: 45, bottom: 55),
-          ),
-          InputTextField(
-            label: "Email",
-            controller: _EmailTF,
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 15),
-          InputTextField(
-            controller: _PasswordTF,
-            label: 'Password',
-            obscureText: _obscureText,
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _obscureText = !_obscureText;
-                });
-              },
-              child: Icon(
-                _obscureText ? Icons.visibility_off : Icons.visibility,
-                semanticLabel: _obscureText ? 'show password' : 'hide password',
-                color: Colors.white,
-              ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const AppText(
+              "Welcome",
+              fontSize: 35,
+              padding: EdgeInsets.only(top: 45, bottom: 55),
             ),
-          ),
-          const SizedBox(height: 30),
-          CustomBtn(
-              btnLable: 'Login',
-              onPressed: () {
-                loginValidation(context);
-              }),
-          TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.all(14.0),
-              primary: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
+            InputTextField(
+              label: "Email",
+              controller: _EmailTF,
+              keyboardType: TextInputType.emailAddress,
             ),
-            child: const AppText(
-              "Forgot Password?",
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-            onPressed: () {
-              ForgotPassword();
-            },
-          ),
-          const SizedBox(height: 30),
-          RichText(
-            textAlign: TextAlign.left,
-            text: TextSpan(
-              text: "Not joined yet? ",
-              style: const TextStyle(
-                  fontSize: 14.0,
+            const SizedBox(height: 15),
+            InputTextField(
+              controller: _PasswordTF,
+              label: 'Password',
+              obscureText: _obscureText,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  semanticLabel: _obscureText ? 'show password' : 'hide password',
                   color: Colors.white,
-                  fontFamily: 'texgyreadventor-regular',
-                  fontWeight: FontWeight.w300),
-              children: [
-                TextSpan(
-                  text: "Sign Up",
-                  style: const TextStyle(
-                    fontSize: 16.0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            CustomBtn(
+                btnLable: 'Login',
+                onPressed: () {
+                  loginValidation(context);
+                }),
+            TextButton(
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.all(14.0),
+                primary: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+              ),
+              child: const AppText(
+                "Forgot Password?",
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+              onPressed: () {
+                ForgotPassword();
+              },
+            ),
+            const SizedBox(height: 30),
+            RichText(
+              textAlign: TextAlign.left,
+              text: TextSpan(
+                text: "Not joined yet? ",
+                style: const TextStyle(
+                    fontSize: 14.0,
                     color: Colors.white,
                     fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w300),
+                children: [
+                  TextSpan(
+                    text: "Sign Up",
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                      fontFamily: 'texgyreadventor-regular',
+                      fontWeight: FontWeight.w400,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).pushReplacementNamed('/RegisterVC');
+                      },
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.of(context).pushReplacementNamed('/RegisterVC');
-                    },
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

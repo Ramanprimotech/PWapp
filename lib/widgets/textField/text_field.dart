@@ -26,7 +26,7 @@ class InputTextField extends StatelessWidget {
     this.autofocus = false,
     this.borderWidth,
     this.borderColor,
-    this.validator, this.margin,
+    this.validator, this.margin, this.textCapitalization,
   }) : super(key: key);
 
   final String label;
@@ -51,6 +51,7 @@ class InputTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool? autofocus;
   final double? borderWidth;
+  final textCapitalization;
   final Color? borderColor;
   final String Function(String)? validator;
 
@@ -64,6 +65,7 @@ class InputTextField extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           color: Color.fromRGBO(255, 255, 255, 0.12)),
       child: TextField(
+        textCapitalization: textCapitalization ?? TextCapitalization.none,
         autocorrect: false,
         controller: controller,
         obscureText: obscureText,
@@ -74,7 +76,7 @@ class InputTextField extends StatelessWidget {
         inputFormatters: inputFormatters,
         style: const TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 17,
             fontFamily: 'texgyreadventor-regular'),
         decoration: InputDecoration(
           enabledBorder: const UnderlineInputBorder(
@@ -85,7 +87,7 @@ class InputTextField extends StatelessWidget {
           ),
           hintText: label,
           hintStyle: const TextStyle(
-              color: Colors.white, fontFamily: 'texgyreadventor-regular'),
+              color: Colors.white70, fontFamily: 'texgyreadventor-regular', fontSize: 16),
           suffixIcon: suffixIcon,
         ),
         onTap: onTap,

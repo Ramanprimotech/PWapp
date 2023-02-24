@@ -175,92 +175,98 @@ class _RegisterVCState extends State<RegisterVC> {
       imgUrl: "Rbg1.png",
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 40),
-            const AppText(
-              "Welcome",
-              fontSize: 35,
-              fontWeight: FontWeight.w600,
-              padding: EdgeInsets.only(top: 40, bottom: 24),
-            ),
-            const AppText(
-              "Select Your Specialty Edition",
-              fontSize: 18,
-              padding: EdgeInsets.only(top: 40, bottom: 24),
-            ),
-            InputTextField(
-              readOnly: true,
-              label: 'Select Specialty',
-              controller: _SpecialityTF,
-              suffixIcon: const Icon(
-                Icons.arrow_drop_down,
-                color: Colors.white,
-              ),
-              onTap: () {
-                setState(() {
-                  _isVisible = !_isVisible;
-                  _LocationTF.text = "";
-                  _addressOptTF.text = "";
-                });
-              },
-            ),
-            Visibility(
-              visible: _isVisible,
-              child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  height: 200.0,
-                  width: 320.0,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      color: Color.fromRGBO(255, 255, 255, 0.12)),
-                  child: specialityData != null
-                      ? ListView.builder(
-                          itemCount: specialityData!.data!.length,
-                          itemBuilder: (context, index) => Container(
-                            color: _selectedIndex == index
-                                ? Colors.transparent
-                                : const Color.fromRGBO(255, 255, 255, 0.12),
-                            child: ListTile(
-                              title: Text(
-                                '${specialityData!.data![index].name}',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.0,
-                                    fontFamily: 'texgyreadventor-regular'),
+        child: SizedBox(
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const SizedBox(height: 40),
+                const AppText(
+                  "Welcome",
+                  fontSize: 35,
+                  fontWeight: FontWeight.w600,
+                  padding: EdgeInsets.only(top: 40, bottom: 24),
+                ),
+                const AppText(
+                  "Select Your Specialty Edition",
+                  fontSize: 18,
+                  padding: EdgeInsets.only(top: 40, bottom: 24),
+                ),
+                InputTextField(
+                  readOnly: true,
+                  label: 'Select Specialty',
+                  controller: _SpecialityTF,
+                  suffixIcon: const Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.white,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _isVisible = !_isVisible;
+                      _LocationTF.text = "";
+                      _addressOptTF.text = "";
+                    });
+                  },
+                ),
+                Visibility(
+                  visible: _isVisible,
+                  child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      height: 200.0,
+                      width: 320.0,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          color: Color.fromRGBO(255, 255, 255, 0.12)),
+                      child: specialityData != null
+                          ? ListView.builder(
+                              itemCount: specialityData!.data!.length,
+                              itemBuilder: (context, index) => Container(
+                                color: _selectedIndex == index
+                                    ? Colors.transparent
+                                    : const Color.fromRGBO(255, 255, 255, 0.12),
+                                child: ListTile(
+                                  title: Text(
+                                    '${specialityData!.data![index].name}',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0,
+                                        fontFamily: 'texgyreadventor-regular'),
+                                  ),
+                                  onTap: () async {
+                                    _onSelected(index);
+                                    _isVisible = !_isVisible;
+                                    _SpecialityTF.text =
+                                        '${specialityData!.data![index].name}';
+                                    SharedPreferences sharedPreferences =
+                                        await SharedPreferences.getInstance();
+                                    sharedPreferences.setString(
+                                        "SelctedSpeciality",
+                                        specialityData!.data![index].name!);
+                                  },
+                                ),
                               ),
-                              onTap: () async {
-                                _onSelected(index);
-                                _isVisible = !_isVisible;
-                                _SpecialityTF.text =
-                                    '${specialityData!.data![index].name}';
-                                SharedPreferences sharedPreferences =
-                                    await SharedPreferences.getInstance();
-                                sharedPreferences.setString("SelctedSpeciality",
-                                    specialityData!.data![index].name!);
-                              },
-                            ),
-                          ),
-                        )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                          ),
-                        )),
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                              ),
+                            )),
+                ),
+                const SizedBox(height: 20),
+                CustomBtn(
+                    btnLable: "Next",
+                    onPressed: () {
+                      checkSpecialityVal();
+                    }),
+                AlreadyAcc(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.of(context).pushReplacementNamed('/Login');
+                    },
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            CustomBtn(
-                btnLable: "Next",
-                onPressed: () {
-                  checkSpecialityVal();
-                }),
-            AlreadyAcc(
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.of(context).pushReplacementNamed('/Login');
-                },
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -271,116 +277,121 @@ class _RegisterVCState extends State<RegisterVC> {
       imgUrl: "Rbg2.png",
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            const AppText(
-              "Registration",
-              fontSize: 35,
-              fontWeight: FontWeight.w600,
-              padding: EdgeInsets.only(top: 40, bottom: 24),
-            ),
-            const AppText(
-              "Select Your Location",
-              fontSize: 20,
-              padding: EdgeInsets.only(bottom: 10),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 35, bottom: 45),
-              padding: const EdgeInsets.only(left: 5),
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  color: Color.fromRGBO(255, 255, 255, 0.12)),
-              child: TextField(
-                readOnly: true,
-                minLines: 1,
-                maxLines: 3,
-                controller: _LocationTF,
-                cursorColor: Colors.white,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontFamily: 'texgyreadventor-regular'),
-                decoration: const InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    hintText: 'Select...',
-                    hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 19,
-                        fontFamily: 'texgyreadventor-regular')),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/LocationSearch');
-                },
+        child: SizedBox(
+          height: double.infinity,
+          child: ListView(
+            children: <Widget>[
+              const AppText(
+                "Registration",
+                fontSize: 35,
+                fontWeight: FontWeight.w600,
+                padding: EdgeInsets.only(top: 40, bottom: 24),
               ),
-            ),
-            Container(
-                margin: const EdgeInsets.only(bottom: 30),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 24),
+              const AppText(
+                "Select Your Location",
+                fontSize: 20,
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 35, bottom: 45),
+                padding: const EdgeInsets.only(left: 5),
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                  color: Color.fromRGBO(255, 255, 255, 0.12),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    const AppText(
-                      "Please describe where your poster is located. (e.g. Staff Office, Staff Breakroom, or other)",
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    color: Color.fromRGBO(255, 255, 255, 0.12)),
+                child: TextField(
+                  readOnly: true,
+                  minLines: 1,
+                  maxLines: 3,
+                  controller: _LocationTF,
+                  cursorColor: Colors.white,
+                  style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 13,
-                      maxLines: 4,
-                      padding: EdgeInsets.only(bottom: 18),
-                    ),
-                    Container(
-                      height: 44.0,
-                      padding: const EdgeInsets.only(left: 5.0, right: 10.0),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                          color: Color.fromRGBO(255, 255, 255, 1.0)),
-                      child: TextField(
-                        controller: _addressOptTF,
-                        cursorColor: Colors.blueAccent,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'texgyreadventor-regular'),
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            suffixIcon: Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.white,
-                            ),
-                            hintText: 'Optional',
-                            hintStyle: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'texgyreadventor-regular')),
+                      fontFamily: 'texgyreadventor-regular'),
+                  decoration: const InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      hintText: 'Select...',
+                      hintStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 19,
+                          fontFamily: 'texgyreadventor-regular')),
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/LocationSearch');
+                  },
+                ),
+              ),
+              Container(
+                  margin: const EdgeInsets.only(bottom: 30),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 24),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
                     ),
-                  ],
-                )),
-            CustomBtn(
-                btnLable: "Next",
-                onPressed: () {
-                  checkLocVal();
-                }),
-            AlreadyAcc(
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.of(context).pushReplacementNamed('/Login');
-                },
-            ),
-          ],
+                    color: Color.fromRGBO(255, 255, 255, 0.12),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      const AppText(
+                        "Please describe where your poster is located. (e.g. Staff Office, Staff Breakroom, or other)",
+                        fontSize: 13,
+                        maxLines: 4,
+                        padding: EdgeInsets.only(bottom: 18),
+                      ),
+                      Container(
+                        height: 44.0,
+                        padding: const EdgeInsets.only(left: 5.0, right: 10.0),
+                        decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                            color: Color.fromRGBO(255, 255, 255, 1.0)),
+                        child: TextField(
+                          controller: _addressOptTF,
+                          cursorColor: Colors.blueAccent,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'texgyreadventor-regular'),
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                              ),
+                              suffixIcon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.white,
+                              ),
+                              hintText: 'Optional',
+                              hintStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'texgyreadventor-regular')),
+                        ),
+                      ),
+                    ],
+                  )),
+              CustomBtn(
+                  btnLable: "Next",
+                  onPressed: () {
+                    checkLocVal();
+                  }),
+              AlreadyAcc(
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.of(context).pushReplacementNamed('/Login');
+                  },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -391,50 +402,55 @@ class _RegisterVCState extends State<RegisterVC> {
       imgUrl: "Rbg3.png",
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: <Widget>[
-            const AppText(
-              "Registration",
-              fontSize: 35,
-              padding: EdgeInsets.only(top: 40, bottom: 50),
-            ),
-            InputTextField(
-              margin: const EdgeInsets.only(bottom: 15.0),
-              controller: _FnameTF,
-              label: 'First Name',
-            ),
-            InputTextField(
-              controller: _LnameTF,
-              label: 'Last Name',
-              margin: const EdgeInsets.only(bottom: 15.0),
-            ),
-            InputTextField(
-              controller: _EmailTF,
-              label: 'Email',
-              keyboardType: TextInputType.emailAddress,
-              margin: const EdgeInsets.only(bottom: 15.0),
-            ),
-            InputTextField(
-              margin: const EdgeInsets.only(bottom: 30),
-              controller: _PhoneTF,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(10),
-              ],
-              label: 'Phone (Optional)',
-              keyboardType: TextInputType.phone,
-            ),
-            CustomBtn(
-                btnLable: "Next",
-                onPressed: () {
-                  checkUserDetail();
-                }),
-            AlreadyAcc(
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.of(context).pushReplacementNamed('/Login');
-                },
-            ),
-          ],
+        child: SizedBox(
+          height: double.infinity,
+          child: ListView(
+            children: <Widget>[
+              const AppText(
+                "Registration",
+                fontSize: 35,
+                padding: EdgeInsets.only(top: 40, bottom: 50),
+              ),
+              InputTextField(
+                textCapitalization: TextCapitalization.words,
+                margin: const EdgeInsets.only(bottom: 15.0),
+                controller: _FnameTF,
+                label: 'First Name',
+              ),
+              InputTextField(
+                textCapitalization: TextCapitalization.words,
+                controller: _LnameTF,
+                label: 'Last Name',
+                margin: const EdgeInsets.only(bottom: 15.0),
+              ),
+              InputTextField(
+                controller: _EmailTF,
+                label: 'Email',
+                keyboardType: TextInputType.emailAddress,
+                margin: const EdgeInsets.only(bottom: 15.0),
+              ),
+              InputTextField(
+                margin: const EdgeInsets.only(bottom: 30),
+                controller: _PhoneTF,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                ],
+                label: 'Phone (Optional)',
+                keyboardType: TextInputType.phone,
+              ),
+              CustomBtn(
+                  btnLable: "Next",
+                  onPressed: () {
+                    checkUserDetail();
+                  }),
+              AlreadyAcc(
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.of(context).pushReplacementNamed('/Login');
+                  },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -445,124 +461,129 @@ class _RegisterVCState extends State<RegisterVC> {
       imgUrl: "Rbg4.png",
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            const AppText(
-              "Registration",
-              fontSize: 35,
-              padding: EdgeInsets.only(top: 35, bottom: 24),
-            ),
-            const AppText(
-              "Create your Password",
-              fontSize: 20,
-              padding: EdgeInsets.only(bottom: 30),
-            ),
-            InputTextField(
-              controller: _PasswordTF,
-              label: 'Password',
-              obscureText: true,
-              margin: const EdgeInsets.only(top: 15, bottom: 14),
-            ),
-
-            InputTextField(
-              controller: _ConfirmPasswordTF,
-              label: 'Confirm Password',
-              obscureText: true,
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.only(bottom: 50),
-              leading: IconButton(
-                icon: Icon(
-                    checkBoxVal == false
-                        ? Icons.check_box_outline_blank
-                        : Icons.check_box,
-                    color: Colors.white),
-                onPressed: () {
-                  if (checkBoxVal == false) {
-                    setState(() {
-                      checkBoxVal = true;
-                    });
-                  } else {
-                    setState(() {
-                      checkBoxVal = false;
-                    });
-                  }
-                },
+        child: SizedBox(
+          height: double.infinity,
+          child: ListView(
+            children: <Widget>[
+              const AppText(
+                "Registration",
+                fontSize: 35,
+                padding: EdgeInsets.only(top: 35, bottom: 24),
               ),
-              title: RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                  children: [
-                    const WidgetSpan(
-                        child: AppText(
-                      "I have read the ",
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300,
-                    )),
-                    TextSpan(
-                      text: "Privacy Policy",
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                        fontFamily: 'texgyreadventor-regular',
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.underline,
+              const AppText(
+                "Create your Password",
+                fontSize: 20,
+                padding: EdgeInsets.only(bottom: 30),
+              ),
+              InputTextField(
+                controller: _PasswordTF,
+                label: 'Password',
+                obscureText: true,
+                margin: const EdgeInsets.only(top: 15, bottom: 14),
+              ),
+              InputTextField(
+                controller: _ConfirmPasswordTF,
+                label: 'Confirm Password',
+                obscureText: true,
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 50),
+                  horizontalTitleGap: 4,
+                leading: GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Icon(
+                        checkBoxVal == false
+                            ? Icons.check_box_outline_blank
+                            : Icons.check_box,
+                        color: Colors.white),
+                  ),
+                  onTap: () {
+                    if (checkBoxVal == false) {
+                      setState(() {
+                        checkBoxVal = true;
+                      });
+                    } else {
+                      setState(() {
+                        checkBoxVal = false;
+                      });
+                    }
+                  },
+                ),
+                title: RichText(
+                  textAlign: TextAlign.left,
+                  text: TextSpan(
+                    children: [
+                      const WidgetSpan(
+                          child: AppText(
+                        "I have read the ",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                      )),
+                      TextSpan(
+                        text: "Privacy Policy",
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                          fontFamily: 'texgyreadventor-regular',
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            _launchURLPnP();
+                          },
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          _launchURLPnP();
-                        },
-                    ),
-                    const WidgetSpan(
-                        child: AppText(
-                      " and",
-                      fontWeight: FontWeight.w300,
-                      fontSize: 14.0,
-                    ))
-                  ],
+                      const WidgetSpan(
+                          child: AppText(
+                        " and",
+                        fontWeight: FontWeight.w300,
+                        fontSize: 14.0,
+                      ))
+                    ],
+                  ),
+                ),
+                subtitle: RichText(
+                  textAlign: TextAlign.left,
+                  text: TextSpan(
+                    children: [
+                      const WidgetSpan(
+                          child: AppText(
+                        "agree to the ",
+                        fontWeight: FontWeight.w300,
+                        fontSize: 14.0,
+                      )),
+                      TextSpan(
+                        text: "Terms & Conditions.",
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                          fontFamily: 'texgyreadventor-regular',
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            _launchURLTnC();
+                          },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              subtitle: RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                  children: [
-                    const WidgetSpan(
-                        child: AppText(
-                          "agree to the ",
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14.0,
-                        )),
-                    TextSpan(
-                      text: "Terms & Conditions.",
-                      style: const TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.white,
-                        fontFamily: 'texgyreadventor-regular',
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          _launchURLTnC();
-                        },
-                    ),
-                  ],
-                ),
+              CustomBtn(
+                  btnLable: 'Submit',
+                  onPressed: () {
+                    validationRegister();
+                  }),
+              AlreadyAcc(
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.of(context).pushReplacementNamed('/Login');
+                  },
               ),
-
-            ),
-            CustomBtn(
-                btnLable: 'Submit',
-                onPressed: () {
-                  validationRegister();
-                }),
-            AlreadyAcc(
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.of(context).pushReplacementNamed('/Login');
-                },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -630,9 +651,8 @@ class _RegisterVCState extends State<RegisterVC> {
       'profile_pic': ""
     };
     log('data---register----------$data');
-    var response = await http.post(
-        Uri.parse("${Api.baseUrl}" "${Api().userRegister}"),
-        body: data);
+    var response = await http
+        .post(Uri.parse("${Api.baseUrl}" "${Api().userRegister}"), body: data);
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       final userRegisterData =
