@@ -1,22 +1,23 @@
-/// Staging
- const String stageApiUrl = "https://stage-perks.physiciansweekly.com/api/";
- const String stageImagePath = "https://stage-perks.physiciansweekly.com/images/";
 
-/// Live Store
- const String liveApiUrl = "https://perks.physiciansweekly.com/api/";
- const String liveImagePath = "https://perks.physiciansweekly.com/images/";
+///Base URL
+abstract class BaseUrl {
+  // ignore: unused_field
+  static const String live = "https://perks.physiciansweekly.com/api/";
+  static const String liveImage = "https://perks.physiciansweekly.com/images/";
+  static const String liveTangoCard = "https://api.tangocard.com/raas/v2/";
 
-class Webservice {
+  // ignore: unused_field
+  static const String stageUrl =
+      "https://stage-perks.physiciansweekly.com/api/";
+  static const String stageImage = "stage-perks.physiciansweekly.com/images/";
+  static const String stageTangoCard =
+      "https://integration-api.tangocard.com/raas/v2/";
+}
 
-  /// URL
-  final String apiUrl = stageApiUrl;
-  final  String imagePath = stageImagePath;
-
-  /// SandBox Tango
-  //final tangoCardBaseUrl = "https://integration-api.tangocard.com/raas/v2/";
-
-  /// Production Tango
-  final tangoCardBaseUrl = "https://api.tangocard.com/raas/v2/";
+class Api {
+  static const String baseUrl = BaseUrl.stageUrl;
+  static const String baseImageUrl = BaseUrl.stageImage;
+  static const String baseTangoCardUrl = BaseUrl.stageTangoCard;
 
   /// Method Name
   final get_address = "get_address";

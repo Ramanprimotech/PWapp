@@ -28,7 +28,7 @@ class _WalletState extends State<Wallet> {
       'user_id': sharedPreferences.getString("userID"),
     };
     var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}${Webservice().get_user_wallet}"),
+        Uri.parse("${Api.baseUrl}${Api().get_user_wallet}"),
         body: body);
     dynamic data = json.decode(response.body);
     if (data['success']) {
@@ -222,7 +222,7 @@ class _WalletCard extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        Webservice().imagePath + wallet.posterImage!,
+                        Api.baseImageUrl + wallet.posterImage!,
                       ),
                     ),
                   ),

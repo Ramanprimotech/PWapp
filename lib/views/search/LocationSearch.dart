@@ -215,12 +215,12 @@ class _LocationSearchState extends State<LocationSearch> {
     GetGeoLocation getGeoLocation = GetGeoLocation();
     Position? position = await getGeoLocation.getCurrentPosition(context);
     var data = <String, String>{};
-    if (Webservice().apiUrl == stageApiUrl) {
+    if (Api.baseUrl == BaseUrl.stageUrl) {
       data = {
         'keyword': enteredkeyword,
         "specialty": specialty!,
         "latitude": "${position!.latitude}",
-        "longitude": "${position!.longitude}"
+        "longitude": "${position.longitude}"
         // "latitude": "30.71579",
         // "longitude": "76.71283"
         // "specialty": "Primary Care",
@@ -238,7 +238,7 @@ class _LocationSearchState extends State<LocationSearch> {
       };
     }
     log(data.toString(), name: "Request");
-    String url = "${Webservice().apiUrl}" + "${Webservice().get_address}";
+    String url = "${Api.baseUrl}"  "${Api().get_address}";
     var response = await http.post(Uri.parse(url), body: data);
     print(response.body);
     if (response.statusCode == 200) {

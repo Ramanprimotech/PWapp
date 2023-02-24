@@ -40,7 +40,7 @@ class _WallboardState extends State<Wallboard> {
     sharedPreferences = await SharedPreferences.getInstance();
     Utility().onLoading(context, true);
     http.MultipartRequest request = http.MultipartRequest(
-        "POST", Uri.parse(Webservice().apiUrl + Webservice().add_poster_image));
+        "POST", Uri.parse(Api.baseUrl + Api().add_poster_image));
 
     request.fields["user_id"] =
         sharedPreferences.getString("userID").toString();

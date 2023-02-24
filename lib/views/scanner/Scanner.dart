@@ -49,7 +49,7 @@ class _ScannerState extends State<Scanner> {
     log('This is the qr code ${data.toString()}');
 
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().check_qr_code),
+        Uri.parse(Api.baseUrl + Api().check_qr_code),
         body: data);
     log(response.toString());
 
@@ -60,7 +60,7 @@ class _ScannerState extends State<Scanner> {
 
       qrCodeCheckData = QrCodeCheckData.fromJson(json.decode(response.body));
       setState(() {
-        imageStr = "${Webservice().imagePath}" +
+        imageStr = "${Api.baseImageUrl}" +
             "${qrCodeCheckData.data![0].posterImage.toString()}";
         _isVisibleScannedCont = true;
         _isVisible = false;
@@ -89,7 +89,7 @@ class _ScannerState extends State<Scanner> {
     };
 
     var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" + "${Webservice().save_poster}"),
+        Uri.parse("${Api.baseUrl}" + "${Api().save_poster}"),
         body: data);
     Utility().onLoading(context, false);
 

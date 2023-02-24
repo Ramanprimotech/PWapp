@@ -63,7 +63,7 @@ class _RewardState extends State<Reward> {
       'user_id': sharedPreferences.getString("userID"),
     };
 
-    String uri = Webservice().apiUrl + Webservice().get_points;
+    String uri = Api.baseUrl + Api().get_points;
 
     var response = await http.post(
       Uri.parse(uri),
@@ -96,7 +96,7 @@ class _RewardState extends State<Reward> {
       'points': pointStr
     };
 
-    String uri = Webservice().apiUrl + Webservice().get_user_blance;
+    String uri = Api.baseUrl + Api().get_user_blance;
 
     var response = await http.post(
       Uri.parse(uri),
@@ -133,7 +133,7 @@ class _RewardState extends State<Reward> {
           placeOrderData.reward!.credentials!.redemptionLink.toString(),
     };
 
-    String uri = Webservice().apiUrl + Webservice().save_oder;
+    String uri = Api.baseUrl + Api().save_oder;
 
     var response = await http.post(
       Uri.parse(uri),
@@ -179,7 +179,7 @@ class _RewardState extends State<Reward> {
     String keyPair = '$platformName:$platformKey';
     String base = base64Encode(utf8.encode(keyPair));
     String basicAuth = 'Basic $base';
-    String uri = Webservice().tangoCardBaseUrl + Webservice().orders;
+    String uri = Api.baseTangoCardUrl + Api().orders;
 
     var response = await http.post(
       Uri.parse(uri),

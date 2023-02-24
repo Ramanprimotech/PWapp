@@ -61,7 +61,7 @@ class _ContactUsState extends State<ContactUs> {
     };
 
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().contact_us),
+        Uri.parse(Api.baseUrl + Api().contact_us),
         body: data);
 
     Utility().onLoading(context, false);

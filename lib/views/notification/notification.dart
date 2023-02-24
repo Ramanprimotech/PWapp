@@ -59,7 +59,7 @@ class _PwNotificationState extends State<PwNotification> {
     };
 
     final http.Response response =
-        await http.post(Uri.parse(Webservice().apiUrl + Webservice().get_notification), body: data);
+        await http.post(Uri.parse(Api.baseUrl + Api().get_notification), body: data);
 
     Utility().onLoading(context, false);
 

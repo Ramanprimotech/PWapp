@@ -187,7 +187,7 @@ class _LoginState extends State<Login> {
     };
 
     var response = await http
-        .post(Uri.parse(Webservice().apiUrl + Webservice().login), body: data);
+        .post(Uri.parse(Api.baseUrl + Api().login), body: data);
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
@@ -284,7 +284,7 @@ class _LoginState extends State<Login> {
     };
     log('data-------------$data');
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().forget_password),
+        Uri.parse(Api.baseUrl + Api().forget_password),
         body: data);
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {

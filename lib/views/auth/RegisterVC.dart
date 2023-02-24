@@ -58,7 +58,7 @@ class _RegisterVCState extends State<RegisterVC> {
   SpecialityData? specialityData;
 
   specialityAPI() async {
-    String url = "${Webservice().apiUrl}" "${Webservice().get_speciality}";
+    String url = "${Api.baseUrl}" "${Api().get_speciality}";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       specialityData = SpecialityData.fromJson(json.decode(response.body));
@@ -631,7 +631,7 @@ class _RegisterVCState extends State<RegisterVC> {
     };
     log('data---register----------$data');
     var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" "${Webservice().userRegister}"),
+        Uri.parse("${Api.baseUrl}" "${Api().userRegister}"),
         body: data);
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {

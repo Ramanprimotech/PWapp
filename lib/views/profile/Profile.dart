@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
       'user_id': sharedPreferences.getString("userID"),
     };
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
+        Uri.parse(Api.baseUrl + Api().get_user_profile),
         body: data);
     print(data.toString());
     if (response.statusCode == 200) {
@@ -70,10 +70,10 @@ class _ProfileState extends State<Profile> {
         }
         pointsStr = profileData.data!.userProfile![0].points;
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Webservice().imagePath +
+          profilePicStr = Api.baseImageUrl +
               profileData.data!.userProfile![0].profilePic!;
         } else {
-          profilePicStr = "${Webservice().imagePath}user_default.png";
+          profilePicStr = "${Api.baseImageUrl}user_default.png";
         }
         rewardCardStr = "${profileData.data!.reward}";
         scannedNoStr = "${profileData.data!.scannedPosters}";
@@ -92,7 +92,7 @@ class _ProfileState extends State<Profile> {
     };
     log(data.toString());
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
+        Uri.parse(Api.baseUrl + Api().get_user_profile),
         body: data);
 
     Utility().onLoading(context, false);
@@ -112,10 +112,10 @@ class _ProfileState extends State<Profile> {
         pointsStr = profileData.data!.userProfile![0].points;
 
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Webservice().imagePath +
+          profilePicStr = Api.baseImageUrl +
               profileData.data!.userProfile![0].profilePic!;
         } else {
-          profilePicStr = "${Webservice().imagePath}user_default.png";
+          profilePicStr = "${Api.baseImageUrl}user_default.png";
         }
         rewardCardStr = "${profileData.data!.reward}";
         scannedNoStr = "${profileData.data!.scannedPosters}";
@@ -132,7 +132,7 @@ class _ProfileState extends State<Profile> {
     sharedPreferences = await SharedPreferences.getInstance();
     var stream = http.ByteStream(_image.openRead());
     var length = await _image.length();
-    var uri = Uri.parse(Webservice().apiUrl + Webservice().update_profile_pic);
+    var uri = Uri.parse(Api.baseUrl + Api().update_profile_pic);
     var request = http.MultipartRequest("POST", uri);
     var multipartFile = http.MultipartFile('profile_pic', stream, length,
         filename: path.basename(_image.path));
@@ -222,7 +222,7 @@ class _ProfileState extends State<Profile> {
       'phone': _phoneNumber.text,
     };
     var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().update_profile),
+        Uri.parse(Api.baseUrl + Api().update_profile),
         body: data);
 
     Utility().onLoading(context, false);

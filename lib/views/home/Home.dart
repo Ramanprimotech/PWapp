@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
       'user_id': sharedPreferences.getString("userID"),
     };
     var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" "${Webservice().user_dashboard}"),
+        Uri.parse("${Api.baseUrl}" "${Api().user_dashboard}"),
         body: data);
     if (response.statusCode == 200) {
       final user_dashboardData =
@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
       'user_id': sharedPreferences.getString("userID"),
     };
     var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" "${Webservice().get_points}"),
+        Uri.parse("${Api.baseUrl}" "${Api().get_points}"),
         body: data);
 
     print("points Api ------");

@@ -31,7 +31,7 @@ class _congratulationVCState extends State<congratulationVC> {
       'points': sharedPreferences.getString("points").toString(),
     };
     var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" + "${Webservice().get_user_blance}"),
+        Uri.parse("${Api.baseUrl}" + "${Api().get_user_blance}"),
         body: data);
 
     if (response.statusCode == 200) {
