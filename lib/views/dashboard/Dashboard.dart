@@ -46,16 +46,6 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  _contactUsURL() async {
-    const url = 'https://www.physiciansweekly.com/contact/';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   logout() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
@@ -184,16 +174,10 @@ class _DashboardState extends State<Dashboard> {
           child: FloatingActionButton(
             // foregroundColor: Colors.red,
             backgroundColor: const Color(0xff4725a3),
-            child: const SizedBox(
-              height: 35.0,
-              width: 35.0,
-              child: Image(
-                image: AssetImage(
-                  'Assets/qr-scan.png',
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: SizedBox(
+                height: 35.0,
+                width: 35.0,
+                child: Image.asset("Assets/qr-scan.png")),
             onPressed: () {
               setState(() {
                 _selectedTab = 2;

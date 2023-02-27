@@ -7,6 +7,7 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/contactUs/ContactUsFailedResponse.dart';
 import 'package:pwlp/validators/Message.dart';
+import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/textField/text_field.dart';
 import 'package:pwlp/widgets/utility/assetImage.dart';
@@ -60,9 +61,8 @@ class _ContactUsState extends State<ContactUs> {
       'device_id': "1234568iOSdummyValue123456789",
     };
 
-    var response = await http.post(
-        Uri.parse(Api.baseUrl + Api().contact_us),
-        body: data);
+    var response =
+        await http.post(Uri.parse(Api.baseUrl + Api().contact_us), body: data);
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
@@ -118,90 +118,6 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     ToastContext().init(context);
 
-    final contactUsContainer = SizedBox(
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  const Text(
-                    'Contact Us',
-                    style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.white,
-                        fontFamily: 'texgyreadventor-regular'),
-                  ),
-                  const SizedBox(height: 50),
-                  Container(
-                    margin: const EdgeInsets.only(left: 25,right: 25),
-                    padding: const EdgeInsets.only(
-                      top: 15.0,
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        InputTextField(
-                          controller: _NameTF,
-                          label: 'Full Name',
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        InputTextField(
-                          controller: _EmailTF,
-                          label: 'Email',
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        InputTextField(
-                          controller: _ContactTF,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(10),
-                          ],
-                          label: 'Phone',
-                          keyboardType: TextInputType.phone,
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        InputTextField(
-                          height: null,
-                          controller: _MessageTF,
-                          maxLines: 5,
-                          maxLength: 1000,
-                          minLines: 5,
-                          label: 'Message',
-                        ),
-                        const SizedBox(height: 70.0),
-                        SizedBox(
-                          height: 55.0,
-                          width: 320.0,
-                          child: CustomBtn(
-                              btnLable: 'Submit',
-                              onPressed: () {
-                                _contactValidation();
-                              }),
-                        ),
-                        const SizedBox(
-                          height: 50.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
     return OfflineBuilder(
       debounceDuration: Duration.zero,
       connectivityBuilder: (
@@ -219,9 +135,11 @@ class _ContactUsState extends State<ContactUs> {
         home: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            leading: IconButton(onPressed: (){
-              Navigator.pop(context);
-            }, icon: const Icon(Icons.arrow_back_ios_new)),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back_ios_new)),
             centerTitle: true,
             title: Text(
               Message().AppBarTitle,
@@ -232,8 +150,57 @@ class _ContactUsState extends State<ContactUs> {
           ),
           body: BGImageWithChild(
             imgUrl: "loginBg.png",
-            child: 
-            contactUsContainer,
+            child: SizedBox(
+              height: double.infinity,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: <Widget>[
+                      const AppText(
+                        "Contact Us",
+                        fontSize: 35,
+                        padding: EdgeInsets.only(top: 40, bottom: 50),
+                      ),
+                      InputTextField(
+                        controller: _NameTF,
+                        label: 'Full Name',
+                        margin: const EdgeInsets.only(bottom: 16),
+                      ),
+                      InputTextField(
+                        controller: _EmailTF,
+                        label: 'Email',
+                        keyboardType: TextInputType.emailAddress,
+                        margin: const EdgeInsets.only(bottom: 16),
+                      ),
+                      InputTextField(
+                        controller: _ContactTF,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                        label: 'Phone',
+                        keyboardType: TextInputType.phone,
+                        margin: const EdgeInsets.only(bottom: 16),
+                      ),
+                      InputTextField(
+                        height: null,
+                        controller: _MessageTF,
+                        maxLines: 5,
+                        maxLength: 1000,
+                        minLines: 5,
+                        label: 'Message',
+                        margin: const EdgeInsets.only(bottom: 50),
+                      ),
+                      CustomBtn(
+                          btnLable: 'Submit',
+                          onPressed: () {
+                            _contactValidation();
+                          }),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

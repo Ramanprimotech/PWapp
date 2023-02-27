@@ -440,7 +440,7 @@ class _ProfileState extends State<Profile> {
               addressStr,
               fontSize: 16,
               fontWeight: FontWeight.w200,
-              padding: EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 8),
               textAlign: TextAlign.center,
               maxLines: 3,
             ),
