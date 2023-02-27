@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
+import 'package:pwlp/utils/extentions/validation_extentions.dart';
 import 'package:pwlp/validators/Message.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
@@ -21,9 +22,6 @@ import '../../Model/auth/UserLoginData.dart';
 import '../../utils/API_Constant.dart';
 import '../../widgets/utility/Utility.dart';
 
-TextEditingController _EmailTF = TextEditingController();
-TextEditingController _PasswordTF = TextEditingController();
-TextEditingController _forgotPsdController = TextEditingController();
 bool _obscureText = true;
 
 class Login extends StatefulWidget {
@@ -34,14 +32,30 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  /// Text Editting Controllers
+  late TextEditingController _EmailTF;
+  late TextEditingController _PasswordTF;
+  late TextEditingController _forgotPsdController;
+
   @override
   void initState() {
-    ToastContext().init(context);
     super.initState();
+    _EmailTF = TextEditingController();
+    _PasswordTF = TextEditingController();
+    _forgotPsdController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _EmailTF.dispose();
+    _PasswordTF.dispose();
+    _forgotPsdController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return OfflineBuilder(
       debounceDuration: Duration.zero,
       connectivityBuilder: (
@@ -66,9 +80,7 @@ class _LoginState extends State<Login> {
         ),
         body: BGImageWithChild(
           imgUrl: "loginBg.png",
-          child: SizedBox(
-              height: double.infinity,
-              child: loginView()),
+          child: SizedBox(height: double.infinity, child: loginView()),
         ),
       ),
     );
@@ -104,7 +116,8 @@ class _LoginState extends State<Login> {
                 },
                 child: Icon(
                   _obscureText ? Icons.visibility_off : Icons.visibility,
-                  semanticLabel: _obscureText ? 'show password' : 'hide password',
+                  semanticLabel:
+                      _obscureText ? 'show password' : 'hide password',
                   color: Colors.white,
                 ),
               ),
@@ -153,7 +166,8 @@ class _LoginState extends State<Login> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).pushReplacementNamed('/RegisterVC');
+                        Navigator.of(context)
+                            .pushReplacementNamed('/RegisterVC');
                       },
                   ),
                 ],
@@ -173,6 +187,8 @@ class _LoginState extends State<Login> {
       Utility().toast(context, Message().PasswordEmpty);
     } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       Utility().toast(context, Message().EmailValid);
+    } else if (!_EmailTF.text.isValidEmail()) {
+      Utility().toast(context, Message().EmailValid);
     } else if (_PasswordTF.text.length < 6) {
       Utility().toast(context, Message().PasswordCharacter);
     } else {
@@ -190,8 +206,8 @@ class _LoginState extends State<Login> {
       'device_id': "1234568iOSdummyValue123456789",
     };
 
-    var response = await http
-        .post(Uri.parse(Api.baseUrl + Api().login), body: data);
+    var response =
+        await http.post(Uri.parse(Api.baseUrl + Api().login), body: data);
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
@@ -287,9 +303,8 @@ class _LoginState extends State<Login> {
       'email': _forgotPsdController.text,
     };
     log('data-------------$data');
-    var response = await http.post(
-        Uri.parse(Api.baseUrl + Api().forget_password),
-        body: data);
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().forget_password), body: data);
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       final forgotPasswordData =

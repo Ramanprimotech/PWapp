@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/utils/API_Constant.dart';
+import 'package:pwlp/utils/extentions/validation_extentions.dart';
 import 'package:pwlp/validators/Message.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
@@ -71,6 +72,9 @@ class _RegisterVCState extends State<RegisterVC> {
   int _selectedIndex = 0;
 
   _onSelected(int index) {
+    if (_selectedIndex != index) {
+      addressStr = "";
+    }
     setState(() => _selectedIndex = index);
   }
 
@@ -96,7 +100,6 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   void initState() {
-    ToastContext().init(context);
     _myPageView.addListener(() {
       var newPage = _myPageView.page!.floor();
       if (page != newPage) {
@@ -123,8 +126,7 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   Widget build(BuildContext context) {
-
-
+    ToastContext().init(context);
     return OfflineBuilder(
       debounceDuration: Duration.zero,
       connectivityBuilder: (
@@ -489,7 +491,7 @@ class _RegisterVCState extends State<RegisterVC> {
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 50),
-                  horizontalTitleGap: 4,
+                horizontalTitleGap: 4,
                 leading: GestureDetector(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
@@ -726,6 +728,8 @@ class _RegisterVCState extends State<RegisterVC> {
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
     } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+      toast(Message().EmailValid);
+    } else if (!_EmailTF.text.isValidEmail()) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 10) {
       toast(Message().InvalidphoneNumberMsg);

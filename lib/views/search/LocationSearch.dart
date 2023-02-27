@@ -47,7 +47,6 @@ class _LocationSearchState extends State<LocationSearch> {
   @override
   initState() {
     firstCall();
-
     super.initState();
   }
 
