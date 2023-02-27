@@ -10,6 +10,8 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:pwlp/widgets/AppText.dart';
+import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,9 +54,8 @@ class _ProfileState extends State<Profile> {
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(
-        Uri.parse(Api.baseUrl + Api().get_user_profile),
-        body: data);
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().get_user_profile), body: data);
     print(data.toString());
     if (response.statusCode == 200) {
       profileData = ProfileData.fromJson(json.decode(response.body));
@@ -70,8 +71,8 @@ class _ProfileState extends State<Profile> {
         }
         pointsStr = profileData.data!.userProfile![0].points;
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Api.baseImageUrl +
-              profileData.data!.userProfile![0].profilePic!;
+          profilePicStr =
+              Api.baseImageUrl + profileData.data!.userProfile![0].profilePic!;
         } else {
           profilePicStr = "${Api.baseImageUrl}user_default.png";
         }
@@ -91,9 +92,8 @@ class _ProfileState extends State<Profile> {
       'user_id': sharedPreferences.getString("userID"),
     };
     log(data.toString());
-    var response = await http.post(
-        Uri.parse(Api.baseUrl + Api().get_user_profile),
-        body: data);
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().get_user_profile), body: data);
 
     Utility().onLoading(context, false);
 
@@ -112,8 +112,8 @@ class _ProfileState extends State<Profile> {
         pointsStr = profileData.data!.userProfile![0].points;
 
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Api.baseImageUrl +
-              profileData.data!.userProfile![0].profilePic!;
+          profilePicStr =
+              Api.baseImageUrl + profileData.data!.userProfile![0].profilePic!;
         } else {
           profilePicStr = "${Api.baseImageUrl}user_default.png";
         }
@@ -221,9 +221,8 @@ class _ProfileState extends State<Profile> {
       'user_id': sharedPreferences.getString("userID"),
       'phone': _phoneNumber.text,
     };
-    var response = await http.post(
-        Uri.parse(Api.baseUrl + Api().update_profile),
-        body: data);
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().update_profile), body: data);
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
@@ -307,98 +306,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final userDetailCont = Container(
-      margin: const EdgeInsets.only(top: 80.0, left: 15.0, right: 15.0),
-      padding:
-          const EdgeInsets.only(top: 83.0, left: 10.0, right: 10.0, bottom: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: const Color(0x1AFFFFFF),
-      ),
-      child: Column(
-        children: <Widget>[
-          const SizedBox(height: 16),
-          Text(
-            userName,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              fontFamily: 'texgyreadventor-regular',
-              fontWeight: FontWeight.w400,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-          if (specialityStr != null) ...[
-            Text(
-              specialityStr ?? "Speciality",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 19,
-                fontFamily: 'texgyreadventor-regular',
-                fontWeight: FontWeight.w200,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-          ],
-          if (addressStr != null)
-            Text(
-              addressStr ?? "Address",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'texgyreadventor-regular',
-                fontWeight: FontWeight.w200,
-              ),
-              maxLines: 3,
-              textAlign: TextAlign.center,
-            ),
-          const SizedBox(height: 8),
-          const Divider(
-            color: Colors.grey,
-          ),
-          ListTile(
-            dense: true,
-            leading: const Icon(
-              Icons.email,
-              color: Colors.white,
-            ),
-            title: Text(
-              emailStr!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'texgyreadventor-regular',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          ListTile(
-            dense: true,
-            leading: const Icon(
-              Icons.call,
-              color: Colors.white,
-            ),
-            title: Text(
-              phoneStr!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'texgyreadventor-regular',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: IconButton(
-              onPressed: showPhoneDialog,
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
     return OfflineBuilder(
       debounceDuration: Duration.zero,
       connectivityBuilder: (
@@ -412,23 +319,16 @@ class _ProfileState extends State<Profile> {
         return child;
       },
       child: Scaffold(
-        body: Container(
-          height: double.maxFinite,
-          width: double.maxFinite,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('Assets/dashboard-bg.png'),
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: SizedBox(
+        body: BGImageWithChild(
+          imgUrl: "dashboard-bg.png",
+          child: SizedBox(
+            height: double.infinity,
+            child: SingleChildScrollView(
               child: Stack(
-                children: <Widget>[
+                children: [
                   Column(
-                    children: <Widget>[
-                      userDetailCont,
+                    children: [
+                      userDetails(),
                       const SizedBox(height: 15),
                       PointsCard(
                           pointsStr: pointsStr,
@@ -451,7 +351,7 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Stack(
                       fit: StackFit.loose,
-                      children: <Widget>[
+                      children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -485,7 +385,7 @@ class _ProfileState extends State<Profile> {
                               const EdgeInsets.only(top: 90.0, left: 100.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
+                            children: [
                               TextButton(
                                 child: const CircleAvatar(
                                   backgroundColor: Color(0xff4725a3),
@@ -514,6 +414,57 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
+  Widget userDetails() {
+    return Container(
+      margin: const EdgeInsets.only(top: 80, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 83, left: 10, right: 10, bottom: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: const Color(0x1AFFFFFF),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          AppText(userName, fontSize: 25, fontWeight: FontWeight.w500),
+          if (specialityStr != null)
+            AppText(
+              specialityStr,
+              fontSize: 19,
+              fontWeight: FontWeight.w300,
+              padding: const EdgeInsets.only(bottom: 6),
+              textAlign: TextAlign.center,
+            ),
+          if (addressStr != null)
+            AppText(
+              addressStr,
+              fontSize: 16,
+              fontWeight: FontWeight.w200,
+              padding: EdgeInsets.only(bottom: 8),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+            ),
+          const Divider(color: Colors.white, thickness: 1),
+          ListTile(
+            dense: true,
+            leading: const Icon(Icons.email, color: Colors.white),
+            title:
+                AppText(emailStr!, fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          ListTile(
+            dense: true,
+            leading: const Icon(Icons.call, color: Colors.white),
+            title:
+                AppText(emailStr!, fontSize: 16, fontWeight: FontWeight.w500),
+            trailing: IconButton(
+              onPressed: showPhoneDialog,
+              icon: const Icon(Icons.edit, color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class PointsCard extends StatelessWidget {
@@ -539,19 +490,10 @@ class PointsCard extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          PointCircle(
-            label: "Available Points",
-            value: pointsStr!,
-          ),
-          PointCircle(
-            label: "Reward Cards",
-            value: rewardCardStr,
-          ),
-          PointCircle(
-            label: "Scanned Posters",
-            value: scannedNoStr,
-          ),
+        children: [
+          PointCircle(label: "Available Points", value: pointsStr!),
+          PointCircle(label: "Reward Cards", value: rewardCardStr),
+          PointCircle(label: "Scanned Posters", value: scannedNoStr),
         ],
       ),
     );
@@ -575,36 +517,14 @@ class PointCircle extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              width: 100.0,
-              height: 100.0,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xff4725a3),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontFamily: 'texgyreadventor-regular',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+          children: [
+            CircleAvatar(
+              radius: 40,
+              backgroundColor: const Color(0xff4725a3),
+              child: AppText(value, fontSize: 26),
             ),
             const SizedBox(height: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 13,
-                fontFamily: 'texgyreadventor-regular',
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            AppText(label, color: Colors.black, fontSize: 13),
           ],
         ),
       ),

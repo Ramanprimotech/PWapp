@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/poster.dart';
+import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -126,9 +127,8 @@ class _HomeState extends State<Home> {
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(
-        Uri.parse("${Api.baseUrl}" "${Api().get_points}"),
-        body: data);
+    var response = await http
+        .post(Uri.parse("${Api.baseUrl}" "${Api().get_points}"), body: data);
 
     print("points Api ------");
     print(response.body.toString());
@@ -190,14 +190,8 @@ class _HomeState extends State<Home> {
           }
           return child;
         },
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('Assets/dashboard-bg.png'),
-              fit: BoxFit.fill,
-              alignment: Alignment.topCenter,
-            ),
-          ),
+        child: BGImageWithChild(
+          imgUrl: "dashboard-bg.png",
           child: ListView(
             children: [
               pointCard(),
@@ -225,13 +219,8 @@ class _HomeState extends State<Home> {
         child: Container(
           padding: const EdgeInsets.all(8),
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                'Assets/cardBG.png',
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
+              image: DecorationImage(
+                  image: AssetImage('Assets/cardBG.png'), fit: BoxFit.cover)),
           child: Column(
             children: <Widget>[
               Row(
@@ -239,43 +228,30 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   Flexible(
                     flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 0.0, left: 0.0),
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            Center(
-                              child: CircularPercentIndicator(
-                                radius: 55.0,
-                                animation: true,
-                                lineWidth: 8.0,
-                                percent: percentage,
-                                progressColor: Color(0xff31bbd2),
-                                circularStrokeCap: CircularStrokeCap.round,
-                              ),
-                            ),
-                            Text(
-                              "\$$amount",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 30.0,
-                                color: Colors.white,
-                                fontFamily: 'texgyreadventor-regular',
-                                fontWeight: FontWeight.w600,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        CircularPercentIndicator(
+                          radius: 55.0,
+                          animation: true,
+                          lineWidth: 8.0,
+                          percent: percentage,
+                          progressColor: Color(0xff31bbd2),
+                          circularStrokeCap: CircularStrokeCap.round,
                         ),
-                      ),
+                        AppText(
+                          "\$$amount",
+                          textAlign: TextAlign.center,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
                     ),
                   ),
                   Flexible(
                     flex: 3,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 15.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,

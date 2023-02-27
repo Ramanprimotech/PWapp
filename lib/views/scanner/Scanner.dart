@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
+import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/Utility.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
@@ -48,8 +49,7 @@ class _ScannerState extends State<Scanner> {
     };
     log('This is the qr code ${data.toString()}');
 
-    var response = await http.post(
-        Uri.parse(Api.baseUrl + Api().check_qr_code),
+    var response = await http.post(Uri.parse(Api.baseUrl + Api().check_qr_code),
         body: data);
     log(response.toString());
 
@@ -88,9 +88,8 @@ class _ScannerState extends State<Scanner> {
       'points': "${qrCodeCheckData.data![0].point.toString()}"
     };
 
-    var response = await http.post(
-        Uri.parse("${Api.baseUrl}" + "${Api().save_poster}"),
-        body: data);
+    var response = await http
+        .post(Uri.parse("${Api.baseUrl}" + "${Api().save_poster}"), body: data);
     Utility().onLoading(context, false);
 
     if (response.statusCode == 200) {
@@ -198,69 +197,46 @@ class _ScannerState extends State<Scanner> {
     );
     final scannedScreen = Visibility(
       visible: _isVisibleScannedCont,
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            flex: 2,
-            child: Container(
-              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: const Text(
-                "Scanned Successfully",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
-              ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            const Flexible(
+              flex: 2,
+              child: AppText("Scanned Successfully",
+                  padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                  fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.w500),
             ),
-          ),
-          Flexible(
-            flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Image.network(
-                imageStr,
-                fit: BoxFit.fill,
-              ),
+            Flexible(
+              flex: 6,
+              child: Image.network(imageStr, fit: BoxFit.fill),
             ),
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          Flexible(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 55.0,
-                    width: 150.0,
+            const SizedBox(height: 35),
+            Flexible(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Expanded(
                     child: CustomBtn(
                         btnLable: 'Scan Again',
                         onPressed: () {
                           _scanQR();
                         }),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 55.0,
-                    width: 150.0,
+                  const SizedBox(width: 16),
+                  Expanded(
                     child: CustomBtn(
                         btnLable: 'Confirm',
                         onPressed: () {
                           posterConfirmAPI();
                         }),
                   ),
-                )
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     return OfflineBuilder(

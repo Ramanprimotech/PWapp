@@ -32,7 +32,7 @@ class AppText extends StatelessWidget {
         label!,
         textAlign: textAlign,
         style: TextStyle(
-          color: Colors.white,
+          color: color ?? Colors.white,
           fontWeight: fontWeight,
           fontSize: fontSize!,
           decoration: textDecoration,
