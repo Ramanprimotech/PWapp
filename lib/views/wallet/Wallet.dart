@@ -28,9 +28,8 @@ class _WalletState extends State<Wallet> {
     Map body = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(
-        Uri.parse("${Api.baseUrl}${Api().get_user_wallet}"),
-        body: body);
+    var response = await http
+        .post(Uri.parse("${Api.baseUrl}${Api().get_user_wallet}"), body: body);
     dynamic data = json.decode(response.body);
     if (data['success']) {
       return (data['data'] as List).map((e) => WalletModel.fromMap(e)).toList();
@@ -50,9 +49,11 @@ class _WalletState extends State<Wallet> {
   Widget build(BuildContext context) {
     return OfflineBuilder(
       debounceDuration: Duration.zero,
-      connectivityBuilder: (BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,) {
+      connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
         if (connectivity == ConnectivityResult.none) {
           return const ConnectivityMessage();
         }
@@ -74,17 +75,17 @@ class _WalletState extends State<Wallet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const AppText("Activity", fontSize: 25.0,
-                  padding: EdgeInsets.symmetric(vertical: 12.0),),
+                const AppText(
+                  "Activity",
+                  fontSize: 25.0,
+                  padding: EdgeInsets.symmetric(vertical: 12.0),
+                ),
                 FutureBuilder<List<WalletModel>>(
                   future: future,
                   builder: (_, snapshot) {
                     if (!snapshot.hasData) {
                       return Container(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * .6,
+                        height: MediaQuery.of(context).size.height * .6,
                         alignment: Alignment.center,
                         child: const Center(
                           child: CircularProgressIndicator(
@@ -95,10 +96,7 @@ class _WalletState extends State<Wallet> {
                     }
                     if (snapshot.data == null || snapshot.data!.isEmpty) {
                       return Container(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * .6,
+                        height: MediaQuery.of(context).size.height * .6,
                         alignment: Alignment.center,
                         child: const Text(
                           "Here, you can see the posters you scanned and reward amount earned.",
@@ -140,7 +138,8 @@ class _WalletState extends State<Wallet> {
 }
 
 class _WalletCard extends StatelessWidget {
-  const _WalletCard(this.wallet, {
+  const _WalletCard(
+    this.wallet, {
     Key? key,
   }) : super(key: key);
 
@@ -167,8 +166,8 @@ class _WalletCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(
-                    isWallet ? "Redemption" : "Scanned Poster", fontSize: 20),
+                AppText(isWallet ? "Redemption" : "Scanned Poster",
+                    fontSize: 20),
                 if (isWallet) ...[
                   Row(
                     children: [
@@ -179,10 +178,9 @@ class _WalletCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                ] else
-                  ...[
-                    _CardText(wallet.specialty),
-                  ],
+                ] else ...[
+                  wallet.specialty != null? _CardText(wallet.specialty): _CardText("specialty"),
+                ],
                 Row(
                   children: [
                     _CardText(
@@ -212,15 +210,15 @@ class _WalletCard extends StatelessWidget {
             child: wallet.posterImage == null
                 ? Image.asset("Assets/walletCard.png")
                 : Align(
-              alignment: Alignment.centerRight,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  Api.baseImageUrl + wallet.posterImage!,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+                    alignment: Alignment.centerRight,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        Api.baseImageUrl + wallet.posterImage!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
@@ -229,7 +227,8 @@ class _WalletCard extends StatelessWidget {
 }
 
 class _CardText extends StatelessWidget {
-  const _CardText(this.label, {
+  const _CardText(
+    this.label, {
     Key? key,
     this.fontSize = 16,
     this.isBold = true,

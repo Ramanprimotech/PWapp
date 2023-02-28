@@ -455,7 +455,7 @@ class _ProfileState extends State<Profile> {
             dense: true,
             leading: const Icon(Icons.call, color: Colors.white),
             title:
-                AppText(emailStr!, fontSize: 16, fontWeight: FontWeight.w500),
+                AppText(phoneStr!, fontSize: 16, fontWeight: FontWeight.w500),
             trailing: IconButton(
               onPressed: showPhoneDialog,
               icon: const Icon(Icons.edit, color: Colors.white),

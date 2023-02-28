@@ -205,12 +205,11 @@ class _ScannerState extends State<Scanner> {
               flex: 2,
               child: AppText("Scanned Successfully",
                   padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                  fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.w500),
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500),
             ),
-            Flexible(
-              flex: 6,
-              child: Image.network(imageStr, fit: BoxFit.fill),
-            ),
+            Flexible(flex: 6, child: Image.network(imageStr, fit: BoxFit.fill)),
             const SizedBox(height: 35),
             Flexible(
               flex: 3,

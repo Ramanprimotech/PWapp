@@ -25,7 +25,7 @@ class CustomBtn extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: AppText(btnLable, fontSize: 20),
+        child: AppText(btnLable, fontSize: 18, fontWeight: FontWeight.w600, maxLines: 2,),
       ),
     );
   }

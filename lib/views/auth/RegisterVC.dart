@@ -37,6 +37,8 @@ String address_id = "";
 String addressStr = "";
 String attnStr = "";
 
+bool _obscureText = true;
+
 class RegisterVC extends StatefulWidget {
   const RegisterVC({Key? key}) : super(key: key);
 
@@ -481,16 +483,45 @@ class _RegisterVCState extends State<RegisterVC> {
                   fontSize: 20,
                   padding: EdgeInsets.only(bottom: 30),
                 ),
+                /// Password
                 InputTextField(
                   controller: _PasswordTF,
                   label: 'Password',
-                  obscureText: true,
+                  obscureText: _obscureText,
                   margin: const EdgeInsets.only(top: 15, bottom: 14),
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    child: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      semanticLabel:
+                      _obscureText ? 'show password' : 'hide password',
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
+                /// Confirm Password
                 InputTextField(
                   controller: _ConfirmPasswordTF,
                   label: 'Confirm Password',
-                  obscureText: true,
+                  obscureText: _obscureText,
+                  margin: const EdgeInsets.only(top: 15, bottom: 14),
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    child: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      semanticLabel:
+                      _obscureText ? 'show password' : 'hide password',
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 ListTile(
                   contentPadding: const EdgeInsets.only(bottom: 50),

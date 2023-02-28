@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
             CustomBtn(
                 btnLable: 'Login',
                 onPressed: () {
-                  loginValidation(context);
+                  loginValidation();
                 }),
             TextButton(
               style: TextButton.styleFrom(
@@ -179,15 +179,13 @@ class _LoginState extends State<Login> {
     );
   }
 
-  loginValidation(BuildContext context) {
+  loginValidation() {
     FocusScope.of(context).requestFocus(FocusNode());
     if (_EmailTF.text.isEmpty) {
       Utility().toast(context, Message().Email);
     } else if (_PasswordTF.text.isEmpty) {
       Utility().toast(context, Message().PasswordEmpty);
     } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
-      Utility().toast(context, Message().EmailValid);
-    } else if (!_EmailTF.text.isValidEmail()) {
       Utility().toast(context, Message().EmailValid);
     } else if (_PasswordTF.text.length < 6) {
       Utility().toast(context, Message().PasswordCharacter);

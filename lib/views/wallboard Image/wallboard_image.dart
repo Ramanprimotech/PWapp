@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:pwlp/utils/API_Constant.dart';
+import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/Utility.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
@@ -138,12 +139,10 @@ class _WallboardState extends State<Wallboard> {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
-        title: const Text(
-          'PW Partner Perks',
-          style: TextStyle(
-              fontSize: 20.0,
-              color: Color(0xff4725a3),
-              fontFamily: 'texgyreadventor-regular'),
+        title: const AppText(
+          "PW Partner Perks",
+          fontSize: 20.0,
+          color: Color(0xff4725a3),
         ),
         actions: <Widget>[
           CupertinoActionSheetAction(
@@ -162,16 +161,11 @@ class _WallboardState extends State<Wallboard> {
           ),
         ],
         cancelButton: CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text(
-            'Cancel',
-            style: TextStyle(
-                fontFamily: 'texgyreadventor-regular', color: Colors.red),
-          ),
-        ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const AppText("Cancel", color: Colors.red)),
       ),
     );
   }
@@ -187,13 +181,11 @@ class _WallboardState extends State<Wallboard> {
             flex: 2,
             child: Container(
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: const Text(
+              child: const AppText(
                 "Wallboard Image",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w500),
+                fontSize: 20.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
                 textAlign: TextAlign.center,
               ),
             ),
