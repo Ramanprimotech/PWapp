@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/utils/API_Constant.dart';
-import 'package:pwlp/utils/extentions/validation_extentions.dart';
 import 'package:pwlp/validators/Message.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
@@ -38,6 +37,7 @@ String addressStr = "";
 String attnStr = "";
 
 bool _obscureText = true;
+bool _obscureConfirmText = true;
 
 class RegisterVC extends StatefulWidget {
   const RegisterVC({Key? key}) : super(key: key);
@@ -483,6 +483,7 @@ class _RegisterVCState extends State<RegisterVC> {
                   fontSize: 20,
                   padding: EdgeInsets.only(bottom: 30),
                 ),
+
                 /// Password
                 InputTextField(
                   controller: _PasswordTF,
@@ -498,27 +499,30 @@ class _RegisterVCState extends State<RegisterVC> {
                     child: Icon(
                       _obscureText ? Icons.visibility_off : Icons.visibility,
                       semanticLabel:
-                      _obscureText ? 'show password' : 'hide password',
+                          _obscureText ? 'show password' : 'hide password',
                       color: Colors.white,
                     ),
                   ),
                 ),
+
                 /// Confirm Password
                 InputTextField(
                   controller: _ConfirmPasswordTF,
                   label: 'Confirm Password',
-                  obscureText: _obscureText,
+                  obscureText: _obscureConfirmText,
                   margin: const EdgeInsets.only(top: 15, bottom: 14),
                   suffixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
-                        _obscureText = !_obscureText;
+                        _obscureConfirmText = !_obscureConfirmText;
                       });
                     },
                     child: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      _obscureConfirmText
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                       semanticLabel:
-                      _obscureText ? 'show password' : 'hide password',
+                          _obscureText ? 'show password' : 'hide password',
                       color: Colors.white,
                     ),
                   ),
@@ -770,7 +774,6 @@ class _RegisterVCState extends State<RegisterVC> {
       _myPageView.jumpToPage(3);
     }
   }
-
 
   void checkSpecialityVal() {
     FocusScope.of(context).requestFocus(FocusNode());

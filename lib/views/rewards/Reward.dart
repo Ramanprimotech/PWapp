@@ -172,7 +172,7 @@ class _RewardState extends State<Reward> {
         "firstName": sharedPreferences.getString("sender_firstname"),
         "lastName": sharedPreferences.getString("sender_lastname")
       },
-     // "utid": "U143628"
+      // "utid": "U143628"
       "utid": "U561593"
     });
     String? platformName = sharedPreferences.getString("platform_name");
@@ -200,7 +200,7 @@ class _RewardState extends State<Reward> {
       dateStr = placeOrderData.createdAt.toString();
       DateTime todayDate = DateTime.parse(dateStr);
       setState(() {
-        dateStr = formatDate(todayDate, [dd, '-', mm, '-', yyyy]).toString();
+        dateStr = formatDate(todayDate, [mm, '-', dd, '-', yyyy]).toString();
         setState(() {
           redeemMsg = "You have Successfully Redeemed";
         });
