@@ -60,7 +60,7 @@ class InputTextField extends StatelessWidget {
     return Container(
       height: height,
       margin: margin ?? const EdgeInsets.all(0),
-      padding: const EdgeInsets.only(left: 5.0, top: 5.0, right: 5.0),
+      padding: const EdgeInsets.only(left: 8.0, top: 5.0, right: 5.0),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           color: Color.fromRGBO(255, 255, 255, 0.12)),

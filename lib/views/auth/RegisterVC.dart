@@ -407,52 +407,54 @@ class _RegisterVCState extends State<RegisterVC> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SizedBox(
           height: double.infinity,
-          child: ListView(
-            children: <Widget>[
-              const AppText(
-                "Registration",
-                fontSize: 35,
-                padding: EdgeInsets.only(top: 40, bottom: 50),
-              ),
-              InputTextField(
-                textCapitalization: TextCapitalization.words,
-                margin: const EdgeInsets.only(bottom: 15.0),
-                controller: _FnameTF,
-                label: 'First Name',
-              ),
-              InputTextField(
-                textCapitalization: TextCapitalization.words,
-                controller: _LnameTF,
-                label: 'Last Name',
-                margin: const EdgeInsets.only(bottom: 15.0),
-              ),
-              InputTextField(
-                controller: _EmailTF,
-                label: 'Email',
-                keyboardType: TextInputType.emailAddress,
-                margin: const EdgeInsets.only(bottom: 15.0),
-              ),
-              InputTextField(
-                margin: const EdgeInsets.only(bottom: 30),
-                controller: _PhoneTF,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(10),
-                ],
-                label: 'Phone (Optional)',
-                keyboardType: TextInputType.phone,
-              ),
-              CustomBtn(
-                  btnLable: "Next",
-                  onPressed: () {
-                    checkUserDetail();
-                  }),
-              AlreadyAcc(
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.of(context).pushReplacementNamed('/Login');
-                  },
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const AppText(
+                  "Registration",
+                  fontSize: 35,
+                  padding: EdgeInsets.only(top: 40, bottom: 50),
+                ),
+                InputTextField(
+                  textCapitalization: TextCapitalization.words,
+                  margin: const EdgeInsets.only(bottom: 15.0),
+                  controller: _FnameTF,
+                  label: 'First Name',
+                ),
+                InputTextField(
+                  textCapitalization: TextCapitalization.words,
+                  controller: _LnameTF,
+                  label: 'Last Name',
+                  margin: const EdgeInsets.only(bottom: 15.0),
+                ),
+                InputTextField(
+                  controller: _EmailTF,
+                  label: 'Email',
+                  keyboardType: TextInputType.emailAddress,
+                  margin: const EdgeInsets.only(bottom: 15.0),
+                ),
+                InputTextField(
+                  margin: const EdgeInsets.only(bottom: 30),
+                  controller: _PhoneTF,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                  label: 'Phone (Optional)',
+                  keyboardType: TextInputType.phone,
+                ),
+                CustomBtn(
+                    btnLable: "Next",
+                    onPressed: () {
+                      checkUserDetail();
+                    }),
+                AlreadyAcc(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.of(context).pushReplacementNamed('/Login');
+                    },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -466,126 +468,128 @@ class _RegisterVCState extends State<RegisterVC> {
         padding: const EdgeInsets.all(16),
         child: SizedBox(
           height: double.infinity,
-          child: ListView(
-            children: <Widget>[
-              const AppText(
-                "Registration",
-                fontSize: 35,
-                padding: EdgeInsets.only(top: 35, bottom: 24),
-              ),
-              const AppText(
-                "Create your Password",
-                fontSize: 20,
-                padding: EdgeInsets.only(bottom: 30),
-              ),
-              InputTextField(
-                controller: _PasswordTF,
-                label: 'Password',
-                obscureText: true,
-                margin: const EdgeInsets.only(top: 15, bottom: 14),
-              ),
-              InputTextField(
-                controller: _ConfirmPasswordTF,
-                label: 'Confirm Password',
-                obscureText: true,
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.only(bottom: 50),
-                horizontalTitleGap: 4,
-                leading: GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Icon(
-                        checkBoxVal == false
-                            ? Icons.check_box_outline_blank
-                            : Icons.check_box,
-                        color: Colors.white),
-                  ),
-                  onTap: () {
-                    if (checkBoxVal == false) {
-                      setState(() {
-                        checkBoxVal = true;
-                      });
-                    } else {
-                      setState(() {
-                        checkBoxVal = false;
-                      });
-                    }
-                  },
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const AppText(
+                  "Registration",
+                  fontSize: 35,
+                  padding: EdgeInsets.only(top: 35, bottom: 24),
                 ),
-                title: RichText(
-                  textAlign: TextAlign.left,
-                  text: TextSpan(
-                    children: [
-                      const WidgetSpan(
-                          child: AppText(
-                        "I have read the ",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300,
-                      )),
-                      TextSpan(
-                        text: "Privacy Policy",
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.white,
-                          fontFamily: 'texgyreadventor-regular',
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.underline,
+                const AppText(
+                  "Create your Password",
+                  fontSize: 20,
+                  padding: EdgeInsets.only(bottom: 30),
+                ),
+                InputTextField(
+                  controller: _PasswordTF,
+                  label: 'Password',
+                  obscureText: true,
+                  margin: const EdgeInsets.only(top: 15, bottom: 14),
+                ),
+                InputTextField(
+                  controller: _ConfirmPasswordTF,
+                  label: 'Confirm Password',
+                  obscureText: true,
+                ),
+                ListTile(
+                  contentPadding: const EdgeInsets.only(bottom: 50),
+                  horizontalTitleGap: 4,
+                  leading: GestureDetector(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Icon(
+                          checkBoxVal == false
+                              ? Icons.check_box_outline_blank
+                              : Icons.check_box,
+                          color: Colors.white),
+                    ),
+                    onTap: () {
+                      if (checkBoxVal == false) {
+                        setState(() {
+                          checkBoxVal = true;
+                        });
+                      } else {
+                        setState(() {
+                          checkBoxVal = false;
+                        });
+                      }
+                    },
+                  ),
+                  title: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(
+                      children: [
+                        const WidgetSpan(
+                            child: AppText(
+                          "I have read the ",
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                        )),
+                        TextSpan(
+                          text: "Privacy Policy",
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                            fontFamily: 'texgyreadventor-regular',
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              _launchURLPnP();
+                            },
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            _launchURLPnP();
-                          },
-                      ),
-                      const WidgetSpan(
-                          child: AppText(
-                        " and",
-                        fontWeight: FontWeight.w300,
-                        fontSize: 14.0,
-                      ))
-                    ],
+                        const WidgetSpan(
+                            child: AppText(
+                          " and",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14.0,
+                        ))
+                      ],
+                    ),
                   ),
-                ),
-                subtitle: RichText(
-                  textAlign: TextAlign.left,
-                  text: TextSpan(
-                    children: [
-                      const WidgetSpan(
-                          child: AppText(
-                        "agree to the ",
-                        fontWeight: FontWeight.w300,
-                        fontSize: 14.0,
-                      )),
-                      TextSpan(
-                        text: "Terms & Conditions.",
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                          fontFamily: 'texgyreadventor-regular',
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.underline,
+                  subtitle: RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(
+                      children: [
+                        const WidgetSpan(
+                            child: AppText(
+                          "agree to the ",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14.0,
+                        )),
+                        TextSpan(
+                          text: "Terms & Conditions.",
+                          style: const TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.white,
+                            fontFamily: 'texgyreadventor-regular',
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              _launchURLTnC();
+                            },
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            _launchURLTnC();
-                          },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              CustomBtn(
-                  btnLable: 'Submit',
-                  onPressed: () {
-                    validationRegister();
-                  }),
-              AlreadyAcc(
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.of(context).pushReplacementNamed('/Login');
-                  },
-              ),
-            ],
+                CustomBtn(
+                    btnLable: 'Submit',
+                    onPressed: () {
+                      validationRegister();
+                    }),
+                AlreadyAcc(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.of(context).pushReplacementNamed('/Login');
+                    },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -729,14 +733,13 @@ class _RegisterVCState extends State<RegisterVC> {
       toast(Message().Email);
     } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
-    } else if (!_EmailTF.text.isValidEmail()) {
-      toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 10) {
       toast(Message().InvalidphoneNumberMsg);
     } else {
       _myPageView.jumpToPage(3);
     }
   }
+
 
   void checkSpecialityVal() {
     FocusScope.of(context).requestFocus(FocusNode());
