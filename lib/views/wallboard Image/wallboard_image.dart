@@ -65,13 +65,23 @@ class _WallboardState extends State<Wallboard> {
     // log('this is response body ${json.decode(response.body)}');
     if (response.statusCode == 200) {
       setState(() {
-        _isImageVisible = true;
-        _isVisible = false;
+        /// NEW
+        submitWallboardImage();
+        _isImageVisible = false;
+        _isVisible = true;
+
+        /// OLD
+        // _isImageVisible = true;
+        // _isVisible = false;
       });
     } else {
       setState(() {
-        _isImageVisible = false;
-        _isVisible = true;
+        /// OLD
+        // _isImageVisible = false;
+        // _isVisible = true;
+        /// NEW
+        _isImageVisible = true;
+        _isVisible = false;
       });
     }
   }
@@ -82,14 +92,14 @@ class _WallboardState extends State<Wallboard> {
       _isVisible = true;
 
       Alert(
-        closeIcon: SizedBox(
+        closeIcon: const SizedBox(
           height: 0,
         ),
         // alertAnimation: ,
         context: context,
         title: "Partner Perks",
         image: Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsets.only(top: 8.0),
           child: Image.asset(
             "Assets/submit_check.png",
             height: 100,
@@ -127,7 +137,12 @@ class _WallboardState extends State<Wallboard> {
       } else {
         imageStr = image.path;
         setState(() {
-          imageMatchAPI(imageStr);
+          ///New
+          _isImageVisible = true;
+          _isVisible = false;
+
+          /// OLD
+          // imageMatchAPI(imageStr);
         });
       }
     } on PlatformException catch (e) {
@@ -279,7 +294,11 @@ class _WallboardState extends State<Wallboard> {
                     child: CustomBtn(
                         btnLable: 'Submit',
                         onPressed: () {
-                          submitWallboardImage();
+                          /// NEW
+                          imageMatchAPI(imageStr);
+
+                          /// OLD
+                          // submitWallboardImage();
                         }),
                   ),
                 )
