@@ -10,6 +10,7 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:pwlp/validators/input_helper.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
@@ -41,7 +42,7 @@ class _ProfileState extends State<Profile> {
   String? specialityStr;
   String? addressStr;
   String? emailStr = "";
-  String? phoneStr = "";
+  String? phoneStr = "xxxxxxxxxx";
   String? pointsStr = "";
   String rewardCardStr = "";
   String scannedNoStr = "";
@@ -219,7 +220,7 @@ class _ProfileState extends State<Profile> {
 
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
-      'phone': _phoneNumber.text,
+      'phone': InputHelper.phoneRegular(_phoneNumber.text),
     };
     var response = await http
         .post(Uri.parse(Api.baseUrl + Api().update_profile), body: data);
@@ -241,7 +242,7 @@ class _ProfileState extends State<Profile> {
   validatePhoneNo() {
     if (_phoneNumber.text.isEmpty) {
       Utility().toast(context, Message().phoneNumberMsg);
-    } else if (_phoneNumber.text.length != 10) {
+    } else if (_phoneNumber.text.length != 14) {
       Utility().toast(context, Message().InvalidphoneNumberMsg);
     } else if (_phoneNumber.text == phoneStr!) {
       Utility().toast(context, Message().phoneNumberExists);
@@ -269,7 +270,8 @@ class _ProfileState extends State<Profile> {
                 hintText: "Phone Number",
               ),
               keyboardType: TextInputType.phone,
-              maxLength: 10,
+              inputFormatters: InputHelper.phoneFormatter,
+              maxLength: 14,
             ),
           ],
         ),
@@ -292,7 +294,7 @@ class _ProfileState extends State<Profile> {
         ]).show();
     setState(() {
       if (phoneStr != "xxx-xxxx-xxx") {
-        _phoneNumber.text = phoneStr!;
+        _phoneNumber.text = InputHelper.phoneToFormat(phoneStr!);
       }
     });
   }
@@ -454,8 +456,8 @@ class _ProfileState extends State<Profile> {
           ListTile(
             dense: true,
             leading: const Icon(Icons.call, color: Colors.white),
-            title:
-                AppText(phoneStr!, fontSize: 16, fontWeight: FontWeight.w500),
+            title: AppText(InputHelper.phoneToFormat(phoneStr!),
+                fontSize: 16, fontWeight: FontWeight.w500),
             trailing: IconButton(
               onPressed: showPhoneDialog,
               icon: const Icon(Icons.edit, color: Colors.white),

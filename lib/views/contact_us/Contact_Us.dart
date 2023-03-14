@@ -6,12 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/contactUs/ContactUsFailedResponse.dart';
+import 'package:pwlp/Model/profile/ProfileData.dart';
 import 'package:pwlp/validators/Message.dart';
+import 'package:pwlp/validators/input_helper.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/textField/text_field.dart';
 import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 import '../../Model/contactUs/ContactUsResponse.dart';
@@ -37,6 +40,7 @@ class _ContactUsState extends State<ContactUs> {
     _NameTF = TextEditingController();
     _ContactTF = TextEditingController();
     _MessageTF = TextEditingController();
+    getProfileAPI();
     super.initState();
   }
 
@@ -49,18 +53,40 @@ class _ContactUsState extends State<ContactUs> {
     super.dispose();
   }
 
+  getProfileAPI() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+    Map data = {
+      'user_id': sharedPreferences.getString("userID"),
+    };
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().get_user_profile), body: data);
+    if (response.statusCode == 200) {
+      ProfileData profileData =
+          ProfileData.fromJson(json.decode(response.body));
+      setState(() {
+        _NameTF.text =
+            "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
+        _EmailTF.text = profileData.data!.userProfile![0].email ?? "";
+        String phone = profileData.data!.userProfile![0].phone ?? "";
+        _ContactTF.text = InputHelper.phoneToFormat(phone);
+      });
+    } else {
+      log("Failure API");
+    }
+  }
+
   /// API------> Contact Us
   Future<void> contactUsAPI() async {
     Utility().onLoading(context, true);
-
+    String phone = InputHelper.phoneRegular(_ContactTF.text);
     Map data = {
       'name': _EmailTF.text,
       'email': _NameTF.text,
-      'phone': _ContactTF.text,
+      'phone': phone,
       'message': _MessageTF.text,
       'device_id': "1234568iOSdummyValue123456789",
     };
-
     var response =
         await http.post(Uri.parse(Api.baseUrl + Api().contact_us), body: data);
 
@@ -68,9 +94,7 @@ class _ContactUsState extends State<ContactUs> {
     if (response.statusCode == 200) {
       var result = json.decode(response.body);
 
-      log(result.toString(), name: "Response");
       if (result['success'] == true) {
-        log(result['success'].toString(), name: "Response sccuc");
         final contactUsResponse =
             ContactUsResponse.fromJson(json.decode(response.body));
         Utility().toast(context, contactUsResponse.message!);
@@ -104,7 +128,7 @@ class _ContactUsState extends State<ContactUs> {
       toast(Message().Email);
     } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
-    } else if (_ContactTF.text.isEmpty || _ContactTF.text.length != 10) {
+    } else if (_ContactTF.text.isEmpty || _ContactTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);
     } else if (_MessageTF.text.isEmpty) {
       toast(Message().MessageEmpty);
@@ -175,11 +199,13 @@ class _ContactUsState extends State<ContactUs> {
                       ),
                       InputTextField(
                         controller: _ContactTF,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(10),
-                        ],
                         label: 'Phone',
+                        maxLength: 14,
+                        inputFormatters: InputHelper.phoneFormatter,
                         keyboardType: TextInputType.phone,
+                        onChanged: (value) {
+                          _MessageTF.text = InputHelper.phoneRegular(value);
+                        },
                         margin: const EdgeInsets.only(bottom: 16),
                       ),
                       InputTextField(
