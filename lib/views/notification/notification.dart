@@ -112,7 +112,7 @@ class _PwNotificationState extends State<PwNotification> {
               if (snapshot.data == null || snapshot.data!.isEmpty) {
                 return const Center(
                   child: Text(
-                    'No Notification found.',
+                    'There are no new notifications for you',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

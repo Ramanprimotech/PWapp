@@ -12,6 +12,8 @@ import 'package:pwlp/views/dashboard/Dashboard.dart';
 import 'package:pwlp/views/search/LocationSearch.dart';
 import 'package:pwlp/widgets/utility/updateUI.dart';
 
+import 'Model/auth/ForgotPasswordData.dart';
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -26,7 +28,7 @@ Future main() async {
         home: const SplashScreen(),
         routes: <String, WidgetBuilder>{
           '/SplashScreen': (BuildContext context) => const SplashScreen(),
-          '/RegisterVC': (BuildContext context) => RegisterVC(),
+          '/RegisterVC': (BuildContext context) => const RegisterVC(),
           '/Login': (BuildContext context) => const Login(),
           '/LocationSearch': (BuildContext context) => const LocationSearch(),
           '/congratulationVC': (BuildContext context) => congratulationVC(),

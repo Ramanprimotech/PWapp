@@ -99,7 +99,7 @@ class _WalletState extends State<Wallet> {
                         height: MediaQuery.of(context).size.height * .6,
                         alignment: Alignment.center,
                         child: const Text(
-                          "Here, you can see the posters you scanned and reward amount earned.",
+                          "Here you can see the posters you have scanned and the total reward amount earned.",
                           style: TextStyle(
                               fontSize: 20.0,
                               color: Colors.white,

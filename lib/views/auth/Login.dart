@@ -255,31 +255,47 @@ class _LoginState extends State<Login> {
 
   Future<bool?> ForgotPassword() {
     return Alert(
-        context: context,
-        title: "Forgot Password",
-        content: Column(
-          children: <Widget>[
-            const SizedBox(height: 10),
-            TextField(
-              controller: _forgotPsdController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                hintText: 'Email',
-              ),
-              keyboardType: TextInputType.emailAddress,
+      context: context,
+      title: "Forgot Password",
+      content: Column(
+        children: <Widget>[
+          const SizedBox(height: 16),
+          TextField(
+            controller: _forgotPsdController,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
+              hintText: 'Email',
             ),
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            color: const Color(0xffc22ea1),
-            onPressed: () {
-              validationForgotPsd();
-            },
-            child: const AppText("Send", fontSize: 20),
+            keyboardType: TextInputType.emailAddress,
           ),
-        ]).show();
+          TextField(
+            controller: _forgotPsdController,
+            decoration: const InputDecoration(
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              hintText: "Email",
+              hintStyle: const TextStyle(
+                  color: Colors.white70, fontFamily: 'texgyreadventor-regular', fontSize: 16),
+            ),
+            keyboardType: TextInputType.emailAddress,
+          ),
+        ],
+      ),
+      buttons: [
+        DialogButton(
+
+          color: const Color(0xffc22ea1),
+          onPressed: () {
+            validationForgotPsd();
+          },
+          child: const AppText("Send", fontSize: 20),
+        ),
+      ]).show();
   }
 
   void validationForgotPsd() {
@@ -309,7 +325,7 @@ class _LoginState extends State<Login> {
           ForgotPasswordData.fromJson(json.decode(response.body));
       _forgotPsdController.text = "";
       dialogAlert(context,
-          "Password reset successfully, We have sent your new password on registered email!");
+          "Your password has been reset successfully. We have emailed your new password. Please check your inbox.");
     } else {
       log("Failure API");
       _forgotPsdController.text = "";

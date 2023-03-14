@@ -36,8 +36,8 @@ String address_id = "";
 String addressStr = "";
 String attnStr = "";
 
-bool _obscureText = true;
-bool _obscureConfirmText = true;
+bool _obscureText = false;
+bool _obscureConfirmText = false;
 
 class RegisterVC extends StatefulWidget {
   const RegisterVC({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _RegisterVCState extends State<RegisterVC> {
     }
   }
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1110;
 
   _onSelected(int index) {
     if (_selectedIndex != index) {
@@ -131,11 +131,9 @@ class _RegisterVCState extends State<RegisterVC> {
     ToastContext().init(context);
     return OfflineBuilder(
       debounceDuration: Duration.zero,
-      connectivityBuilder: (
-        BuildContext context,
-        ConnectivityResult connectivity,
-        Widget child,
-      ) {
+      connectivityBuilder: (BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,) {
         if (connectivity == ConnectivityResult.none) {
           return const ConnectivityMessage();
         }
@@ -184,96 +182,100 @@ class _RegisterVCState extends State<RegisterVC> {
           height: double.infinity,
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
-                const SizedBox(height: 40),
-                const AppText(
-                  "Welcome",
-                  fontSize: 35,
-                  fontWeight: FontWeight.w600,
-                  padding: EdgeInsets.only(top: 40, bottom: 24),
-                ),
-                const AppText(
-                  "Select Your Specialty Edition",
-                  fontSize: 18,
-                  padding: EdgeInsets.only(top: 40, bottom: 24),
-                ),
-                InputTextField(
-                  readOnly: true,
-                  label: 'Select Specialty',
-                  controller: _SpecialityTF,
-                  suffixIcon: const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.white,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      _isVisible = !_isVisible;
-                      _LocationTF.text = "";
-                      _addressOptTF.text = "";
-                    });
-                  },
-                ),
-                Visibility(
-                  visible: _isVisible,
-                  child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      height: 200.0,
-                      width: 320.0,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Color.fromRGBO(255, 255, 255, 0.12)),
-                      child: specialityData != null
-                          ? ListView.builder(
-                              itemCount: specialityData!.data!.length,
-                              itemBuilder: (context, index) => Container(
-                                color: _selectedIndex == index
-                                    ? Colors.transparent
-                                    : const Color.fromRGBO(255, 255, 255, 0.12),
-                                child: ListTile(
-                                  title: Text(
-                                    '${specialityData!.data![index].name}',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18.0,
-                                        fontFamily: 'texgyreadventor-regular'),
-                                  ),
-                                  onTap: () async {
-                                    _onSelected(index);
-                                    _isVisible = !_isVisible;
-                                    _SpecialityTF.text =
-                                        '${specialityData!.data![index].name}';
-                                    SharedPreferences sharedPreferences =
-                                        await SharedPreferences.getInstance();
-                                    sharedPreferences.setString(
-                                        "SelctedSpeciality",
-                                        specialityData!.data![index].name!);
-                                  },
-                                ),
-                              ),
-                            )
-                          : const Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                              ),
-                            )),
-                ),
-                const SizedBox(height: 20),
-                CustomBtn(
-                    btnLable: "Next",
-                    onPressed: () {
-                      checkSpecialityVal();
-                    }),
-                AlreadyAcc(
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.of(context).pushReplacementNamed('/Login');
-                    },
-                ),
-              ],
+                children: <Widget>[
+            const SizedBox(height: 40),
+            const AppText(
+              "Welcome",
+              fontSize: 35,
+              fontWeight: FontWeight.w600,
+              padding: EdgeInsets.only(top: 40, bottom: 24),
             ),
+            const AppText(
+              "Select Your Specialty Edition",
+              fontSize: 18,
+              padding: EdgeInsets.only(top: 40, bottom: 24),
+            ),
+            InputTextField(
+              readOnly: true,
+              label: 'Select Specialty',
+              controller: _SpecialityTF,
+              suffixIcon: const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white,
+              ),
+              onTap: () {
+                setState(() {
+                  _isVisible = !_isVisible;
+                  _LocationTF.text = "";
+                  _addressOptTF.text = "";
+                });
+              },
+            ),
+            Visibility(
+                visible: _isVisible,
+                child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    height: 200.0,
+                    // width: 320.0,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),),
+                        // BorderRadius.all(Radius.circular(10.0)),
+                        color: Color.fromRGBO(255, 255, 255, 0.12)),
+                child: specialityData != null
+                    ? ListView.builder(
+                  itemCount: specialityData!.data!.length,
+                  itemBuilder: (context, index) =>
+                      Container(
+                        color: _selectedIndex == index
+                            ? Colors.transparent
+                            : const Color.fromRGBO(255, 255, 255, 0.12),
+                        child: ListTile(
+                          title: Text(
+                            '${specialityData!.data![index].name}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontFamily: 'texgyreadventor-regular'),
+                          ),
+                          onTap: () async {
+                            _onSelected(index);
+                            _isVisible = !_isVisible;
+                            _SpecialityTF.text =
+                            '${specialityData!.data![index].name}';
+                            SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                            sharedPreferences.setString(
+                                "SelctedSpeciality",
+                                specialityData!.data![index].name!);
+                          },
+                        ),
+                      ),
+                )
+                    : const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                  ),
+                )),
           ),
+          const SizedBox(height: 20),
+          CustomBtn(
+              btnLable: "Next",
+              onPressed: () {
+                checkSpecialityVal();
+              }),
+          AlreadyAcc(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.of(context).pushReplacementNamed('/Login');
+              },
+          ),
+          ],
         ),
       ),
+    ),)
+    ,
     );
   }
 
@@ -337,7 +339,7 @@ class _RegisterVCState extends State<RegisterVC> {
               Container(
                   margin: const EdgeInsets.only(bottom: 30),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 24),
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 24),
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(
                       Radius.circular(5.0),
@@ -357,7 +359,7 @@ class _RegisterVCState extends State<RegisterVC> {
                         padding: const EdgeInsets.only(left: 5.0, right: 10.0),
                         decoration: const BoxDecoration(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(5.0)),
+                            BorderRadius.all(Radius.circular(5.0)),
                             color: Color.fromRGBO(255, 255, 255, 1.0)),
                         child: TextField(
                           controller: _addressOptTF,
@@ -370,7 +372,7 @@ class _RegisterVCState extends State<RegisterVC> {
                               border: InputBorder.none,
                               enabledBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                BorderSide(color: Colors.transparent),
                               ),
                               suffixIcon: Icon(
                                 Icons.arrow_drop_down,
@@ -499,7 +501,7 @@ class _RegisterVCState extends State<RegisterVC> {
                     child: Icon(
                       _obscureText ? Icons.visibility_off : Icons.visibility,
                       semanticLabel:
-                          _obscureText ? 'show password' : 'hide password',
+                      _obscureText ? 'show password' : 'hide password',
                       color: Colors.white,
                     ),
                   ),
@@ -522,7 +524,7 @@ class _RegisterVCState extends State<RegisterVC> {
                           ? Icons.visibility_off
                           : Icons.visibility,
                       semanticLabel:
-                          _obscureText ? 'show password' : 'hide password',
+                      _obscureText ? 'show password' : 'hide password',
                       color: Colors.white,
                     ),
                   ),
@@ -557,10 +559,10 @@ class _RegisterVCState extends State<RegisterVC> {
                       children: [
                         const WidgetSpan(
                             child: AppText(
-                          "I have read the ",
-                          fontSize: 15,
-                          fontWeight: FontWeight.w300,
-                        )),
+                              "I have read the ",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                            )),
                         TextSpan(
                           text: "Privacy Policy",
                           style: const TextStyle(
@@ -577,10 +579,10 @@ class _RegisterVCState extends State<RegisterVC> {
                         ),
                         const WidgetSpan(
                             child: AppText(
-                          " and",
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14.0,
-                        ))
+                              " and",
+                              fontWeight: FontWeight.w300,
+                              fontSize: 14.0,
+                            ))
                       ],
                     ),
                   ),
@@ -590,10 +592,10 @@ class _RegisterVCState extends State<RegisterVC> {
                       children: [
                         const WidgetSpan(
                             child: AppText(
-                          "agree to the ",
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14.0,
-                        )),
+                              "agree to the ",
+                              fontWeight: FontWeight.w300,
+                              fontSize: 14.0,
+                            )),
                         TextSpan(
                           text: "Terms & Conditions.",
                           style: const TextStyle(
@@ -698,7 +700,7 @@ class _RegisterVCState extends State<RegisterVC> {
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       final userRegisterData =
-          UserRegisterData.fromJson(json.decode(response.body));
+      UserRegisterData.fromJson(json.decode(response.body));
       log('Response final------------- ${userRegisterData.data!.firstname}');
       sharedPreferences.setString(
           "userID", userRegisterData.data!.id.toString());
@@ -738,7 +740,7 @@ class _RegisterVCState extends State<RegisterVC> {
       log(response.body, name: "register");
     } else {
       final registerErrorData =
-          RegisterErrorData.fromJson(json.decode(response.body));
+      RegisterErrorData.fromJson(json.decode(response.body));
     }
   }
 

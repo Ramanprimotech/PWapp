@@ -104,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
                   setState(() {
                     _selectedTab = 6;
                   });
-                  Navigator.pop(context, "Notification");
+                  Navigator.pop(context, "Notifications");
                 },
               ),
               CupertinoActionSheetAction(
