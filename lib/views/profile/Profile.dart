@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:pwlp/validators/input_helper.dart';
 import 'package:pwlp/widgets/AppText.dart';
+import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -253,51 +254,90 @@ class _ProfileState extends State<Profile> {
   }
 
   showPhoneDialog() {
-    Alert(
-        context: context,
-        title: "Phone Number",
-        content: Column(
-          children: <Widget>[
-            const SizedBox(height: 10),
-            TextField(
-              controller: _phoneNumber,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                ),
-                hintText: "Phone Number",
+    // Alert(
+    //     context: context,
+    //     title: "Phone Number",
+    //     content: TextField(
+    //       controller: _phoneNumber,
+    //       decoration: const InputDecoration(
+    //         border: OutlineInputBorder(
+    //           borderRadius: BorderRadius.all(Radius.circular(5.0)),
+    //         ),
+    //         hintText: "(999) 000-0000",
+    //       ),
+    //       keyboardType: TextInputType.phone,
+    //       inputFormatters: InputHelper.phoneFormatter,
+    //       // maxLength: 14,
+    //     ),
+    //     buttons: [
+    //       DialogButton(
+    //         color: const Color(0xffc22ea1),
+    //         onPressed: () {
+    //           Navigator.of(context, rootNavigator: true).pop();
+    //           validatePhoneNo();
+    //         },
+    //         child: const Text(
+    //           "Update",
+    //           style: TextStyle(
+    //             color: Colors.white,
+    //             fontSize: 20,
+    //             fontFamily: 'texgyreadventor-regular',
+    //           ),
+    //         ),
+    //       )
+    //     ]).show();
+
+    showDialog(
+
+        barrierColor: Colors.black87,
+        context: context, builder: (BuildContext buildContext){
+
+      return AlertDialog(
+        contentPadding: const EdgeInsets.all(6),
+        backgroundColor: Colors.white24,
+        content: Container(
+          padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.white),
+        height: 240,
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 16),
+          const AppText("Phone Number", color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+          const Spacer(),
+          TextField(
+            controller: _phoneNumber,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
-              keyboardType: TextInputType.phone,
-              inputFormatters: InputHelper.phoneFormatter,
-              maxLength: 14,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              hintText: "(999) 000-0000",
             ),
-          ],
-        ),
-        buttons: [
-          DialogButton(
-            color: const Color(0xffc22ea1),
+            keyboardType: TextInputType.phone,
+            inputFormatters: InputHelper.phoneFormatter,
+            // maxLength: 14,
+          ),
+          SizedBox(height: 16),
+          CustomBtn(
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
               validatePhoneNo();
             },
-            child: const Text(
-              "Update",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: 'texgyreadventor-regular',
-              ),
-            ),
+            btnLable: 'Update',
           )
-        ]).show();
+        ],
+      ),),);
+    });
     setState(() {
       if (phoneStr != "xxx-xxxx-xxx") {
         _phoneNumber.text = InputHelper.phoneToFormat(phoneStr!);
       }
     });
   }
+
 
   @override
   void initState() {

@@ -37,8 +37,8 @@ String address_id = "";
 String addressStr = "";
 String attnStr = "";
 
-bool _obscureText = false;
-bool _obscureConfirmText = false;
+bool _obscureText = true;
+bool _obscureConfirmText = true;
 
 class RegisterVC extends StatefulWidget {
   const RegisterVC({Key? key}) : super(key: key);
