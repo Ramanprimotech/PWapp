@@ -71,14 +71,15 @@ class _WalletState extends State<Wallet> {
             ),
           ),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: const EdgeInsets.only(bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const AppText(
                   "Activity",
-                  fontSize: 25.0,
-                  padding: EdgeInsets.symmetric(vertical: 12.0),
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.w700,
+                  padding: EdgeInsets.symmetric(vertical: 24),
                 ),
                 FutureBuilder<List<WalletModel>>(
                   future: future,
@@ -151,7 +152,7 @@ class _WalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isWallet = wallet.catgory == "wallet";
+    final bool isWallet = wallet.catgory == "scanned_posters";
     return Container(
       height: 150,
       padding: const EdgeInsets.all(15.0),
@@ -166,7 +167,7 @@ class _WalletCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(isWallet ? "Redemption" : "Scanned Poster",
+                AppText(isWallet ? "Scanned Poster" : "Wallboard Poster",
                     fontSize: 20),
                 if (isWallet) ...[
                   Row(

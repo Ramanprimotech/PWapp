@@ -269,21 +269,6 @@ class _LoginState extends State<Login> {
             ),
             keyboardType: TextInputType.emailAddress,
           ),
-          TextField(
-            controller: _forgotPsdController,
-            decoration: const InputDecoration(
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-              hintText: "Email",
-              hintStyle: const TextStyle(
-                  color: Colors.white70, fontFamily: 'texgyreadventor-regular', fontSize: 16),
-            ),
-            keyboardType: TextInputType.emailAddress,
-          ),
         ],
       ),
       buttons: [
