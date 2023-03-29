@@ -257,18 +257,21 @@ class _ProfileState extends State<Profile> {
     Alert(
         context: context,
         title: "Phone Number",
-        content: TextField(
-          controller: _phoneNumber,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        content: Padding(
+          padding: const EdgeInsets.only(top:18.0),
+          child: TextField(
+            controller: _phoneNumber,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              hintText: "xxx-xxxx-xxx",
+              hintStyle: TextStyle(fontSize: 20)
             ),
-            hintText: "xxx-xxxx-xxx",
-            hintStyle: TextStyle(fontSize: 20)
+            keyboardType: TextInputType.phone,
+            inputFormatters: InputHelper.phoneFormatter,
+            // maxLength: 14,
           ),
-          keyboardType: TextInputType.phone,
-          inputFormatters: InputHelper.phoneFormatter,
-          // maxLength: 14,
         ),
         buttons: [
           DialogButton(
