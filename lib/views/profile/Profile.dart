@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
   String? specialityStr;
   String? addressStr;
   String? emailStr = "";
-  String? phoneStr = "xxxxxxxxxx";
+  String? phoneStr = "";
   String? pointsStr = "";
   String rewardCardStr = "";
   String scannedNoStr = "";
@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
         emailStr = profileData.data!.userProfile![0].email;
         phoneStr = profileData.data!.userProfile![0].phone;
         if (phoneStr == "") {
-          phoneStr = "(xxx) xxx-xxxx";
+          phoneStr = "";
         }
         pointsStr = profileData.data!.userProfile![0].points;
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
@@ -108,7 +108,7 @@ class _ProfileState extends State<Profile> {
         emailStr = profileData.data!.userProfile![0].email;
         phoneStr = profileData.data!.userProfile![0].phone;
         if (phoneStr == "") {
-          phoneStr = "(xxx) xxx-xxxx";
+          phoneStr = "xxxxxxxxxx";
         }
         pointsStr = profileData.data!.userProfile![0].points;
 
@@ -290,7 +290,7 @@ class _ProfileState extends State<Profile> {
         ]).show();
 
     setState(() {
-      if (phoneStr != "(xxx) xxx-xxxx") {
+      if (phoneStr != "xxx xxx-xxxx") {
         _phoneNumber.text = InputHelper.phoneToFormat(phoneStr!);
       }
     });
@@ -453,8 +453,12 @@ class _ProfileState extends State<Profile> {
           ListTile(
             dense: true,
             leading: const Icon(Icons.call, color: Colors.white),
-            title: AppText(InputHelper.phoneToFormat(phoneStr!),
-                fontSize: 16, fontWeight: FontWeight.w500),
+            title: AppText(
+                phoneStr == "" || phoneStr == null
+                    ? InputHelper.phoneToFormat("xxxxxxxxxx")
+                    : InputHelper.phoneToFormat(phoneStr!),
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
             trailing: IconButton(
               onPressed: showPhoneDialog,
               icon: const Icon(Icons.edit, color: Colors.white),
