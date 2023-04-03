@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:pwlp/validators/input_helper.dart';
 import 'package:pwlp/widgets/AppText.dart';
-import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/utility/assetImage.dart';
 import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -258,16 +257,15 @@ class _ProfileState extends State<Profile> {
         context: context,
         title: "Phone Number",
         content: Padding(
-          padding: const EdgeInsets.only(top:18.0),
+          padding: const EdgeInsets.only(top: 18.0),
           child: TextField(
             controller: _phoneNumber,
             decoration: const InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              hintText: "xxx-xxxx-xxx",
-              hintStyle: TextStyle(fontSize: 20)
-            ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
+                hintText: "(xxx) xxxx-xxx",
+                hintStyle: TextStyle(fontSize: 20)),
             keyboardType: TextInputType.phone,
             inputFormatters: InputHelper.phoneFormatter,
             // maxLength: 14,
@@ -297,7 +295,6 @@ class _ProfileState extends State<Profile> {
       }
     });
   }
-
 
   @override
   void initState() {
