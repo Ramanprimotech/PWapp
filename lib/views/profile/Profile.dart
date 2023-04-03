@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
         emailStr = profileData.data!.userProfile![0].email;
         phoneStr = profileData.data!.userProfile![0].phone;
         if (phoneStr == "") {
-          phoneStr = "xxx-xxxx-xxx";
+          phoneStr = "(xxx) xxx-xxxx";
         }
         pointsStr = profileData.data!.userProfile![0].points;
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
@@ -108,7 +108,7 @@ class _ProfileState extends State<Profile> {
         emailStr = profileData.data!.userProfile![0].email;
         phoneStr = profileData.data!.userProfile![0].phone;
         if (phoneStr == "") {
-          phoneStr = "xxx-xxxx-xxx";
+          phoneStr = "(xxx) xxx-xxxx";
         }
         pointsStr = profileData.data!.userProfile![0].points;
 
@@ -264,7 +264,7 @@ class _ProfileState extends State<Profile> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 ),
-                hintText: "(xxx) xxxx-xxx",
+                hintText: "(xxx) xxx-xxxx",
                 hintStyle: TextStyle(fontSize: 20)),
             keyboardType: TextInputType.phone,
             inputFormatters: InputHelper.phoneFormatter,
@@ -290,7 +290,7 @@ class _ProfileState extends State<Profile> {
         ]).show();
 
     setState(() {
-      if (phoneStr != "xxx-xxxx-xxx") {
+      if (phoneStr != "(xxx) xxx-xxxx") {
         _phoneNumber.text = InputHelper.phoneToFormat(phoneStr!);
       }
     });
