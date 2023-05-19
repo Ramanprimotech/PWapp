@@ -665,6 +665,8 @@ class _RegisterVCState extends State<RegisterVC> {
       toast(Message().Password);
     } else if (_PasswordTF.text.length < 6) {
       toast(Message().PasswordCharacter);
+    } else if (_PasswordTF.text.trim() != _ConfirmPasswordTF.text.trim()) {
+      toast(Message().PasswordMismatch);
     } else if (_PasswordTF.text.length != _ConfirmPasswordTF.text.length) {
       toast(Message().PasswordMismatch);
     } else if (checkBoxVal == false) {
