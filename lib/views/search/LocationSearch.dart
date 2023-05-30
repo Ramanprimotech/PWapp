@@ -3,12 +3,15 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/search/LocationData.dart';
 import 'package:pwlp/utils/API_Constant.dart';
 import 'package:pwlp/views/auth/RegisterVC.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+
+import '../../utils/get_location.dart';
 
 class LocationSearch extends StatefulWidget {
   const LocationSearch({Key? key, fun}) : super(key: key);
@@ -208,8 +211,8 @@ class _LocationSearchState extends State<LocationSearch> {
       filteredNames.clear();
     });
 
-    // GetGeoLocation getGeoLocation = GetGeoLocation();
-    // Position? position = await getGeoLocation.getCurrentPosition(context);
+    GetGeoLocation getGeoLocation = GetGeoLocation();
+    Position? position = await getGeoLocation.getCurrentPosition(context);
     var data = <String, String>{};
     if (Api.baseUrl == BaseUrl.stageUrl) {
       data = {
@@ -217,11 +220,12 @@ class _LocationSearchState extends State<LocationSearch> {
         "specialty": specialty!,
         // "latitude": "${position!.latitude}",
         // "longitude": "${position.longitude}"
-        "latitude": "0.0",
-        "longitude": "0.0"
-        // "specialty": "Primary Care",
-        // "latitude": "30.71383",
-        // "longitude": "76.71283"
+        ///
+        "latitude": "arsgvd0.0",
+        "longitude": "asgqwrvg0.0"
+        // // "specialty": "Primary Care",
+        // // "latitude": "30.71383",
+        // // "longitude": "76.71283"
       };
     } else {
       data = {
@@ -229,12 +233,13 @@ class _LocationSearchState extends State<LocationSearch> {
         "specialty": specialty!,
         // "latitude": "${position!.latitude}",
         // "longitude": "${position.longitude}"
-        "latitude": "0.0",
-        "longitude": "0.0"
+        "latitude": "40.788920",
+        "longitude": "-74.465170"
         // "latitude": "37.0902",
         // "longitude": "95.7129"
       };
     }
+    print("latitude${position!.latitude} longtitude${position.longitude}");
     log(data.toString(), name: "Request");
     String url = "${Api.baseUrl}" "${Api().get_address}";
     var response = await http.post(Uri.parse(url), body: data);

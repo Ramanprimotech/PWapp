@@ -156,8 +156,73 @@ class _RewardState extends State<Reward> {
       "campaign": "Partner Perks",
       "customerIdentifier": sharedPreferences.getString("customer_identifier"),
       "emailSubject": "Partner Perks Reward Card",
-      //"etid": sharedPreferences.getString("etid"),
-      "etid": "E869211",
+      "etid": sharedPreferences.getString("etid"),
+      "externalRefID": "",
+      "message": "You have got reward by Partner Perks.",
+      "notes": "Partner Perks",
+      "recipient": {
+        "email": sharedPreferences.getString("email"),
+        "firstName": sharedPreferences.getString("firstname"),
+        "lastName": sharedPreferences.getString("lastname")
+      },
+      "sendEmail": true,
+      "sender": {
+        "email": sharedPreferences.getString("sender_email"),
+        "firstName": sharedPreferences.getString("sender_firstname"),
+        "lastName": sharedPreferences.getString("sender_lastname")
+      },
+      "utid": "U143628"
+    });
+    String? platformName = sharedPreferences.getString("platform_name");
+    String? platformKey = sharedPreferences.getString("platform_key");
+
+    String keyPair = '$platformName:$platformKey';
+    String base = base64Encode(utf8.encode(keyPair));
+    String basicAuth = 'Basic $base';
+
+    String uri = Api.baseTangoCardUrl + Api().orders;
+    var response = await http.post(
+      Uri.parse(uri),
+      body: body,
+      headers: <String, String>{
+        'authorization': basicAuth,
+        "Content-Type": "application/json",
+      },
+    );
+    Utility().onLoading(context, false);
+    if (response.statusCode == 201) {
+      placeOrderData =
+          PlaceOrderData.fromJson(json.decode(response.body.toString()));
+      dateStr = placeOrderData.createdAt.toString();
+      DateTime todayDate = DateTime.parse(dateStr);
+      setState(() {
+        dateStr = formatDate(todayDate, [dd, '-', mm, '-', yyyy]).toString();
+        setState(() {
+          redeemMsg = "You have Successfully Redeemed";
+        });
+        saveOrder();
+      });
+    } else {
+      log("Failure API");
+      Utility().onLoading(context, false);
+      setState(() {
+        redeemMsg = "Redemption unsuccessful";
+      });
+      Utility().toast(context, Message().redeptionMsg);
+    }
+  }
+
+  /*placeOrderAPI() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+    var body = json.encode({
+      "accountIdentifier": sharedPreferences.getString("accountIdentifier"),
+      "amount": moneyD,
+      "campaign": "Partner Perks",
+      "customerIdentifier": sharedPreferences.getString("customer_identifier"),
+      "emailSubject": "Partner Perks Reward Card",
+      "etid": sharedPreferences.getString("etid"),
+      // "etid": "E869211",
       // "externalRefID": "",
       "message": "You have got reward by Partner Perks.",
       "notes": "Partner Perks",
@@ -173,7 +238,8 @@ class _RewardState extends State<Reward> {
         "lastName": sharedPreferences.getString("sender_lastname")
       },
       // "utid": "U143628"
-      "utid": "U561593"
+      // "utid": "U561593"
+      "utid": sharedPreferences.getString("U")
     });
     String? platformName = sharedPreferences.getString("platform_name");
     String? platformKey = sharedPreferences.getString("platform_key");
@@ -214,7 +280,7 @@ class _RewardState extends State<Reward> {
         });
       }
     }
-  }
+  }*/
 
   @override
   void initState() {

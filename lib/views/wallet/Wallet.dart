@@ -154,8 +154,7 @@ class _WalletCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isWallet = wallet.catgory == "scanned_posters";
     return Container(
-      height: 150,
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: Colors.white24,

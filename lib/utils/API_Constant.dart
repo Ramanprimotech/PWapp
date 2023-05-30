@@ -13,9 +13,9 @@ abstract class BaseUrl {
 }
 
 class Api {
-  static const String baseUrl = BaseUrl.stageUrl;
-  static const String baseImageUrl = BaseUrl.stageImage;
-  static const String baseTangoCardUrl = BaseUrl.stageTangoCard;
+  static const String baseUrl = BaseUrl.live;
+  static const String baseImageUrl = BaseUrl.liveImage;
+  static const String baseTangoCardUrl = BaseUrl.liveTangoCard;
 
   /// Method Name
   final get_address = "get_address";
