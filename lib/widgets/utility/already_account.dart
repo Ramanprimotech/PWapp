@@ -10,7 +10,7 @@ class AlreadyAcc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 18),
+      margin: const EdgeInsets.only(top: 48),
       child: Center(
         child: RichText(
           textAlign: TextAlign.left,
