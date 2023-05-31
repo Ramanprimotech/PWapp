@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,6 +105,7 @@ class _RegisterVCState extends State<RegisterVC> {
 
   @override
   void initState() {
+    getUniqueDeviceId();
     _myPageView.addListener(() {
       var newPage = _myPageView.page!.floor();
       if (page != newPage) {
@@ -112,6 +115,24 @@ class _RegisterVCState extends State<RegisterVC> {
     });
     specialityAPI();
     super.initState();
+  }
+
+
+  Future<String> getUniqueDeviceId() async {
+    String uniqueDeviceId = '';
+
+    var deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isIOS) { // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      uniqueDeviceId = '${iosDeviceInfo.name}:${iosDeviceInfo.identifierForVendor}'; // unique ID on iOS
+    } else if(Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      uniqueDeviceId = '${androidDeviceInfo.product}:${androidDeviceInfo.id}' ; // unique ID on Android
+    }
+    print("uuuuuuuuuuu ${uniqueDeviceId}");
+    return uniqueDeviceId;
+
   }
 
   @override
@@ -692,8 +713,8 @@ class _RegisterVCState extends State<RegisterVC> {
       'address': addressStr,
       'address_id': address_id,
       'specialty': _SpecialityTF.text,
-      // 'device_id': '1234568iOSdummyValue',
-      'device_id': '1234568iOSdummyValuey65675',
+      'device_id': await getUniqueDeviceId(),
+      // 'device_id': '1234568iOSdummyValuey65675',
       'phone': phoneStr,
       'profile_pic': ""
     };
