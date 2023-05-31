@@ -104,7 +104,6 @@ class _LoginState extends State<Login> {
             InputTextField(
               label: "Email",
               controller: _EmailTF,
-              inputFormatters: emailFormatter,
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 15),
@@ -193,8 +192,8 @@ class _LoginState extends State<Login> {
       Utility().toast(context, Message().Email);
     } else if (_PasswordTF.text.isEmpty) {
       Utility().toast(context, Message().PasswordEmpty);
-    } else if (!isValidEmail(_EmailTF.text.trim())) {
-    // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+    // } else if (!isValidEmail(_EmailTF.text.trim())) {
+    } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       Utility().toast(context, Message().EmailValid);
     } else if (_PasswordTF.text.length < 6) {
       Utility().toast(context, Message().PasswordCharacter);
