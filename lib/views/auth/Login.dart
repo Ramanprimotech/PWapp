@@ -3,11 +3,13 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/utils/extentions/validation_extentions.dart';
 import 'package:pwlp/validators/Message.dart';
 import 'package:pwlp/widgets/AppText.dart';
+import 'package:pwlp/widgets/Widgets.dart';
 import 'package:pwlp/widgets/button/elevated_btn.dart';
 import 'package:pwlp/widgets/textField/text_field.dart';
 import 'package:pwlp/widgets/utility/alert.dart';
@@ -21,6 +23,7 @@ import '../../Model/auth/ForgotPasswordData.dart';
 import '../../Model/auth/UserLoginData.dart';
 import '../../utils/API_Constant.dart';
 import '../../widgets/utility/Utility.dart';
+
 
 bool _obscureText = true;
 
@@ -101,6 +104,7 @@ class _LoginState extends State<Login> {
             InputTextField(
               label: "Email",
               controller: _EmailTF,
+              inputFormatters: emailFormatter,
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 15),
@@ -179,13 +183,18 @@ class _LoginState extends State<Login> {
     );
   }
 
+
+
+  static List<TextInputFormatter> checkEmail = [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}\\@[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25})+')),];
+
   loginValidation() {
     FocusScope.of(context).requestFocus(FocusNode());
     if (_EmailTF.text.isEmpty) {
       Utility().toast(context, Message().Email);
     } else if (_PasswordTF.text.isEmpty) {
       Utility().toast(context, Message().PasswordEmpty);
-    } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+    } else if (!isValidEmail(_EmailTF.text.trim())) {
+    // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       Utility().toast(context, Message().EmailValid);
     } else if (_PasswordTF.text.length < 6) {
       Utility().toast(context, Message().PasswordCharacter);

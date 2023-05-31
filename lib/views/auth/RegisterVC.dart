@@ -23,6 +23,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Model/auth/UserRegisterData.dart';
 import '../../Model/search/SpecialityData.dart';
+import '../../widgets/Widgets.dart';
 import '../../widgets/utility/Utility.dart';
 
 TextEditingController _FnameTF = TextEditingController();
@@ -458,6 +459,7 @@ class _RegisterVCState extends State<RegisterVC> {
                 InputTextField(
                   controller: _EmailTF,
                   label: 'Email',
+                  inputFormatters: emailFormatter,
                   keyboardType: TextInputType.emailAddress,
                   margin: const EdgeInsets.only(bottom: 15.0),
                 ),
@@ -678,7 +680,8 @@ class _RegisterVCState extends State<RegisterVC> {
       toast(Message().FnameCharacterValid);
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
-    } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+    } else if (!isValidEmail(_EmailTF.text.trim())) {
+    // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);
@@ -792,7 +795,8 @@ class _RegisterVCState extends State<RegisterVC> {
       toast(Message().FnameCharacterValid);
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
-    } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+    } else if (!isValidEmail(_EmailTF.text.trim())) {
+    // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);

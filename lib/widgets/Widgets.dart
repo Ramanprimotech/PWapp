@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Future CommonShowDialog(context, {Widget? child, contentPadding}){
   return showDialog(
@@ -18,4 +19,20 @@ Future CommonShowDialog(context, {Widget? child, contentPadding}){
           ),
         );
       });
+}
+
+ List<TextInputFormatter> emailFormatter = [
+  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\.\-\@\_]')),
+  FilteringTextInputFormatter.deny(RegExp('[\<\>\?\\\/\|\=\;\:]')),
+];
+
+bool isValidEmail(value) {
+  if (value.isEmpty) {
+    return false;
+  }
+  RegExp exp = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+  bool result = exp.hasMatch(value);
+
+  return result;
 }
