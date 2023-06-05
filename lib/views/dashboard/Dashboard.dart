@@ -26,24 +26,47 @@ class _DashboardState extends State<Dashboard> {
   int _selectedTab = 0;
   late List<Widget> _pageOptions;
 
-  _launchURL() async {
+/*  _launchURL() async {
     const url = 'https://www.physiciansweekly.com';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    if (await launch(url)) {
+      await canLaunch(url);
     } else {
       throw 'Could not launch $url';
     }
+  }*/
+
+  _launchURL() async {
+    const url = 'https://www.physiciansweekly.com';
+    final Uri uri = Uri.parse(url);
+    try{
+      await launchUrl(uri);
+    }
+    catch(e){
+      log(e.toString());
+      throw 'Could not launch $url';
+    }
+    /*if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Could not launch $url';
+    }*/
   }
 
   _aboutUsURL() async {
     const url = 'https://www.physiciansweekly.com/about/';
     final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
+    try{
+      await launchUrl(uri);
+    }
+    catch(e){
+      log(e.toString());
+      throw '$e $url';
+    }
+    /* if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
       throw 'Could not launch $url';
-    }
+    }*/
   }
 
   logout() async {
