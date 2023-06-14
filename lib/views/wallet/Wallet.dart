@@ -99,15 +99,15 @@ class _WalletState extends State<Wallet> {
                       return Container(
                         height: MediaQuery.of(context).size.height * .6,
                         alignment: Alignment.center,
-                        child: const Text(
+                        child: const AppText(
                           "Here you can see the posters you have scanned and the total reward amount earned.",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400),
-                          maxLines: 2,
+                          fontSize: 21.0,
+                          padding: EdgeInsets.all(26),
+                          // color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          maxLines: 8,
                           textAlign: TextAlign.center,
-                        ),
+                        )
                       );
                     }
                     List<WalletModel> items = snapshot.data!;
