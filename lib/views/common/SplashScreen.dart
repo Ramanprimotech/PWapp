@@ -49,8 +49,11 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     startTime();
   }
-static const String iosAppLinked = "https://apps.apple.com/in/app/pw-partner-perks/id1497536937";
-static const String androidAppLinked = "https://play.google.com/store/apps/details?id=com.partnerperks.pwlp&hl=en-IN";
+
+  static const String iosAppLinked =
+      "https://apps.apple.com/in/app/pw-partner-perks/id1497536937";
+  static const String androidAppLinked =
+      "https://play.google.com/store/apps/details?id=com.partnerperks.pwlp&hl=en-IN";
 
   @override
   Widget build(BuildContext context) {
@@ -71,64 +74,63 @@ static const String androidAppLinked = "https://play.google.com/store/apps/detai
       ),
     );
   }
+
   void _showDialog(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          // title: const Text("Partner Perks",),
+            // title: const Text("Partner Perks",),
             content: Container(
-              height: 250,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const AppText("Partner Perks", color: Colors.black, fontSize: 22),
-                  const AppText(
-                    "We've just released a new update for the app which includes some great new features! To make sure you're getting the most out of the app, we recommend you update the app.",
-                    color: Colors.black,
-                    fontSize: 16,
-                    maxLines: 6,
-                    textAlign: TextAlign.center,
-                    padding: EdgeInsets.only(top: 18, bottom: 16),
-                  ),
-                  DialogButton(
-                    color: const Color(0xffc22ea1),
-                    onPressed: () {
-                      urlLaunch(Platform.isAndroid ? androidAppLinked : Platform.isIOS ? iosAppLinked : iosAppLinked);
-                      //
-                      // if (Platform.isAndroid) {
-                      //   print("object");
-                      // } else if (Platform.isIOS) {
-                      //   print(Platform.isIOS);
-                      // }
-                    },
-                    width: double.infinity,
-                    padding: EdgeInsets.zero,
-                    child: const Text(
-                      "Update",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'texgyreadventor-regular'),
-                    ),
-                  ),
-                ],
+          height: 250,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const AppText("Partner Perks", color: Colors.black, fontSize: 22),
+              const AppText(
+                "We've just released a new update for the app which includes some great new features! To make sure you're getting the most out of the app, we recommend you update the app.",
+                color: Colors.black,
+                fontSize: 16,
+                maxLines: 6,
+                textAlign: TextAlign.center,
+                padding: EdgeInsets.only(top: 18, bottom: 16),
               ),
-            )
+              DialogButton(
+                color: const Color(0xffc22ea1),
+                onPressed: () {
+                  urlLaunch(Platform.isAndroid
+                      ? androidAppLinked
+                      : Platform.isIOS
+                          ? iosAppLinked
+                          : iosAppLinked);
+                },
+                width: double.infinity,
+                padding: EdgeInsets.zero,
+                child: const Text(
+                  "Update",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'texgyreadventor-regular'),
+                ),
+              ),
+            ],
+          ),
+        )
 
-          // const Text("Please install the updated version from TestFlight"),
-          // actions: <Widget>[
-          //    IconButton(
-          //     icon:  const Text("OK"),
-          //     onPressed: () {
-          //       // Navigator.of(context).pop();
-          //     },
-          //   ),
-          // ],
-        );
+            // const Text("Please install the updated version from TestFlight"),
+            // actions: <Widget>[
+            //    IconButton(
+            //     icon:  const Text("OK"),
+            //     onPressed: () {
+            //       // Navigator.of(context).pop();
+            //     },
+            //   ),
+            // ],
+            );
       },
     );
   }
