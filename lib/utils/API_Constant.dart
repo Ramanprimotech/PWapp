@@ -12,7 +12,7 @@ abstract class BaseUrl {
   static const String stageTangoCard = "https://integration-api.tangocard.com/raas/v2/";
 }
 
-const String kAppVersion = "2.0.1";
+const String kAppVersion = "2.0.2";
 
 class Api {
   static const String baseUrl = BaseUrl.live;

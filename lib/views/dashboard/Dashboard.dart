@@ -26,49 +26,6 @@ class _DashboardState extends State<Dashboard> {
   int _selectedTab = 0;
   late List<Widget> _pageOptions;
 
-/*  _launchURL() async {
-    const url = 'https://www.physiciansweekly.com';
-    if (await launch(url)) {
-      await canLaunch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }*/
-
-  _launchURL() async {
-    const url = 'https://www.physiciansweekly.com';
-    final Uri uri = Uri.parse(url);
-    try{
-      await launchUrl(uri);
-    }
-    catch(e){
-      log(e.toString());
-      throw 'Could not launch $url';
-    }
-    /*if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }*/
-  }
-
-  _aboutUsURL() async {
-    const url = 'https://www.physiciansweekly.com/about/';
-    final Uri uri = Uri.parse(url);
-    try{
-      await launchUrl(uri);
-    }
-    catch(e){
-      log(e.toString());
-      throw '$e $url';
-    }
-    /* if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }*/
-  }
-
   logout() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
@@ -107,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text("Physician's Weekly"),
                 onPressed: () {
-                  _launchURL();
+                  urlLaunch("https://www.physiciansweekly.com");
                   Navigator.pop(context, "Physician's Weekly");
                 },
               ),
@@ -133,7 +90,8 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text('About Us'),
                 onPressed: () {
-                  _aboutUsURL();
+                  urlLaunch("https://www.physiciansweekly.com/about/");
+
                   Navigator.pop(context, 'About Us');
                 },
               ),
@@ -249,5 +207,16 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       _selectedTab = i;
     });
+  }
+}
+
+urlLaunch(String urlPage) async {
+  final url = urlPage;
+  final Uri uri = Uri.parse(url);
+  try {
+    await launchUrl(uri);
+  } catch (e) {
+    log(e.toString());
+    throw 'Could not launch $url';
   }
 }
