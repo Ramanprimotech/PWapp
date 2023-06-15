@@ -43,42 +43,7 @@ class Utility {
     }
   }
 
-  static Future<bool?> checkVersion() async {
-    bool isAllowed = false;
-    VersionResponse data = VersionResponse();
-    try {
-      var response =
-      await http.get(Uri.parse("https://stage-perks.physiciansweekly.com/api/version"));
-      if (response.statusCode == 200) {
-        data = VersionResponse.fromJson(jsonDecode(response.body));
-        print("respojseo${data}");
-      } else {
-        print("staesfdf${response.statusCode}");
-        // return false;
-      }
 
-      if (data == null) {
-        print("[Common.CheckVersion] - Received Null");
-        return false;
-      }
-
-      // if (response()['status'] != 1) {
-      //   print("[Common.CheckVersion] - ${show()['msg']}");
-      //   return false;
-      // }
-      data.version == kAppVersion ? isAllowed = true:false;
-
-
-      if (!isAllowed) {
-        print("API[${data.version}] == APP[$kAppVersion]");
-      }
-
-      return isAllowed;
-    } catch (e, st) {
-      print("[Common.CheckVersion] - Error $e\n$st");
-      return false;
-    }
-  }
 
  /* static show() async {
     var response =

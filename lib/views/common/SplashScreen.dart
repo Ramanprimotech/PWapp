@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
+import 'package:pwlp/Model/auth/version_response.dart';
+import 'package:pwlp/utils/API_Constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pwlp/Model/auth/version_response.dart';
 import 'package:pwlp/widgets/AppText.dart';
 import 'package:pwlp/widgets/utility/Utility.dart';
 import 'package:pwlp/widgets/utility/alert.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:package_info_plus/package_info_plus.dart';
 import '../dashboard/Dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,15 +23,72 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  VersionResponse data = VersionResponse();
   bool canNavigateInside = false;
+  String version = "";
+  String code = "";
 
   startTime() async {
     var duration = const Duration(seconds: 3);
     return Timer(duration, navigationPage);
   }
 
+  packageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+    code = packageInfo.buildNumber;
+    print("version ${version}");
+    print("build number ${code}");
+  }
+
+  Future<bool?> checkVersion({required version}) async {
+    bool isAllowed = false;
+
+    // VersionResponse payload = VersionResponse(version: version.toString());
+
+    try {
+      Map payload = {
+        "version" : version,
+      };
+      print("request ${payload}");
+      var response =
+      await http.post(Uri.parse("https://stage-perks.physiciansweekly.com/api/version"),
+        body: payload,
+      );
+      if (response.statusCode == 200) {
+        // final userLoginData = UserLoginData.fromJson(json.decode(response.body));
+        data = VersionResponse.fromJson(json.decode(response.body));
+        print("respojseo${data}");
+      } else {
+        print("staesfdf${response.statusCode}");
+        // return false;
+      }
+
+      if (data == null) {
+        print("[Common.CheckVersion] - Received Null");
+        return false;
+      }
+
+      // if (response()['status'] != 1) {
+      //   print("[Common.CheckVersion] - ${show()['msg']}");
+      //   return false;
+      // }
+      data.success==true? isAllowed = true : false;
+
+
+      if (!isAllowed) {
+        print("API[${data.version}] == APP[$version]");
+      }
+
+      return isAllowed;
+    } catch (e, st) {
+      print("[Common.CheckVersion] - Error $e\n$st");
+      return false;
+    }
+  }
+
   void navigationPage() async {
-    await Utility.checkVersion().then((value) async {
+    await checkVersion(version: version.toString()).then((value) async {
       canNavigateInside = true;
       if (value == true) {
         SharedPreferences sharedPreferences =
@@ -48,6 +109,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     startTime();
+    packageInfo();
   }
 
   static const String iosAppLinked =
@@ -89,8 +151,9 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const AppText("Partner Perks", color: Colors.black, fontSize: 22),
-              const AppText(
-                "We've just released a new update for the app which includes some great new features! To make sure you're getting the most out of the app, we recommend you update the app.",
+              AppText(
+                "${data.message??""}",
+                // "We've just released a new update for the app which includes some great new features! To make sure you're getting the most out of the app, we recommend you update the app.",
                 color: Colors.black,
                 fontSize: 16,
                 maxLines: 6,
