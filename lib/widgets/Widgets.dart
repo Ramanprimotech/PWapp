@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pwlp/pw_app.dart';
 
-Future CommonShowDialog(context, {Widget? child, contentPadding}){
+Future CommonShowDialog(context, {Widget? child, contentPadding}) {
   return showDialog(
       barrierColor: Colors.black87,
       context: context,
@@ -12,8 +11,7 @@ Future CommonShowDialog(context, {Widget? child, contentPadding}){
           content: Container(
             padding: contentPadding ?? const EdgeInsets.all(16),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: Colors.white),
+                borderRadius: BorderRadius.circular(6), color: Colors.white),
             height: 240,
             child: child ?? const SizedBox(),
           ),
@@ -21,7 +19,7 @@ Future CommonShowDialog(context, {Widget? child, contentPadding}){
       });
 }
 
- List<TextInputFormatter> emailFormatter = [
+List<TextInputFormatter> emailFormatter = [
   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\.\-\@\_]')),
   FilteringTextInputFormatter.deny(RegExp('[\<\>\?\\\/\|\=\;\:]')),
 ];

@@ -1,17 +1,6 @@
-import 'dart:convert';
-
-import 'package:date_format/date_format.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
-import 'package:pwlp/Model/notification/notification.dart';
-import 'package:pwlp/utils/API_Constant.dart';
-import 'package:pwlp/widgets/utility/Utility.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../../widgets/utility/connectivity_result_message.dart';
+import 'package:pwlp/pw_app.dart';
 
 typedef VoidWithIntCallback = void Function(int);
 

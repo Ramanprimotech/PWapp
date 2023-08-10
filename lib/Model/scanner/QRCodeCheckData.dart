@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final qrCodeCheckData = qrCodeCheckDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class QrCodeCheckData {

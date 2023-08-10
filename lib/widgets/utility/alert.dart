@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:pwlp/pw_app.dart';
 
 dialogAlert(BuildContext context, String message) {
   Alert(

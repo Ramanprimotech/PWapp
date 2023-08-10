@@ -1,17 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:pwlp/Model/search/LocationData.dart';
-import 'package:pwlp/utils/API_Constant.dart';
-import 'package:pwlp/views/auth/RegisterVC.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-
-import '../../utils/get_location.dart';
+import 'package:pwlp/pw_app.dart';
 
 class LocationSearch extends StatefulWidget {
   const LocationSearch({Key? key, fun}) : super(key: key);
@@ -21,9 +12,9 @@ class LocationSearch extends StatefulWidget {
 }
 
 class _LocationSearchState extends State<LocationSearch> {
-  final TextEditingController _filter = new TextEditingController();
+  final TextEditingController _filter = TextEditingController();
   final dio = Dio();
-  String _searchText = "";
+  final String _searchText = "";
   List names = [];
   List filteredNames = [];
   bool? checkVal;
@@ -98,8 +89,9 @@ class _LocationSearchState extends State<LocationSearch> {
       }
       filteredNames = tempList;
     }
-    return names.length != 0
+    return names.isNotEmpty
         ? ListView.builder(
+            // ignore: unnecessary_null_comparison
             itemCount: names == null ? 0 : filteredNames.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
@@ -110,6 +102,7 @@ class _LocationSearchState extends State<LocationSearch> {
                         fontFamily: 'texgyreadventor-regular', fontSize: 14),
                   ),
                   subtitle: Text(
+                    // ignore: prefer_interpolation_to_compose_strings
                     "${filteredNames[index]['address_1']}, ${filteredNames[index]['city']}, ${filteredNames[index]['state']}\n${filteredNames[index]['unit_location_desc'] == "null" ? "" : "- ATTN: " + filteredNames[index]['unit_location_desc']}  ",
                     style: const TextStyle(
                         fontFamily: 'texgyreadventor-regular', fontSize: 12),
@@ -125,7 +118,7 @@ class _LocationSearchState extends State<LocationSearch> {
                       attnStr = "";
                     }
                     String addressId = "${filteredNames[index]['id']}";
-                    RegisterVC().updateUI(finalStr, addressId, attnStr);
+                    const RegisterVC().updateUI(finalStr, addressId, attnStr);
                     Navigator.of(context).pop();
                   });
             },
@@ -172,7 +165,7 @@ class _LocationSearchState extends State<LocationSearch> {
             locAPIFirst(text,
                 sharedPreferences.get("SelctedSpeciality") as String?, context);
             checkVal = false;
-            if (text.length == 0) {
+            if (text.isEmpty) {
               locAPIFirst(
                   "a",
                   sharedPreferences.get("SelctedSpeciality") as String?,
@@ -181,11 +174,11 @@ class _LocationSearchState extends State<LocationSearch> {
           },
         );
       } else {
-        this._searchIcon = const Icon(
+        _searchIcon = const Icon(
           Icons.search,
           color: Colors.white,
         );
-        this._appBarTitle = const Text(
+        _appBarTitle = const Text(
           'Search Address',
           style: TextStyle(fontFamily: 'texgyreadventor-regular'),
         );
@@ -220,6 +213,7 @@ class _LocationSearchState extends State<LocationSearch> {
         "specialty": specialty!,
         "latitude": "${position!.latitude}",
         "longitude": "${position.longitude}"
+
         ///
         // "latitude": "arsgvd0.0",
         // "longitude": "asgqwrvg0.0"
@@ -239,7 +233,7 @@ class _LocationSearchState extends State<LocationSearch> {
         // "longitude": "95.7129"
       };
     }
-    print("latitude${position!.latitude} longtitude${position.longitude}");
+
     log(data.toString(), name: "Request");
     String url = "${Api.baseUrl}" "${Api().get_address}";
     var response = await http.post(Uri.parse(url), body: data);

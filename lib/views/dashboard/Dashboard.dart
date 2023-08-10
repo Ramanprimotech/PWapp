@@ -1,19 +1,11 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:pwlp/views/notification/notification.dart';
-import 'package:pwlp/views/wallboard%20Image/wallboard_image.dart';
-import 'package:pwlp/widgets/utility/alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../../validators/Message.dart';
-import '../home/Home.dart';
+import 'package:pwlp/views/wallboard_Image/wallboard_image.dart';
 import '../profile/Profile.dart';
 import '../rewards/Reward.dart';
 import '../scanner/Scanner.dart';
-import '../wallet/Wallet.dart';
+import 'package:pwlp/pw_app.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -40,7 +32,7 @@ class _DashboardState extends State<Dashboard> {
       Home(changeScreen: changeScreen),
       const Wallet(),
       Scanner(changeScreen: changeScreen),
-      Reward(changeScreen: changeScreen),
+      RewardView(changeScreen: changeScreen),
       Profile(changeScreen: changeScreen),
       Wallboard(changeScreen: changeScreen),
       PwNotification(changeScreen: changeScreen)

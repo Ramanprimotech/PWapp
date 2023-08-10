@@ -1,16 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
-
-import 'package:date_format/date_format.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
-import 'package:pwlp/widgets/AppText.dart';
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../Model/wallet/WalletData.dart';
-import '../../utils/API_Constant.dart';
+import 'package:pwlp/pw_app.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({Key? key}) : super(key: key);
@@ -97,18 +88,17 @@ class _WalletState extends State<Wallet> {
                     }
                     if (snapshot.data == null || snapshot.data!.isEmpty) {
                       return Container(
-                        height: MediaQuery.of(context).size.height * .6,
-                        alignment: Alignment.center,
-                        child: const AppText(
-                          "Here you can see the posters you have scanned and the total reward amount earned.",
-                          fontSize: 21.0,
-                          padding: EdgeInsets.all(26),
-                          // color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          maxLines: 8,
-                          textAlign: TextAlign.center,
-                        )
-                      );
+                          height: MediaQuery.of(context).size.height * .6,
+                          alignment: Alignment.center,
+                          child: const AppText(
+                            "Here you can see the posters you have scanned and the total reward amount earned.",
+                            fontSize: 21.0,
+                            padding: EdgeInsets.all(26),
+                            // color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            maxLines: 8,
+                            textAlign: TextAlign.center,
+                          ));
                     }
                     List<WalletModel> items = snapshot.data!;
 

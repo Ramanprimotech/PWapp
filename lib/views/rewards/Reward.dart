@@ -1,33 +1,22 @@
-import 'dart:convert';
 import 'dart:developer';
-
-import 'package:date_format/date_format.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../Model/common/MoneyData.dart';
-import '../../Model/common/PlaceOrderData.dart';
 import '../../Model/common/PointsData.dart';
-import '../../utils/API_Constant.dart';
-import '../../validators/Message.dart';
-import '../../widgets/utility/Utility.dart';
+import 'package:pwlp/pw_app.dart';
 
 typedef VoidWithIntCallback = void Function(int);
 
-class Reward extends StatefulWidget {
+class RewardView extends StatefulWidget {
   final VoidWithIntCallback? changeScreen;
 
-  const Reward({Key? key, this.changeScreen}) : super(key: key);
+  const RewardView({Key? key, this.changeScreen}) : super(key: key);
 
   @override
-  _RewardState createState() => _RewardState();
+  _RewardViewState createState() => _RewardViewState();
 }
 
-class _RewardState extends State<Reward> {
+class _RewardViewState extends State<RewardView> {
   double PointPercent = 0.0;
   String pointInStr = "0";
   int pointInt = 0;
@@ -330,111 +319,102 @@ class _RewardState extends State<Reward> {
         ),
         Container(
           margin: const EdgeInsets.only(left: 12.0, top: 20.0, right: 12.0),
-          child: Container(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  child: Center(
-                    child: Image.asset(
-                      'Assets/redeemBG.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Image.asset(
+                  'Assets/redeemBG.png',
+                  fit: BoxFit.fill,
                 ),
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          flex: 5,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: 10.0, left: 10.0),
-                            child: Container(
-                              child: Center(
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      child: Center(
-                                        child: Image.asset(
-                                          'Assets/redeemPointCir.png',
-                                          fit: BoxFit.fill,
-                                        ),
+              ),
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                          child: Container(
+                            child: Center(
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    child: Center(
+                                      child: Image.asset(
+                                        'Assets/redeemPointCir.png',
+                                        fit: BoxFit.fill,
                                       ),
                                     ),
-                                    Text(
-                                      "\$$moneyStr",
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 30.0,
-                                          color: Colors.white,
-                                          fontFamily: 'texgyreadventor-regular',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  Text(
+                                    "\$$moneyStr",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 30.0,
+                                        color: Colors.white,
+                                        fontFamily: 'texgyreadventor-regular',
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                        Flexible(
-                          flex: 7,
-                          child: Container(
-                            child: Column(
-                              children: const <Widget>[
-                                Text(
-                                  "PHYSICIAN'S WEEKLY",
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      color: Colors.white,
-                                      fontFamily: "Garamond",
-                                      fontWeight: FontWeight.w200),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Text(
-                                  "Partner Perks",
-                                  style: TextStyle(
-                                      fontSize: 25.0,
-                                      color: Colors.white,
-                                      fontFamily: 'texgyreadventor-regular',
-                                      fontWeight: FontWeight.w300),
-                                ),
-                                Text(
-                                  "",
-                                  style: TextStyle(
-                                      fontSize: 28.0,
-                                      color: Colors.white,
-                                      fontFamily: 'texgyreadventor-regular',
-                                      fontWeight: FontWeight.w300),
-                                ),
-                              ],
+                      ),
+                      Flexible(
+                        flex: 7,
+                        child: Column(
+                          children: const <Widget>[
+                            Text(
+                              "PHYSICIAN'S WEEKLY",
+                              style: TextStyle(
+                                  fontSize: 17.0,
+                                  color: Colors.white,
+                                  fontFamily: "Garamond",
+                                  fontWeight: FontWeight.w200),
                             ),
-                          ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Partner Perks",
+                              style: TextStyle(
+                                  fontSize: 25.0,
+                                  color: Colors.white,
+                                  fontFamily: 'texgyreadventor-regular',
+                                  fontWeight: FontWeight.w300),
+                            ),
+                            Text(
+                              "",
+                              style: TextStyle(
+                                  fontSize: 28.0,
+                                  color: Colors.white,
+                                  fontFamily: 'texgyreadventor-regular',
+                                  fontWeight: FontWeight.w300),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 300.0,
+                    padding: const EdgeInsets.only(
+                      top: 23.0,
                     ),
-                    Container(
-                      width: 300.0,
-                      padding: const EdgeInsets.only(
-                        top: 23.0,
-                      ),
-                      child: Text(
-                        "$dateStr",
-                        style: const TextStyle(
-                            fontSize: 17.0,
-                            color: Colors.white,
-                            fontFamily: 'texgyreadventor-regular',
-                            fontWeight: FontWeight.w400),
-                        textAlign: TextAlign.right,
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
+                    child: Text(
+                      "$dateStr",
+                      style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.white,
+                          fontFamily: 'texgyreadventor-regular',
+                          fontWeight: FontWeight.w400),
+                      textAlign: TextAlign.right,
+                    ),
+                  )
+                ],
+              ),
+            ],
           ),
         ),
         const SizedBox(

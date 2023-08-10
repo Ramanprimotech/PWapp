@@ -1,26 +1,11 @@
-import 'dart:async';
-import 'dart:convert';
+import 'package:pwlp/pw_app.dart';
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:pwlp/widgets/AppText.dart';
-import 'package:pwlp/widgets/poster.dart';
-import 'package:pwlp/widgets/utility/assetImage.dart';
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-
 import '../../Model/common/MoneyData.dart';
-import '../../Model/common/PlaceOrderData.dart';
 import '../../Model/common/PointsData.dart';
 import '../../Model/dashboard/DashboardData.dart';
-import '../../utils/API_Constant.dart';
-import '../../validators/Message.dart';
-import '../../widgets/utility/Utility.dart';
 
 typedef VoidWithIntCallback = void Function(int);
 
@@ -130,10 +115,6 @@ class _HomeState extends State<Home> {
     var response = await http
         .post(Uri.parse("${Api.baseUrl}" "${Api().get_points}"), body: data);
 
-    print("points Api ------");
-    print(response.body.toString());
-    print("points Api ------");
-
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       pointsData = PointsData.fromJson(json.decode(response.body));
@@ -236,7 +217,7 @@ class _HomeState extends State<Home> {
                           animation: true,
                           lineWidth: 8.0,
                           percent: percentage,
-                          progressColor: Color(0xff31bbd2),
+                          progressColor: const Color(0xff31bbd2),
                           circularStrokeCap: CircularStrokeCap.round,
                         ),
                         AppText(

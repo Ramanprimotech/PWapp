@@ -1,30 +1,9 @@
-import 'dart:convert';
+import 'package:pwlp/pw_app.dart';
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
-import 'package:pwlp/utils/API_Constant.dart';
-import 'package:pwlp/validators/Message.dart';
-import 'package:pwlp/validators/input_helper.dart';
-import 'package:pwlp/widgets/AppText.dart';
-import 'package:pwlp/widgets/button/elevated_btn.dart';
-import 'package:pwlp/widgets/textField/text_field.dart';
-import 'package:pwlp/widgets/utility/already_account.dart';
-import 'package:pwlp/widgets/utility/assetImage.dart';
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../Model/auth/UserRegisterData.dart';
 import '../../Model/search/SpecialityData.dart';
-import '../../widgets/Widgets.dart';
-import '../../widgets/utility/Utility.dart';
 
 TextEditingController _FnameTF = TextEditingController();
 TextEditingController _LnameTF = TextEditingController();
@@ -118,22 +97,22 @@ class _RegisterVCState extends State<RegisterVC> {
     super.initState();
   }
 
-
   Future<String> getUniqueDeviceId() async {
     String uniqueDeviceId = '';
 
     var deviceInfo = DeviceInfoPlugin();
 
-    if (Platform.isIOS) { // import 'dart:io'
+    if (Platform.isIOS) {
+      // import 'dart:io'
       var iosDeviceInfo = await deviceInfo.iosInfo;
-      uniqueDeviceId = '${iosDeviceInfo.name}:${iosDeviceInfo.identifierForVendor}'; // unique ID on iOS
-    } else if(Platform.isAndroid) {
+      uniqueDeviceId =
+          '${iosDeviceInfo.name}:${iosDeviceInfo.identifierForVendor}'; // unique ID on iOS
+    } else if (Platform.isAndroid) {
       var androidDeviceInfo = await deviceInfo.androidInfo;
-      uniqueDeviceId = '${androidDeviceInfo.product}:${androidDeviceInfo.id}' ; // unique ID on Android
+      uniqueDeviceId =
+          '${androidDeviceInfo.product}:${androidDeviceInfo.id}'; // unique ID on Android
     }
-    print("uuuuuuuuuuu ${uniqueDeviceId}");
     return uniqueDeviceId;
-
   }
 
   @override
@@ -681,7 +660,7 @@ class _RegisterVCState extends State<RegisterVC> {
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
     } else if (!isValidEmail(_EmailTF.text.trim())) {
-    // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+      // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);
@@ -796,7 +775,7 @@ class _RegisterVCState extends State<RegisterVC> {
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
     } else if (!isValidEmail(_EmailTF.text.trim())) {
-    // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
+      // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);

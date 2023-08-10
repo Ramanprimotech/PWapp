@@ -1,7 +1,5 @@
 import 'dart:developer';
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:pwlp/pw_app.dart';
 
 class DeviceInformation {
   Future<String> getDeviceId() async {

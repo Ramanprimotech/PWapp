@@ -8,19 +8,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
   cupertino_icons: ^1.0.5
-
   rflutter_alert:
-
   toast:
   dio:
   url_launcher: ^6.1.5
-
   percent_indicator:
   http:
-
   flutter_progress_hud:
   shared_preferences: any
   provider: any
@@ -36,6 +30,8 @@ dependencies:
   device_info_plus: ^8.0.0
   geolocator: ^9.0.2
   geocoding: ^2.0.5
+  responsive_builder: ^0.7.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

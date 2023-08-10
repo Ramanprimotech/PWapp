@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final dashboardData = dashboardDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class DashboardData {

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final specialityData = specialityDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class SpecialityData {

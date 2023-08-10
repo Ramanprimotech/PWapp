@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final placeOrderData = placeOrderDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class PlaceOrderData {

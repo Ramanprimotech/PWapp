@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:pwlp/widgets/AppText.dart';
+import 'package:pwlp/pw_app.dart';
 
 class CustomBtn extends StatelessWidget {
   const CustomBtn(

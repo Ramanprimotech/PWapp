@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final locationData = locationDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class LocationData {

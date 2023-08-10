@@ -1,19 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/auth/version_response.dart';
-import 'package:pwlp/utils/API_Constant.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:pwlp/Model/auth/version_response.dart';
-import 'package:pwlp/widgets/AppText.dart';
-import 'package:pwlp/widgets/utility/Utility.dart';
-import 'package:pwlp/widgets/utility/alert.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../dashboard/Dashboard.dart';
+import 'package:pwlp/pw_app.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -25,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   VersionResponse data = VersionResponse();
   bool canNavigateInside = false;
-  String version = "";
+  String version = "1.0.3";
   String code = "";
 
   startTime() async {
@@ -35,7 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   packageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = packageInfo.version;
+    // version = packageInfo.version;
+    version = "1.0.3";
     code = packageInfo.buildNumber;
     print("version ${version}");
     print("build number ${code}");
@@ -52,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
       };
       print("request ${payload}");
       var response =
-      await http.post(Uri.parse("https://stage-perks.physiciansweekly.com/api/version"),
+      await http.post(Uri.parse("https://perks.physiciansweekly.com/api/version"),
         body: payload,
       );
       if (response.statusCode == 200) {
@@ -90,17 +79,24 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigationPage() async {
     await checkVersion(version: version.toString()).then((value) async {
       canNavigateInside = true;
-      if (value == true) {
-        SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        if (sharedPreferences.getString("userID") == null) {
-          Navigator.of(context).pushReplacementNamed('/Login');
-        } else {
-          Navigator.of(context).pushReplacementNamed('/Dashboard');
-        }
+      // if (value == true) {
+      //   SharedPreferences sharedPreferences =
+      //       await SharedPreferences.getInstance();
+      //   if (sharedPreferences.getString("userID") == null) {
+      //     Navigator.of(context).pushReplacementNamed('/Login');
+      //   } else {
+      //     Navigator.of(context).pushReplacementNamed('/Dashboard');
+      //   }
+      // } else {
+      //   // dialogAlert(context, "Please install the updated version from TestFlight");
+      //   _showDialog(context);
+      // }
+      SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
+      if (sharedPreferences.getString("userID") == null) {
+        Navigator.of(context).pushReplacementNamed('/Login');
       } else {
-        // dialogAlert(context, "Please install the updated version from TestFlight");
-        _showDialog(context);
+        Navigator.of(context).pushReplacementNamed('/Dashboard');
       }
     });
   }

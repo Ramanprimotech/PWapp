@@ -1,18 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:pwlp/views/auth/Login.dart';
-import 'package:pwlp/views/auth/RegisterVC.dart';
-import 'package:pwlp/views/common/CongratulationVC.dart';
-import 'package:pwlp/views/common/SplashScreen.dart';
-import 'package:pwlp/views/contact_us/Contact_Us.dart';
-import 'package:pwlp/views/dashboard/Dashboard.dart';
-import 'package:pwlp/views/search/LocationSearch.dart';
-import 'package:pwlp/widgets/utility/updateUI.dart';
-
-import 'Model/auth/ForgotPasswordData.dart';
+import 'pw_app.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +18,7 @@ Future main() async {
             '/RegisterVC': (BuildContext context) => const RegisterVC(),
             '/Login': (BuildContext context) => const Login(),
             '/LocationSearch': (BuildContext context) => const LocationSearch(),
-            '/congratulationVC': (BuildContext context) => congratulationVC(),
+            '/congratulationVC': (BuildContext context) => CongratulationVC(),
             '/Dashboard': (BuildContext context) => const Dashboard(),
             '/ContactUs': (BuildContext context) => const ContactUs(),
           }),

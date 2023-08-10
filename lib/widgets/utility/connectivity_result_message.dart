@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:pwlp/validators/Message.dart';
+import 'package:pwlp/pw_app.dart';
 
 class ConnectivityMessage extends StatelessWidget {
   const ConnectivityMessage({Key? key}) : super(key: key);

@@ -1,6 +1,4 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:pwlp/widgets/AppText.dart';
+import 'package:pwlp/pw_app.dart';
 
 // ignore: must_be_immutable
 class AlreadyAcc extends StatelessWidget {

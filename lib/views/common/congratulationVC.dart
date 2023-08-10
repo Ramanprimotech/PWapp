@@ -1,22 +1,17 @@
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../../utils/API_Constant.dart';
-import '../../validators/Message.dart';
 import '../../Model/common/MoneyData.dart';
-import '../../widgets/utility/Utility.dart';
+import 'package:pwlp/pw_app.dart';
 
-class congratulationVC extends StatefulWidget {
+class CongratulationVC extends StatefulWidget {
+  const CongratulationVC({Key? key}) : super(key: key);
+
   @override
-  _congratulationVCState createState() => _congratulationVCState();
+  _CongratulationVCState createState() => _CongratulationVCState();
 }
 
-class _congratulationVCState extends State<congratulationVC> {
+class _CongratulationVCState extends State<CongratulationVC> {
   String pointsStr = "0";
   String moneyStr = "0";
   late MoneyData moneyData;

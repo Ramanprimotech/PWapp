@@ -1,12 +1,10 @@
 
 ///Base URL
 abstract class BaseUrl {
-  // ignore: unused_field
   static const String live = "https://perks.physiciansweekly.com/api/";
   static const String liveImage = "https://perks.physiciansweekly.com/images/";
   static const String liveTangoCard = "https://api.tangocard.com/raas/v2/";
 
-  // ignore: unused_field
   static const String stageUrl = "https://stage-perks.physiciansweekly.com/api/";
   static const String stageImage = "https://stage-perks.physiciansweekly.com/images/";
   static const String stageTangoCard = "https://integration-api.tangocard.com/raas/v2/";
