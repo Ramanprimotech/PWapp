@@ -6,6 +6,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../../Model/common/MoneyData.dart';
 import '../../Model/common/PointsData.dart';
 import '../../Model/dashboard/DashboardData.dart';
+import '../rewards/RedeemSuccess.dart';
 
 typedef VoidWithIntCallback = void Function(int);
 

@@ -32,12 +32,15 @@ class PosterCard extends StatelessWidget {
                 color: Color(0xff4725a3),
                 fontFamily: 'texgyreadventor-regular'),
           ),
-          subtitle: Text(
-            subTitle,
-            style: const TextStyle(
-                fontSize: 14.0,
-                color: Colors.black,
-                fontFamily: 'texgyreadventor-regular'),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              subTitle,
+              style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black,
+                  fontFamily: 'texgyreadventor-regular'),
+            ),
           ),
           trailing: imageAsset.isEmpty
               ? Container(
