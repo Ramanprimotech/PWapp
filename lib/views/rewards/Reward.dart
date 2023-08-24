@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../../Model/common/MoneyData.dart';
 import '../../Model/common/PointsData.dart';
 import 'package:pwlp/pw_app.dart';
+import 'dart:convert';
 
 typedef VoidWithIntCallback = void Function(int);
 
@@ -43,163 +44,163 @@ class _RewardViewState extends State<RewardView> {
     } else {
       throw 'Could not launch $url';
     }
-  }
+   }
 
-  pointsAPI() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {
-      'user_id': sharedPreferences.getString("userID"),
-    };
-
-    String uri = Api.baseUrl + Api().get_points;
-
-    var response = await http.post(
-      Uri.parse(uri),
-      body: data,
-    );
-
-    if (response.statusCode == 200) {
-      pointsData = PointsData.fromJson(json.decode(response.body));
-      setState(() {
-        pointInt = int.parse(pointsData.data!.points.toString());
-        int totalPoint = int.parse(pointsData.data!.points!);
-        int tempPoint = totalPoint;
-        int remainderPoint = tempPoint % 50;
-        int finalPoints = totalPoint - remainderPoint;
-        pointsToredeemStr = finalPoints.toString();
-      });
-      moneyAPI(pointsToredeemStr);
-    } else {
-      log("Failure API Points");
-      Utility().toast(context, Message().ErrorMsg);
-    }
-  }
-
-  moneyAPI(String pointStr) async {
-    Utility().onLoading(context, true);
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {
-      'user_id': sharedPreferences.getString("userID"),
-      'points': pointStr
-    };
-
-    String uri = Api.baseUrl + Api().get_user_blance;
-
-    var response = await http.post(
-      Uri.parse(uri),
-      body: data,
-    );
-
-    if (response.statusCode == 200) {
-      setState(() {
-        moneyData = MoneyData.fromJson(json.decode(response.body));
-        moneyD = double.parse(moneyData.data!.money!);
-        moneyStr = "${moneyD.round().toString()}";
-        specialityStr = sharedPreferences.getString("specialty");
-      });
-      placeOrderAPI();
-    } else {
-      log("Failure API money");
-      Utility().onLoading(context, false);
-      Utility().toast(context, Message().ErrorMsg);
-    }
-  }
-
-  saveOrder() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {
-      'user_id': sharedPreferences.getString("userID").toString(),
-      'fisrtname': sharedPreferences.getString("firstname").toString(),
-      'lastname': sharedPreferences.getString("lastname").toString(),
-      'email': sharedPreferences.getString("email").toString(),
-      'points': pointsToredeemStr,
-      'amount': moneyD.toString(),
-      'tc_order_id': placeOrderData.referenceOrderID.toString(),
-      'redemption_link':
-          placeOrderData.reward!.credentials!.redemptionLink.toString(),
-    };
-
-    String uri = Api.baseUrl + Api().save_oder;
-
-    var response = await http.post(
-      Uri.parse(uri),
-      body: data,
-    );
-    if (response.statusCode == 200) {
-      sharedPreferences.setString("is_first", "1");
-    } else {
-      log("Failure API save order");
-      Utility().toast(context, Message().ErrorMsg);
-    }
-  }
-
-  placeOrderAPI() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences = await SharedPreferences.getInstance();
-    var body = json.encode({
-      "accountIdentifier": sharedPreferences.getString("accountIdentifier"),
-      "amount": moneyD,
-      "campaign": "Partner Perks",
-      "customerIdentifier": sharedPreferences.getString("customer_identifier"),
-      "emailSubject": "Partner Perks Reward Card",
-      "etid": sharedPreferences.getString("etid"),
-      "externalRefID": "",
-      "message": "You have got reward by Partner Perks.",
-      "notes": "Partner Perks",
-      "recipient": {
-        "email": sharedPreferences.getString("email"),
-        "firstName": sharedPreferences.getString("firstname"),
-        "lastName": sharedPreferences.getString("lastname")
-      },
-      "sendEmail": true,
-      "sender": {
-        "email": sharedPreferences.getString("sender_email"),
-        "firstName": sharedPreferences.getString("sender_firstname"),
-        "lastName": sharedPreferences.getString("sender_lastname")
-      },
-      "utid": "U143628"
-    });
-    String? platformName = sharedPreferences.getString("platform_name");
-    String? platformKey = sharedPreferences.getString("platform_key");
-
-    String keyPair = '$platformName:$platformKey';
-    String base = base64Encode(utf8.encode(keyPair));
-    String basicAuth = 'Basic $base';
-
-    String uri = Api.baseTangoCardUrl + Api().orders;
-    var response = await http.post(
-      Uri.parse(uri),
-      body: body,
-      headers: <String, String>{
-        'authorization': basicAuth,
-        "Content-Type": "application/json",
-      },
-    );
-    Utility().onLoading(context, false);
-    if (response.statusCode == 201) {
-      placeOrderData =
-          PlaceOrderData.fromJson(json.decode(response.body.toString()));
-      dateStr = placeOrderData.createdAt.toString();
-      DateTime todayDate = DateTime.parse(dateStr);
-      setState(() {
-        dateStr = formatDate(todayDate, [dd, '-', mm, '-', yyyy]).toString();
-        setState(() {
-          redeemMsg = "You have Successfully Redeemed";
-        });
-        saveOrder();
-      });
-    } else {
-      log("Failure API");
-      Utility().onLoading(context, false);
-      setState(() {
-        redeemMsg = "Redemption unsuccessful";
-      });
-      Utility().toast(context, Message().redeptionMsg);
-    }
-  }
+  // pointsAPI() async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences = await SharedPreferences.getInstance();
+  //   Map data = {
+  //     'user_id': sharedPreferences.getStrinvar rID"),
+  //   };
+  //
+  //   String uri = Api.baseUrl + Api().get_points;
+  //
+  //   var response = await http.post(
+  //     Uri.parse(uri),
+  //     body: data,
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     pointsData = PointsData.fromJson(json.decode(response.body));
+  //     setState(() {
+  //       pointInt = int.parse(pointsData.data!.points.toString());
+  //       int totalPoint = int.parse(pointsData.data!.points!);
+  //       int tempPoint = totalPoint;
+  //       int remainderPoint = tempPoint % 50;
+  //       int finalPoints = totalPoint - remainderPoint;
+  //       pointsToredeemStr = finalPoints.toString();
+  //     });
+  //     moneyAPI(pointsToredeemStr);
+  //   } else {
+  //     log("Failure API Points");
+  //     Utility().toast(context, Message().ErrorMsg);
+  //   }
+  // }
+  //
+  // moneyAPI(String pointStr) async {
+  //   Utility().onLoading(context, true);
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences = await SharedPreferences.getInstance();
+  //   Map data = {
+  //     'user_id': sharedPreferences.getString("userID"),
+  //     'points': pointStr
+  //   };
+  //
+  //   String uri = Api.baseUrl + Api().get_user_blance;
+  //
+  //   var response = await http.post(
+  //     Uri.parse(uri),
+  //     body: data,
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       moneyData = MoneyData.fromJson(json.decode(response.body));
+  //       moneyD = double.parse(moneyData.data!.money!);
+  //       moneyStr = "${moneyD.round().toString()}";
+  //       specialityStr = sharedPreferences.getString("specialty");
+  //     });
+  //     placeOrderAPI();
+  //   } else {
+  //     log("Failure API money");
+  //     Utility().onLoading(context, false);
+  //     Utility().toast(context, Message().ErrorMsg);
+  //   }
+  // }
+  //
+  // saveOrder() async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences = await SharedPreferences.getInstance();
+  //   Map data = {
+  //     'user_id': sharedPreferences.getString("userID").toString(),
+  //     'fisrtname': sharedPreferences.getString("firstname").toString(),
+  //     'lastname': sharedPreferences.getString("lastname").toString(),
+  //     'email': sharedPreferences.getString("email").toString(),
+  //     'points': pointsToredeemStr,
+  //     'amount': moneyD.toString(),
+  //     'tc_order_id': placeOrderData.referenceOrderID.toString(),
+  //     'redemption_link':
+  //         placeOrderData.reward!.credentials!.redemptionLink.toString(),
+  //   };
+  //
+  //   String uri = Api.baseUrl + Api().save_oder;
+  //
+  //   var response = await http.post(
+  //     Uri.parse(uri),
+  //     body: data,
+  //   );
+  //   if (response.statusCode == 200) {
+  //     sharedPreferences.setString("is_first", "1");
+  //   } else {
+  //     log("Failure API save order");
+  //     Utility().toast(context, Message().ErrorMsg);
+  //   }
+  // }
+  //
+  // placeOrderAPI() async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   sharedPreferences = await SharedPreferences.getInstance();
+  //   var body = json.encode({
+  //     "accountIdentifier": sharedPreferences.getString("accountIdentifier"),
+  //     "amount": moneyD,
+  //     "campaign": "Partner Perks",
+  //     "customerIdentifier": sharedPreferences.getString("customer_identifier"),
+  //     "emailSubject": "Partner Perks Reward Card",
+  //     "etid": sharedPreferences.getString("etid"),
+  //     "externalRefID": "",
+  //     "message": "You have got reward by Partner Perks.",
+  //     "notes": "Partner Perks",
+  //     "recipient": {
+  //       "email": sharedPreferences.getString("email"),
+  //       "firstName": sharedPreferences.getString("firstname"),
+  //       "lastName": sharedPreferences.getString("lastname")
+  //     },
+  //     "sendEmail": true,
+  //     "sender": {
+  //       "email": sharedPreferences.getString("sender_email"),
+  //       "firstName": sharedPreferences.getString("sender_firstname"),
+  //       "lastName": sharedPreferences.getString("sender_lastname")
+  //     },
+  //     "utid": "U143628"
+  //   });
+  //   String? platformName = sharedPreferences.getString("platform_name");
+  //   String? platformKey = sharedPreferences.getString("platform_key");
+  //
+  //   String keyPair = '$platformName:$platformKey';
+  //   String base = base64Encode(utf8.encode(keyPair));
+  //   String basicAuth = 'Basic $base';
+  //
+  //   String uri = Api.baseTangoCardUrl + Api().orders;
+  //   var response = await http.post(
+  //     Uri.parse(uri),
+  //     body: body,
+  //     headers: <String, String>{
+  //       'authorization': basicAuth,
+  //       "Content-Type": "application/json",
+  //     },
+  //   );
+  //   Utility().onLoading(context, false);
+  //   if (response.statusCode == 201) {
+  //     placeOrderData =
+  //         PlaceOrderData.fromJson(json.decode(response.body.toString()));
+  //     dateStr = placeOrderData.createdAt.toString();
+  //     DateTime todayDate = DateTime.parse(dateStr);
+  //     setState(() {
+  //       dateStr = formatDate(todayDate, [dd, '-', mm, '-', yyyy]).toString();
+  //       setState(() {
+  //         redeemMsg = "You have Successfully Redeemed";
+  //       });
+  //       saveOrder();
+  //     });
+  //   } else {
+  //     log("Failure API");
+  //     Utility().onLoading(context, false);
+  //     setState(() {
+  //       redeemMsg = "Redemption unsuccessful";
+  //     });
+  //     Utility().toast(context, Message().redeptionMsg);
+  //   }
+  // }
 
   /*placeOrderAPI() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -271,9 +272,73 @@ class _RewardViewState extends State<RewardView> {
     }
   }*/
 
+
+
+  _redeemPointsNew(String pointStr) async {
+    Utility().onLoading(context, true);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    String uri = Api.baseUrl + Api().redeem_points_new;
+    var request = http.MultipartRequest('POST', Uri.parse(uri));
+    request.fields['user_id']= sharedPreferences.getString("userID") ?? "";
+    request.fields['email']= sharedPreferences.getString('email') ?? "";
+    request.fields['speciality']= sharedPreferences.getString('speciality') ?? "";
+    request.fields['first_name']= sharedPreferences.getString('firstname') ?? "";
+    request.fields['last_name']= sharedPreferences.getString('lastname') ?? "";
+    request.fields['points']= pointInt.toString();
+    request.fields['amount']=  (pointInt/10).toString();
+
+    // Send the request
+    var response = await request.send();
+
+    // Get the response as a string
+    var responseData = await response.stream.bytesToString();
+    final jsonStr = json.decode(responseData);
+
+    if (response.statusCode == 200) {
+      Utility().toast(context, "${jsonStr['message']}");
+      Utility().onLoading(context, false);
+    } else {
+      Utility().toast(context, Message().ErrorMsg);
+      Utility().onLoading(context, false);
+    }
+  }
+
+  _pointsAPINew() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences = await SharedPreferences.getInstance();
+    Map data = {
+      'user_id': sharedPreferences.getString("userID"),
+    };
+
+    String uri = Api.baseUrl + Api().get_points;
+
+    var response = await http.post(
+      Uri.parse(uri),
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      pointsData = PointsData.fromJson(json.decode(response.body));
+      setState(() {
+        pointInt = int.parse(pointsData.data!.points.toString());
+        int totalPoint = int.parse(pointsData.data!.points!);
+        int tempPoint = totalPoint;
+        int remainderPoint = tempPoint % 50;
+        int finalPoints = totalPoint - remainderPoint;
+        pointsToredeemStr = finalPoints.toString();
+      });
+      _redeemPointsNew(pointsToredeemStr);
+    } else {
+      log("Failure API Points");
+      Utility().toast(context, Message().ErrorMsg);
+    }
+  }
+
   @override
   void initState() {
-    pointsAPI();
+    _pointsAPINew();
     super.initState();
   }
 
