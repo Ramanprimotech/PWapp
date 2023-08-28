@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
+import 'package:pwlp/views/rewards/RedeemSuccess.dart';
 import '../../Model/common/MoneyData.dart';
 import '../../Model/common/PointsData.dart';
 import 'package:pwlp/pw_app.dart';
-import 'dart:convert';
 
 typedef VoidWithIntCallback = void Function(int);
 
@@ -278,12 +278,11 @@ class _RewardViewState extends State<RewardView> {
     Utility().onLoading(context, true);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
-
-    String uri = Api.baseUrl + Api().redeem_points_new;
+    String uri = Api.baseUrl + Api().save_redemption;
     var request = http.MultipartRequest('POST', Uri.parse(uri));
     request.fields['user_id']= sharedPreferences.getString("userID") ?? "";
     request.fields['email']= sharedPreferences.getString('email') ?? "";
-    request.fields['speciality']= sharedPreferences.getString('speciality') ?? "";
+    request.fields['speciality']= sharedPreferences.getString('specialty') ?? "";
     request.fields['first_name']= sharedPreferences.getString('firstname') ?? "";
     request.fields['last_name']= sharedPreferences.getString('lastname') ?? "";
     request.fields['points']= pointInt.toString();
@@ -291,7 +290,6 @@ class _RewardViewState extends State<RewardView> {
 
     // Send the request
     var response = await request.send();
-
     // Get the response as a string
     var responseData = await response.stream.bytesToString();
     final jsonStr = json.decode(responseData);
@@ -299,6 +297,9 @@ class _RewardViewState extends State<RewardView> {
     if (response.statusCode == 200) {
       Utility().toast(context, "${jsonStr['message']}");
       Utility().onLoading(context, false);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const RedeemSuccessful())
+      );
     } else {
       Utility().toast(context, Message().ErrorMsg);
       Utility().onLoading(context, false);
@@ -325,22 +326,24 @@ class _RewardViewState extends State<RewardView> {
         pointInt = int.parse(pointsData.data!.points.toString());
         int totalPoint = int.parse(pointsData.data!.points!);
         int tempPoint = totalPoint;
-        int remainderPoint = tempPoint % 50;
+        int remainderPoint = tempPoint % 10;
         int finalPoints = totalPoint - remainderPoint;
         pointsToredeemStr = finalPoints.toString();
       });
+      log("Failure API Points 1");
       _redeemPointsNew(pointsToredeemStr);
     } else {
-      log("Failure API Points");
+      log("Failure API Points 2");
       Utility().toast(context, Message().ErrorMsg);
     }
   }
 
-  @override
-  void initState() {
-    _pointsAPINew();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _pointsAPINew();
+  //   log("Failure API Points 3");
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
