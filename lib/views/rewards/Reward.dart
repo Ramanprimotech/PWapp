@@ -338,12 +338,12 @@ class _RewardViewState extends State<RewardView> {
     }
   }
 
-  // @override
-  // void initState() {
-  //   _pointsAPINew();
-  //   log("Failure API Points 3");
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    _pointsAPINew();
+    log("Failure API Points 3");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
