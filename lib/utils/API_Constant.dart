@@ -26,7 +26,7 @@ class Api {
   final check_qr_code = "check_qr_code";
   final save_poster = "save_poster";
   final get_points = "get_points";
-  final redeem_points_new = "save-redemption";
+  final save_redemption = "save-redemption";
   final get_user_blance = "get_user_blance";
   final save_oder = "save_oder";
   final get_user_profile = "get_user_profile";
