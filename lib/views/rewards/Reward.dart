@@ -330,10 +330,8 @@ class _RewardViewState extends State<RewardView> {
         int finalPoints = totalPoint - remainderPoint;
         pointsToredeemStr = finalPoints.toString();
       });
-      log("Failure API Points 1");
       _redeemPointsNew(pointsToredeemStr);
     } else {
-      log("Failure API Points 2");
       Utility().toast(context, Message().ErrorMsg);
     }
   }
@@ -341,7 +339,6 @@ class _RewardViewState extends State<RewardView> {
   @override
   void initState() {
     _pointsAPINew();
-    log("Failure API Points 3");
     super.initState();
   }
 
