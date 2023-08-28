@@ -13,7 +13,7 @@ abstract class BaseUrl {
 const String kAppVersion = "2.0.1";
 
 class Api {
-  static const String baseUrl = BaseUrl.stageUrl;
+  static const String baseUrl = BaseUrl.live;
   static const String baseImageUrl = BaseUrl.liveImage;
   static const String baseTangoCardUrl = BaseUrl.liveTangoCard;
 

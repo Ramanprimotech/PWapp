@@ -124,21 +124,23 @@ class _HomeState extends State<Home> {
       setState(() {
         if (sharedPreferences.getString("is_first") == "0") {
           if (pointInt < 100) {
-            int remainPoint = 100 - pointInt;
-            setState(() {
-              pointCheckDialog(context,
-                  "You are just ${remainPoint.toString()} points away.");
-            });
+            // int remainPoint = 100 - pointInt;
+            // setState(() {
+            //   pointCheckDialog(context,
+            //       "You are just ${remainPoint.toString()} points away.");
+            // });
+            dialogAlert(context, Message().RedeemConfirmMsg);
           } else {
             dialogAlert(context, Message().RedeemConfirmMsg);
           }
         } else {
           if (pointInt < 50) {
-            int remainPoint = 50 - pointInt;
-            setState(() {
-              pointCheckDialog(context,
-                  "You are just ${remainPoint.toString()} points away.");
-            });
+            // int remainPoint = 50 - pointInt;
+            // setState(() {
+            //   pointCheckDialog(context,
+            //       "You are just ${remainPoint.toString()} points away.");
+            // });
+            dialogAlert(context, Message().RedeemConfirmMsg);
           } else {
             dialogAlert(context, Message().RedeemConfirmMsg);
           }
