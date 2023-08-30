@@ -297,9 +297,9 @@ class _RewardViewState extends State<RewardView> {
     if (response.statusCode == 200) {
       Utility().toast(context, "${jsonStr['message']}");
       Utility().onLoading(context, false);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const RedeemSuccessful())
-      );
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(builder: (context) => const RedeemSuccessful())
+      // );
     } else {
       Utility().toast(context, Message().ErrorMsg);
       Utility().onLoading(context, false);
