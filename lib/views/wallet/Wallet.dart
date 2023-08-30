@@ -26,9 +26,11 @@ class _WalletState extends State<Wallet> {
 
     print("fdsfsfsfsfsssfs $data");
     if (data['success']) {
-      try{
-        return (data['data'] as List).map((e) => WalletModel.fromMap(e)).toList();
-      }catch(e){
+      try {
+        return (data['data'] as List)
+            .map((e) => WalletModel.fromMap(e))
+            .toList();
+      } catch (e) {
         return [];
       }
     } else {
@@ -151,73 +153,93 @@ class _WalletCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isWallet = wallet.catgory == "scanned_posters";
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: Colors.white24,
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             flex: 4,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                AppText(isWallet ? "Scanned Poster" : "Wallboard Poster",
-                    fontSize: 20),
-                if (isWallet) ...[
-                  Row(
-                    children: [
-                      const _CardText("Amount: "),
-                      _CardText(
-                        "\$${wallet.amount.isEmpty ? 0 : wallet.amount}",
-                        isBold: false,
-                      ),
-                    ],
-                  ),
-                ] else ...[
-                  wallet.specialty != null
-                      ? _CardText(wallet.specialty)
-                      : _CardText("specialty"),
-                ],
-                Row(
-                  children: [
-                    _CardText(
-                      isWallet ? "Redeemed: " : "Earned: ",
-                    ),
-                    _CardText(
-                      "${wallet.points.isEmpty ? 0 : wallet.points} Points",
-                      isBold: false,
-                    ),
-                  ],
+                AppText(
+                  isWallet
+                      ? "Scanned Poster"
+                      : wallet.catgory.toString() == "redemption"
+                          ? "Redemption"
+                          : "Wallboard Poster",
+                  fontSize: 20,
                 ),
-                Row(
-                  children: [
-                    const _CardText("Date: "),
-                    _CardText(
-                      _date,
-                      isBold: false,
-                    ),
-                  ],
-                ),
+                SizedBox(height: 8),
+                if (wallet.specialty.isNotEmpty)
+                  _CardText(label: "Specialty", label2: wallet.specialty),
+                if (wallet.isApproved != "")
+                  _CardText(label: "Status", label2: wallet.isApproved),
+                if (wallet.points != "0")
+                  _CardText(
+                      label: isWallet ? "Redeemed: " : "Earned: ",
+                      label2: wallet.points),
+                if (wallet.points != "0")
+                  _CardText(label: "Date", label2: _date),
+                // if (isWallet) ...[
+                //   wallet.amount != "" && wallet.amount != 0
+                //       ? Row(
+                //           children: [
+                //             const _CardText("Amount: aFWFFAF"),
+                //             _CardText(
+                //               "\$${wallet.amount.isEmpty ? 0 : wallet.amount}",
+                //               isBold: false,
+                //             ),
+                //           ],
+                //         )
+                //       : const SizedBox(height: 0, width: 0),
+                // ] else ...[
+                //   wallet.specialty != null
+                //       ? _CardText(wallet.specialty)
+                //       : _CardText("specialty"),
+                // ],
+                ///
+                // Row(
+                //   children: [
+                //     _CardText(
+                //       isWallet ? "Redeemed: " : "Earned: ",
+                //     ),
+                //     _CardText(
+                //       "${wallet.points.isEmpty ? 0 : wallet.points} Points",
+                //       isBold: false,
+                //     ),
+                //   ],
+                // ),
+                ///
+                // Row(
+                //   children: [
+                //     const _CardText("Date: "),
+                //     _CardText(
+                //       _date,
+                //       isBold: false,
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
             flex: 2,
-            child: wallet.posterImage == null
-                ? Image.asset("Assets/walletCard.png")
-                : Align(
-                    alignment: Alignment.centerRight,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        Api.baseImageUrl + wallet.posterImage!,
-                        fit: BoxFit.cover,
-                      ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: wallet.posterImage == null
+                  ? Container(child: Image.asset("Assets/walletCard.png"))
+                  : Image.network(
+                      Api.baseImageUrl + wallet.posterImage!,
+                      fit: BoxFit.cover,
                     ),
-                  ),
+            ),
           ),
         ],
       ),
@@ -226,31 +248,41 @@ class _WalletCard extends StatelessWidget {
 }
 
 class _CardText extends StatelessWidget {
-  const _CardText(
-    this.label, {
+  const _CardText({
     Key? key,
-    this.fontSize = 16,
+    this.label2,
+    this.label,
+    this.fontSize,
     this.isBold = true,
   }) : super(key: key);
 
-  final String label;
-  final double fontSize;
+  final String? label;
+  final String? label2;
+  final double? fontSize;
   final bool isBold;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: fontSize,
-          color: Colors.white,
-          fontFamily: 'texgyreadventor-regular',
-          fontWeight: isBold ? FontWeight.w500 : FontWeight.w200,
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          AppText(
+            "$label: ",
+            fontSize: fontSize ?? 15,
+            color: Colors.white,
+            fontWeight: FontWeight.w300,
+          ),
+          Expanded(
+            child: AppText(label2 ?? "",
+                fontSize: fontSize ?? 16,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                maxLines: 3),
+          ),
+        ],
       ),
     );
   }
