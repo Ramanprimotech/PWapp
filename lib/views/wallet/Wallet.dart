@@ -24,7 +24,6 @@ class _WalletState extends State<Wallet> {
 
     dynamic data = json.decode(response.body);
 
-    print("fdsfsfsfsfsssfs $data");
     if (data['success']) {
       try {
         return (data['data'] as List)
@@ -171,11 +170,13 @@ class _WalletCard extends StatelessWidget {
                   isWallet
                       ? "Scanned Poster"
                       : wallet.catgory.toString() == "redemption"
-                          ? "Redemption"
+                          ? wallet.catgory.toString() == "redemption"
+                              ? "Wallet"
+                              : "Redemption"
                           : "Wallboard Poster",
                   fontSize: 20,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 if (wallet.specialty.isNotEmpty)
                   _CardText(label: "Specialty", label2: wallet.specialty),
                 if (wallet.isApproved != "")
@@ -234,7 +235,7 @@ class _WalletCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: wallet.posterImage == null
-                  ? Container(child: Image.asset("Assets/walletCard.png"))
+                  ? Image.asset("Assets/walletCard.png")
                   : Image.network(
                       Api.baseImageUrl + wallet.posterImage!,
                       fit: BoxFit.cover,
@@ -252,14 +253,10 @@ class _CardText extends StatelessWidget {
     Key? key,
     this.label2,
     this.label,
-    this.fontSize,
-    this.isBold = true,
   }) : super(key: key);
 
   final String? label;
   final String? label2;
-  final double? fontSize;
-  final bool isBold;
 
   @override
   Widget build(BuildContext context) {
@@ -271,13 +268,13 @@ class _CardText extends StatelessWidget {
         children: [
           AppText(
             "$label: ",
-            fontSize: fontSize ?? 15,
+            fontSize: 15,
             color: Colors.white,
             fontWeight: FontWeight.w300,
           ),
           Expanded(
             child: AppText(label2 ?? "",
-                fontSize: fontSize ?? 16,
+                fontSize: 16,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
                 maxLines: 3),
