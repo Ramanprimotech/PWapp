@@ -48,7 +48,7 @@ class _RedeemSuccessfulState extends State<RedeemSuccessful> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => const Dashboard()),
-                              (route) => false
+                          (route) => false
                       );
                     }
                 )

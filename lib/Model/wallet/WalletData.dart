@@ -4,8 +4,8 @@ class WalletModel {
   final int id;
   final int userId;
   final String? posterImage;
-  final String points;
-  final String amount;
+  final dynamic points;
+  final dynamic amount;
   final String specialty;
   final String isApproved;
   final String catgory;

@@ -21,9 +21,16 @@ class _WalletState extends State<Wallet> {
     };
     var response = await http
         .post(Uri.parse("${Api.baseUrl}${Api().get_user_wallet}"), body: body);
+
     dynamic data = json.decode(response.body);
+
+    print("fdsfsfsfsfsssfs $data");
     if (data['success']) {
-      return (data['data'] as List).map((e) => WalletModel.fromMap(e)).toList();
+      try{
+        return (data['data'] as List).map((e) => WalletModel.fromMap(e)).toList();
+      }catch(e){
+        return [];
+      }
     } else {
       log("Failure API");
       return [];
