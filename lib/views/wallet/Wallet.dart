@@ -270,7 +270,7 @@ class _CardText extends StatelessWidget {
             "$label: ",
             fontSize: 15,
             color: Colors.white,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w400,
           ),
           Expanded(
             child: AppText(label2 ?? "",
