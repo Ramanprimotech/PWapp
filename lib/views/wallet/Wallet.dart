@@ -185,7 +185,7 @@ class _WalletCard extends StatelessWidget {
                   _CardText(
                       label: isWallet ? "Redeemed: " : "Earned: ",
                       label2: wallet.points),
-                if (wallet.points != "0")
+                if (_date.isNotEmpty)
                   _CardText(label: "Date", label2: _date),
                 // if (isWallet) ...[
                 //   wallet.amount != "" && wallet.amount != 0

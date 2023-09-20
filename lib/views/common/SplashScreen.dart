@@ -37,11 +37,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
     try {
       Map payload = {
-        "version" : version,
+        "version": "2.0.1",
       };
       print("request ${payload}");
-      var response =
-      await http.post(Uri.parse("https://perks.physiciansweekly.com/api/version"),
+      var response = await http.post(
+        Uri.parse("https://perks.physiciansweekly.com/api/version"),
         body: payload,
       );
       if (response.statusCode == 200) {
@@ -62,8 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //   print("[Common.CheckVersion] - ${show()['msg']}");
       //   return false;
       // }
-      data.success==true? isAllowed = true : false;
-
+      data.success == true ? isAllowed = true : false;
 
       if (!isAllowed) {
         print("API[${data.version}] == APP[$version]");
@@ -79,24 +78,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigationPage() async {
     await checkVersion(version: version.toString()).then((value) async {
       canNavigateInside = true;
-      // if (value == true) {
-      //   SharedPreferences sharedPreferences =
-      //       await SharedPreferences.getInstance();
-      //   if (sharedPreferences.getString("userID") == null) {
-      //     Navigator.of(context).pushReplacementNamed('/Login');
-      //   } else {
-      //     Navigator.of(context).pushReplacementNamed('/Dashboard');
-      //   }
-      // } else {
-      //   // dialogAlert(context, "Please install the updated version from TestFlight");
-      //   _showDialog(context);
-      // }
-      SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
-      if (sharedPreferences.getString("userID") == null) {
-        Navigator.of(context).pushReplacementNamed('/Login');
+      if (value == true) {
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        if (sharedPreferences.getString("userID") == null) {
+          Navigator.of(context).pushReplacementNamed('/Login');
+        } else {
+          Navigator.of(context).pushReplacementNamed('/Dashboard');
+        }
       } else {
-        Navigator.of(context).pushReplacementNamed('/Dashboard');
+        // dialogAlert(context, "Please install the updated version from TestFlight");
+        _showDialog(context);
       }
     });
   }
@@ -148,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               const AppText("Partner Perks", color: Colors.black, fontSize: 22),
               AppText(
-                "${data.message??""}",
+                "${data.message ?? ""}",
                 // "We've just released a new update for the app which includes some great new features! To make sure you're getting the most out of the app, we recommend you update the app.",
                 color: Colors.black,
                 fontSize: 16,
