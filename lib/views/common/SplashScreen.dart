@@ -17,14 +17,13 @@ class _SplashScreenState extends State<SplashScreen> {
   String code = "";
 
   startTime() async {
-    var duration = const Duration(seconds: 3);
+    var duration = const Duration(seconds: 2);
     return Timer(duration, navigationPage);
   }
 
   packageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    // version = packageInfo.version;
-    version = "1.0.3";
+    version = "2.0.1";
     code = packageInfo.buildNumber;
     print("version ${version}");
     print("build number ${code}");
@@ -32,9 +31,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<bool?> checkVersion({required version}) async {
     bool isAllowed = false;
-
-    // VersionResponse payload = VersionResponse(version: version.toString());
-
     try {
       Map payload = {
         "version": "2.0.1",
@@ -57,11 +53,6 @@ class _SplashScreenState extends State<SplashScreen> {
         print("[Common.CheckVersion] - Received Null");
         return false;
       }
-
-      // if (response()['status'] != 1) {
-      //   print("[Common.CheckVersion] - ${show()['msg']}");
-      //   return false;
-      // }
       data.success == true ? isAllowed = true : false;
 
       if (!isAllowed) {
@@ -87,7 +78,6 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.of(context).pushReplacementNamed('/Dashboard');
         }
       } else {
-        // dialogAlert(context, "Please install the updated version from TestFlight");
         _showDialog(context);
       }
     });
@@ -131,43 +121,43 @@ class _SplashScreenState extends State<SplashScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            // title: const Text("Partner Perks",),
             content: Container(
-          height: 250,
+          height: data.message != null ? 250 : 180,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const AppText("Partner Perks", color: Colors.black, fontSize: 22),
               AppText(
-                "${data.message ?? ""}",
-                // "We've just released a new update for the app which includes some great new features! To make sure you're getting the most out of the app, we recommend you update the app.",
+                data.message ??
+                    "Exciting changes are on the way. Thanks for your patience, we'll be back shortly.",
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 18,
                 maxLines: 6,
                 textAlign: TextAlign.center,
-                padding: EdgeInsets.only(top: 18, bottom: 16),
+                padding: const EdgeInsets.only(top: 18, bottom: 16),
               ),
-              DialogButton(
-                color: const Color(0xffc22ea1),
-                onPressed: () {
-                  urlLaunch(Platform.isAndroid
-                      ? androidAppLinked
-                      : Platform.isIOS
-                          ? iosAppLinked
-                          : iosAppLinked);
-                },
-                width: double.infinity,
-                padding: EdgeInsets.zero,
-                child: const Text(
-                  "Update",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'texgyreadventor-regular'),
+              if (data.message != null)
+                DialogButton(
+                  color: const Color(0xffc22ea1),
+                  onPressed: () {
+                    urlLaunch(Platform.isAndroid
+                        ? androidAppLinked
+                        : Platform.isIOS
+                            ? iosAppLinked
+                            : iosAppLinked);
+                  },
+                  width: double.infinity,
+                  padding: EdgeInsets.zero,
+                  child: const Text(
+                    "Update",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'texgyreadventor-regular'),
+                  ),
                 ),
-              ),
             ],
           ),
         )
