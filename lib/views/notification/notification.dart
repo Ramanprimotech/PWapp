@@ -14,7 +14,6 @@ class PwNotification extends StatefulWidget {
 
 viewNotification(BuildContext context, String title, String subTitle) async {
   Alert(
-    // alertAnimation: ,
     context: context,
     title: title,
     desc: subTitle,
@@ -56,7 +55,6 @@ class _PwNotificationState extends State<PwNotification> {
     if (response.statusCode == 200) {
       return (data['data'] as List).map((e) => NotificationModel.fromMap((e as List).first)).toList();
     } else {
-      // Utility().toast(context, data['data']);
       return [];
     }
   }
@@ -159,9 +157,6 @@ class _BuildNotificationCard extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
         onTap: () {
-          // final title = notification.title;
-          // final subTitle = notification.message;
-          // viewNotification(context, title, subTitle);
           if (notification.link.isNotEmpty) {
             launchUrl(Uri.parse(notification.link));
           }

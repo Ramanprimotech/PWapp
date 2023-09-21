@@ -48,7 +48,6 @@ class _WallboardState extends State<Wallboard> {
     Utility().onLoading(context, false);
     log('this is response ${response.statusCode}');
     log(response.body);
-    // log('this is response body ${json.decode(response.body)}');
     if (response.statusCode == 200) {
       setState(() {
         /// NEW
@@ -247,7 +246,6 @@ class _WallboardState extends State<Wallboard> {
               padding: const EdgeInsets.all(15.0),
               child: Image.file(
                 File(imageStr),
-                // 'https://i.pinimg.com/736x/c1/9d/79/c19d7964360a0144b39a0e4b67ca2cfb.jpg',
                 fit: BoxFit.fill,
               ),
             ),

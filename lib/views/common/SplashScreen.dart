@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/auth/version_response.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pwlp/pw_app.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,44 +12,54 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   VersionResponse data = VersionResponse();
   bool canNavigateInside = false;
-  String version = "1.0.3";
-  String code = "";
+  String version = "2.0.1";
+
+  @override
+  void initState() {
+    super.initState();
+    startTime();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('Assets/Logo.png'),
+                fit: BoxFit.fill,
+                alignment: Alignment.topCenter,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   startTime() async {
     var duration = const Duration(seconds: 2);
     return Timer(duration, navigationPage);
   }
 
-  packageInfo() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = "2.0.1";
-    code = packageInfo.buildNumber;
-    print("version ${version}");
-    print("build number ${code}");
-  }
-
   Future<bool?> checkVersion({required version}) async {
     bool isAllowed = false;
     try {
-      Map payload = {
-        "version": "2.0.1",
-      };
-      print("request ${payload}");
+      Map payload = {"version": version};
       var response = await http.post(
         Uri.parse("https://perks.physiciansweekly.com/api/version"),
         body: payload,
       );
       if (response.statusCode == 200) {
-        // final userLoginData = UserLoginData.fromJson(json.decode(response.body));
         data = VersionResponse.fromJson(json.decode(response.body));
-        print("respojseo${data}");
       } else {
         print("staesfdf${response.statusCode}");
-        // return false;
       }
 
       if (data == null) {
-        print("[Common.CheckVersion] - Received Null");
         return false;
       }
       data.success == true ? isAllowed = true : false;
@@ -83,95 +92,50 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    startTime();
-    packageInfo();
-  }
-
-  static const String iosAppLinked =
-      "https://apps.apple.com/in/app/pw-partner-perks/id1497536937";
-  static const String androidAppLinked =
-      "https://play.google.com/store/apps/details?id=com.partnerperks.pwlp&hl=en-IN";
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('Assets/Logo.png'),
-                fit: BoxFit.fill,
-                alignment: Alignment.topCenter,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   void _showDialog(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            content: Container(
-          height: data.message != null ? 250 : 180,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const AppText("Partner Perks", color: Colors.black, fontSize: 22),
-              AppText(
-                data.message ??
-                    "Exciting changes are on the way. Thanks for your patience, we'll be back shortly.",
-                color: Colors.black,
-                fontSize: 18,
-                maxLines: 6,
-                textAlign: TextAlign.center,
-                padding: const EdgeInsets.only(top: 18, bottom: 16),
-              ),
-              if (data.message != null)
-                DialogButton(
-                  color: const Color(0xffc22ea1),
-                  onPressed: () {
-                    urlLaunch(Platform.isAndroid
-                        ? androidAppLinked
-                        : Platform.isIOS
-                            ? iosAppLinked
-                            : iosAppLinked);
-                  },
-                  width: double.infinity,
-                  padding: EdgeInsets.zero,
-                  child: const Text(
-                    "Update",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'texgyreadventor-regular'),
-                  ),
+          content: Container(
+            height: data.message != null ? 250 : 180,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const AppText("Partner Perks",
+                    color: Colors.black, fontSize: 22),
+                AppText(
+                  data.message ??
+                      "Exciting changes are on the way. Thanks for your patience, we'll be back shortly.",
+                  color: Colors.black,
+                  fontSize: 18,
+                  maxLines: 6,
+                  textAlign: TextAlign.center,
+                  padding: const EdgeInsets.only(top: 18, bottom: 16),
                 ),
-            ],
+                if (data.message != null)
+                  DialogButton(
+                    color: const Color(0xffc22ea1),
+                    onPressed: () {
+                      urlLaunch(Platform.isAndroid
+                          ? Api.androidAppLinked.toString()
+                          : Api.iosAppLinked.toString());
+                    },
+                    width: double.infinity,
+                    padding: EdgeInsets.zero,
+                    child: const AppText(
+                      "Update",
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+              ],
+            ),
           ),
-        )
-
-            // const Text("Please install the updated version from TestFlight"),
-            // actions: <Widget>[
-            //    IconButton(
-            //     icon:  const Text("OK"),
-            //     onPressed: () {
-            //       // Navigator.of(context).pop();
-            //     },
-            //   ),
-            // ],
-            );
+        );
       },
     );
   }

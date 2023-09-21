@@ -102,7 +102,6 @@ class _WalletState extends State<Wallet> {
                             "Here you can see the posters you have scanned and the total reward amount earned.",
                             fontSize: 21.0,
                             padding: EdgeInsets.all(26),
-                            // color: Colors.black,
                             fontWeight: FontWeight.w500,
                             maxLines: 8,
                             textAlign: TextAlign.center,
@@ -187,45 +186,6 @@ class _WalletCard extends StatelessWidget {
                       label2: wallet.points),
                 if (_date.isNotEmpty)
                   _CardText(label: "Date", label2: _date),
-                // if (isWallet) ...[
-                //   wallet.amount != "" && wallet.amount != 0
-                //       ? Row(
-                //           children: [
-                //             const _CardText("Amount: aFWFFAF"),
-                //             _CardText(
-                //               "\$${wallet.amount.isEmpty ? 0 : wallet.amount}",
-                //               isBold: false,
-                //             ),
-                //           ],
-                //         )
-                //       : const SizedBox(height: 0, width: 0),
-                // ] else ...[
-                //   wallet.specialty != null
-                //       ? _CardText(wallet.specialty)
-                //       : _CardText("specialty"),
-                // ],
-                ///
-                // Row(
-                //   children: [
-                //     _CardText(
-                //       isWallet ? "Redeemed: " : "Earned: ",
-                //     ),
-                //     _CardText(
-                //       "${wallet.points.isEmpty ? 0 : wallet.points} Points",
-                //       isBold: false,
-                //     ),
-                //   ],
-                // ),
-                ///
-                // Row(
-                //   children: [
-                //     const _CardText("Date: "),
-                //     _CardText(
-                //       _date,
-                //       isBold: false,
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),

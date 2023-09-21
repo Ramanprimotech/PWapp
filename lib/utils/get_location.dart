@@ -72,6 +72,5 @@ class GetGeoLocation {
       debugPrint(e);
     });
     return _currentPosition;
-    // return getAddressFromLatLng(_currentPosition!);
   }
 }

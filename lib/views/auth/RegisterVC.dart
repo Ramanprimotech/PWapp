@@ -103,7 +103,6 @@ class _RegisterVCState extends State<RegisterVC> {
     var deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isIOS) {
-      // import 'dart:io'
       var iosDeviceInfo = await deviceInfo.iosInfo;
       uniqueDeviceId =
           '${iosDeviceInfo.name}:${iosDeviceInfo.identifierForVendor}'; // unique ID on iOS
@@ -220,13 +219,11 @@ class _RegisterVCState extends State<RegisterVC> {
                   child: Container(
                       padding: const EdgeInsets.all(8.0),
                       height: 200.0,
-                      // width: 320.0,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(10),
                             bottomRight: Radius.circular(10),
                           ),
-                          // BorderRadius.all(Radius.circular(10.0)),
                           color: Color.fromRGBO(255, 255, 255, 0.12)),
                       child: specialityData != null
                           ? ListView.builder(
@@ -660,7 +657,6 @@ class _RegisterVCState extends State<RegisterVC> {
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
     } else if (!isValidEmail(_EmailTF.text.trim())) {
-      // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);
@@ -696,7 +692,6 @@ class _RegisterVCState extends State<RegisterVC> {
       'address_id': address_id,
       'specialty': _SpecialityTF.text,
       'device_id': await getUniqueDeviceId(),
-      // 'device_id': '1234568iOSdummyValuey65675',
       'phone': phoneStr,
       'profile_pic': ""
     };
@@ -775,7 +770,6 @@ class _RegisterVCState extends State<RegisterVC> {
     } else if (_EmailTF.text == "") {
       toast(Message().Email);
     } else if (!isValidEmail(_EmailTF.text.trim())) {
-      // } else if (!_EmailTF.text.contains("@") || !_EmailTF.text.contains(".")) {
       toast(Message().EmailValid);
     } else if (_PhoneTF.text.isNotEmpty && _PhoneTF.text.length != 14) {
       toast(Message().InvalidphoneNumberMsg);

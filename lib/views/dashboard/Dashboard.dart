@@ -90,8 +90,6 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text('Contact Us'),
                 onPressed: () {
-                  // _contactUsURL();
-                  // Navigator.pop(context, 'Contact Us');
                   Navigator.of(context).popAndPushNamed("/ContactUs");
                 },
               ),
@@ -145,7 +143,6 @@ class _DashboardState extends State<Dashboard> {
             shape: BoxShape.circle,
           ),
           child: FloatingActionButton(
-            // foregroundColor: Colors.red,
             backgroundColor: const Color(0xff4725a3),
             child: SizedBox(
                 height: 35.0,

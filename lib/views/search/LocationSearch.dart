@@ -213,13 +213,6 @@ class _LocationSearchState extends State<LocationSearch> {
         "specialty": specialty!,
         "latitude": "${position!.latitude}",
         "longitude": "${position.longitude}"
-
-        ///
-        // "latitude": "arsgvd0.0",
-        // "longitude": "asgqwrvg0.0"
-        // // "specialty": "Primary Care",
-        // // "latitude": "30.71383",
-        // // "longitude": "76.71283"
       };
     } else {
       data = {
@@ -227,10 +220,6 @@ class _LocationSearchState extends State<LocationSearch> {
         "specialty": specialty!,
         "latitude": "${position!.latitude}",
         "longitude": "${position.longitude}"
-        // "latitude": "40.788920",
-        // "longitude": "-74.465170"
-        // "latitude": "37.0902",
-        // "longitude": "95.7129"
       };
     }
 

@@ -39,19 +39,4 @@ class Utility {
     }
   }
 
-
-
- /* static show() async {
-    var response =
-    await http.get(Uri.parse("https://stage-perks.physiciansweekly.com/api/version"));
-    if (response.statusCode == 200) {
-      print(response.body);
-      var data = jsonDecode(response.body);
-      return data;
-    } else {
-      print(response.statusCode);
-      return;
-    }
-  }*/
-
 }

@@ -43,4 +43,10 @@ class Api {
 
   /// Tango Card Method Name
   final orders = "orders";
+
+  /// AppStore & PlayStore
+  static const String iosAppLinked =
+      "https://apps.apple.com/in/app/pw-partner-perks/id1497536937";
+  static const String androidAppLinked =
+      "https://play.google.com/store/apps/details?id=com.partnerperks.pwlp&hl=en-IN";
 }

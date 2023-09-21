@@ -249,7 +249,6 @@ class _ProfileState extends State<Profile> {
                 hintStyle: TextStyle(fontSize: 20)),
             keyboardType: TextInputType.phone,
             inputFormatters: InputHelper.phoneFormatter,
-            // maxLength: 14,
           ),
         ),
         buttons: [
