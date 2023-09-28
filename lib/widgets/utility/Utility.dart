@@ -38,4 +38,5 @@ class Utility {
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
+
 }

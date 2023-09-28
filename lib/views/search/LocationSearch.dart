@@ -1,25 +1,20 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:pwlp/Model/search/LocationData.dart';
-import 'package:pwlp/utils/API_Constant.dart';
-import 'package:pwlp/views/auth/RegisterVC.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:toast/toast.dart';
+import 'package:pwlp/pw_app.dart';
 
 class LocationSearch extends StatefulWidget {
-  const LocationSearch({Key? key}) : super(key: key);
+  const LocationSearch({Key? key, fun}) : super(key: key);
 
   @override
   _LocationSearchState createState() => _LocationSearchState();
 }
 
 class _LocationSearchState extends State<LocationSearch> {
-  final TextEditingController _filter = new TextEditingController();
+  final TextEditingController _filter = TextEditingController();
   final dio = Dio();
-  String _searchText = "";
+  final String _searchText = "";
   List names = [];
   List filteredNames = [];
   bool? checkVal;
@@ -39,18 +34,19 @@ class _LocationSearchState extends State<LocationSearch> {
   firstCall() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.get("SelctedSpeciality");
-    locAPIFirst("a", sharedPreferences.get("SelctedSpeciality") as String?);
+    locAPIFirst(
+        "a", sharedPreferences.get("SelctedSpeciality") as String?, context);
   }
 
   @override
   initState() {
     firstCall();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Scaffold(
       appBar: _buildBar(context) as PreferredSizeWidget?,
       body: Container(
@@ -93,8 +89,9 @@ class _LocationSearchState extends State<LocationSearch> {
       }
       filteredNames = tempList;
     }
-    return names.length != 0
+    return names.isNotEmpty
         ? ListView.builder(
+            // ignore: unnecessary_null_comparison
             itemCount: names == null ? 0 : filteredNames.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
@@ -105,6 +102,7 @@ class _LocationSearchState extends State<LocationSearch> {
                         fontFamily: 'texgyreadventor-regular', fontSize: 14),
                   ),
                   subtitle: Text(
+                    // ignore: prefer_interpolation_to_compose_strings
                     "${filteredNames[index]['address_1']}, ${filteredNames[index]['city']}, ${filteredNames[index]['state']}\n${filteredNames[index]['unit_location_desc'] == "null" ? "" : "- ATTN: " + filteredNames[index]['unit_location_desc']}  ",
                     style: const TextStyle(
                         fontFamily: 'texgyreadventor-regular', fontSize: 12),
@@ -120,7 +118,7 @@ class _LocationSearchState extends State<LocationSearch> {
                       attnStr = "";
                     }
                     String addressId = "${filteredNames[index]['id']}";
-                    RegisterVC().updateUI(finalStr, addressId, attnStr);
+                    const RegisterVC().updateUI(finalStr, addressId, attnStr);
                     Navigator.of(context).pop();
                   });
             },
@@ -164,21 +162,23 @@ class _LocationSearchState extends State<LocationSearch> {
               hintStyle: TextStyle(
                   color: Colors.white, fontFamily: 'texgyreadventor-regular')),
           onChanged: (text) {
-            locAPIFirst(
-                text, sharedPreferences.get("SelctedSpeciality") as String?);
+            locAPIFirst(text,
+                sharedPreferences.get("SelctedSpeciality") as String?, context);
             checkVal = false;
-            if (text.length == 0) {
+            if (text.isEmpty) {
               locAPIFirst(
-                  "a", sharedPreferences.get("SelctedSpeciality") as String?);
+                  "a",
+                  sharedPreferences.get("SelctedSpeciality") as String?,
+                  context);
             }
           },
         );
       } else {
-        this._searchIcon = const Icon(
+        _searchIcon = const Icon(
           Icons.search,
           color: Colors.white,
         );
-        this._appBarTitle = const Text(
+        _appBarTitle = const Text(
           'Search Address',
           style: TextStyle(fontFamily: 'texgyreadventor-regular'),
         );
@@ -188,8 +188,8 @@ class _LocationSearchState extends State<LocationSearch> {
           filteredNames = names;
         });
         if (_filter.text.isNotEmpty) {
-          locAPIFirst(
-              "a", sharedPreferences.get("SelctedSpeciality") as String?);
+          locAPIFirst("a",
+              sharedPreferences.get("SelctedSpeciality") as String?, context);
         }
 
         _filter.clear();
@@ -197,15 +197,36 @@ class _LocationSearchState extends State<LocationSearch> {
     });
   }
 
-  locAPIFirst(String enteredkeyword, String? specialty) async {
+  locAPIFirst(
+      String enteredkeyword, String? specialty, BuildContext context) async {
     setState(() {
       names.clear();
       filteredNames.clear();
     });
-    Map data = {'keyword': enteredkeyword, "specialty": specialty};
 
-    String url = "${Webservice().apiUrl}" + "${Webservice().get_address}";
+    GetGeoLocation getGeoLocation = GetGeoLocation();
+    Position? position = await getGeoLocation.getCurrentPosition(context);
+    var data = <String, String>{};
+    if (Api.baseUrl == BaseUrl.stageUrl) {
+      data = {
+        'keyword': enteredkeyword,
+        "specialty": specialty!,
+        "latitude": "${position!.latitude}",
+        "longitude": "${position.longitude}"
+      };
+    } else {
+      data = {
+        'keyword': enteredkeyword,
+        "specialty": specialty!,
+        "latitude": "${position!.latitude}",
+        "longitude": "${position.longitude}"
+      };
+    }
+
+    log(data.toString(), name: "Request");
+    String url = "${Api.baseUrl}" "${Api().get_address}";
     var response = await http.post(Uri.parse(url), body: data);
+    print(response.body);
     if (response.statusCode == 200) {
       locationData = LocationData.fromJson(json.decode(response.body));
       List tempList = [];

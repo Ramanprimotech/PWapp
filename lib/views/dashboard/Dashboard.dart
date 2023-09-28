@@ -1,15 +1,11 @@
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../home/Home.dart';
-import '../../validators/Message.dart';
+import 'package:pwlp/views/notification/notification.dart';
+import 'package:pwlp/views/wallboard_Image/wallboard_image.dart';
 import '../profile/Profile.dart';
 import '../rewards/Reward.dart';
 import '../scanner/Scanner.dart';
-import '../wallet/Wallet.dart';
+import 'package:pwlp/pw_app.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -21,36 +17,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   int _selectedTab = 0;
   late List<Widget> _pageOptions;
-
-  _launchURL() async {
-    const url = 'https://www.physiciansweekly.com';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  _aboutUsURL() async {
-    const url = 'https://www.physiciansweekly.com/about/';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  _contactUsURL() async {
-    const url = 'https://www.physiciansweekly.com/contact/';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   logout() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -66,8 +32,10 @@ class _DashboardState extends State<Dashboard> {
       Home(changeScreen: changeScreen),
       const Wallet(),
       Scanner(changeScreen: changeScreen),
-      Reward(changeScreen: changeScreen),
-      Profile(changeScreen: changeScreen)
+      RewardView(changeScreen: changeScreen),
+      Profile(changeScreen: changeScreen),
+      Wallboard(changeScreen: changeScreen),
+      PwNotification(changeScreen: changeScreen)
     ];
   }
 
@@ -88,7 +56,7 @@ class _DashboardState extends State<Dashboard> {
               CupertinoActionSheetAction(
                 child: const Text("Physician's Weekly"),
                 onPressed: () {
-                  _launchURL();
+                  urlLaunch("https://www.physiciansweekly.com");
                   Navigator.pop(context, "Physician's Weekly");
                 },
               ),
@@ -103,25 +71,34 @@ class _DashboardState extends State<Dashboard> {
                 },
               ),
               CupertinoActionSheetAction(
+                child: const Text('Notification'),
+                onPressed: () {
+                  setState(() {
+                    _selectedTab = 6;
+                  });
+                  Navigator.pop(context, "Notifications");
+                },
+              ),
+              CupertinoActionSheetAction(
                 child: const Text('About Us'),
                 onPressed: () {
-                  _aboutUsURL();
+                  urlLaunch("https://www.physiciansweekly.com/about/");
+
                   Navigator.pop(context, 'About Us');
                 },
               ),
               CupertinoActionSheetAction(
                 child: const Text('Contact Us'),
                 onPressed: () {
-                  _contactUsURL();
-                  Navigator.pop(context, 'Contact Us');
+                  Navigator.of(context).popAndPushNamed("/ContactUs");
                 },
               ),
               CupertinoActionSheetAction(
                 child: const Text('Logout'),
                 onPressed: () {
-                  logout();
+                  dialogLogoutAlert(context, "Do you want to Logout?", logout);
                 },
-              )
+              ),
             ],
             cancelButton: CupertinoActionSheetAction(
               isDefaultAction: true,
@@ -140,7 +117,8 @@ class _DashboardState extends State<Dashboard> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: const Color(0xff4725a3),
+        backgroundColor: Colors.transparent,
+        extendBody: true,
         appBar: AppBar(
           title: Text(
             Message().AppBarTitle,
@@ -150,7 +128,7 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: const Color(0xff4725a3),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.menu),
               onPressed: () {
                 actionSheetMethod(context);
               },
@@ -159,26 +137,27 @@ class _DashboardState extends State<Dashboard> {
         ),
         body: _pageOptions[_selectedTab],
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color(0xff4725a3),
-          child: Container(
-            height: 35.0,
-            width: 35.0,
-            child: const Image(
-              image: AssetImage(
-                'Assets/qr-scan.png',
-              ),
-              fit: BoxFit.cover,
-            ),
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 0.2),
+            shape: BoxShape.circle,
           ),
-          onPressed: () {
-            setState(() {
-              _selectedTab = 2;
-            });
-          },
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xff4725a3),
+            child: SizedBox(
+                height: 35.0,
+                width: 35.0,
+                child: Image.asset("Assets/qr-scan.png")),
+            onPressed: () {
+              setState(() {
+                _selectedTab = 2;
+              });
+            },
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           color: const Color.fromRGBO(255, 255, 255, 1.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -217,5 +196,16 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       _selectedTab = i;
     });
+  }
+}
+
+urlLaunch(String urlPage) async {
+  final url = urlPage;
+  final Uri uri = Uri.parse(url);
+  try {
+    await launchUrl(uri);
+  } catch (e) {
+    log(e.toString());
+    throw 'Could not launch $url';
   }
 }

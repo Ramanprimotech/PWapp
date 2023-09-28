@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final pointsData = pointsDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class PointsData {

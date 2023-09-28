@@ -1,22 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-
-import '../../Model/profile/ProfileData.dart';
-import '../../utils/API_Constant.dart';
-import '../../validators/Message.dart';
-import '../../widgets/utility/Utility.dart';
+import 'package:pwlp/pw_app.dart';
 
 typedef VoidWithIntCallback = void Function(int);
 
@@ -34,8 +21,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late ProfileData profileData;
   String userName = "";
-  String? specialityStr = "";
-  String? addressStr = "";
+  String? specialityStr;
+  String? addressStr;
   String? emailStr = "";
   String? phoneStr = "";
   String? pointsStr = "";
@@ -50,13 +37,10 @@ class _ProfileState extends State<Profile> {
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
-        body: data);
-
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().get_user_profile), body: data);
     if (response.statusCode == 200) {
       profileData = ProfileData.fromJson(json.decode(response.body));
-
       setState(() {
         userName =
             "${profileData.data!.userProfile![0].firstname} ${profileData.data!.userProfile![0].lastname}";
@@ -65,14 +49,14 @@ class _ProfileState extends State<Profile> {
         emailStr = profileData.data!.userProfile![0].email;
         phoneStr = profileData.data!.userProfile![0].phone;
         if (phoneStr == "") {
-          phoneStr = "xxx-xxxx-xxx";
+          phoneStr = "";
         }
         pointsStr = profileData.data!.userProfile![0].points;
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Webservice().imagePath +
-              profileData.data!.userProfile![0].profilePic!;
+          profilePicStr =
+              Api.baseImageUrl + profileData.data!.userProfile![0].profilePic!;
         } else {
-          profilePicStr = "${Webservice().imagePath}user_default.png";
+          profilePicStr = "${Api.baseImageUrl}user_default.png";
         }
         rewardCardStr = "${profileData.data!.reward}";
         scannedNoStr = "${profileData.data!.scannedPosters}";
@@ -90,9 +74,8 @@ class _ProfileState extends State<Profile> {
       'user_id': sharedPreferences.getString("userID"),
     };
     log(data.toString());
-    var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().get_user_profile),
-        body: data);
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().get_user_profile), body: data);
 
     Utility().onLoading(context, false);
 
@@ -106,15 +89,15 @@ class _ProfileState extends State<Profile> {
         emailStr = profileData.data!.userProfile![0].email;
         phoneStr = profileData.data!.userProfile![0].phone;
         if (phoneStr == "") {
-          phoneStr = "xxx-xxxx-xxx";
+          phoneStr = "xxxxxxxxxx";
         }
         pointsStr = profileData.data!.userProfile![0].points;
 
         if (profileData.data!.userProfile![0].profilePic.toString() != "") {
-          profilePicStr = Webservice().imagePath +
-              profileData.data!.userProfile![0].profilePic!;
+          profilePicStr =
+              Api.baseImageUrl + profileData.data!.userProfile![0].profilePic!;
         } else {
-          profilePicStr = "${Webservice().imagePath}user_default.png";
+          profilePicStr = "${Api.baseImageUrl}user_default.png";
         }
         rewardCardStr = "${profileData.data!.reward}";
         scannedNoStr = "${profileData.data!.scannedPosters}";
@@ -131,7 +114,7 @@ class _ProfileState extends State<Profile> {
     sharedPreferences = await SharedPreferences.getInstance();
     var stream = http.ByteStream(_image.openRead());
     var length = await _image.length();
-    var uri = Uri.parse(Webservice().apiUrl + Webservice().update_profile_pic);
+    var uri = Uri.parse(Api.baseUrl + Api().update_profile_pic);
     var request = http.MultipartRequest("POST", uri);
     var multipartFile = http.MultipartFile('profile_pic', stream, length,
         filename: path.basename(_image.path));
@@ -142,7 +125,7 @@ class _ProfileState extends State<Profile> {
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
-      log("Upload Profile pic successfully....");
+      Utility().toast(context, Message().profilePictureUpdate);
       getProfileAPISec();
     } else {
       Utility().onLoading(context, false);
@@ -152,25 +135,21 @@ class _ProfileState extends State<Profile> {
     response.stream.transform(utf8.decoder).listen((value) {});
   }
 
-  Future getImage() async {
-    var image = await ImagePicker()
-        .pickImage(source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
-    setState(() {
-      _image = image!;
-      _uploadImage();
-    });
-  }
-
-  Future getGallery() async {
+  Future getImage(ImageSource source) async {
     try {
-      var imageFile = await ImagePicker().pickImage(
-          source: ImageSource.gallery, maxHeight: 300, maxWidth: 300);
-      setState(() {
-        _image = imageFile!;
-        _uploadImage();
-      });
-    } catch (e) {
-      log(e.toString());
+      final image = await ImagePicker()
+          .pickImage(source: source, maxHeight: 300, maxWidth: 300);
+      if (image == null) {
+        return;
+      } else {
+        final imageTemp = XFile(image.path);
+        setState(() {
+          _image = imageTemp;
+          _uploadImage();
+        });
+      }
+    } on PlatformException catch (e) {
+      log('Failed to pick image : $e');
     }
   }
 
@@ -189,14 +168,14 @@ class _ProfileState extends State<Profile> {
           CupertinoActionSheetAction(
             child: const Text("Open Camera"),
             onPressed: () {
-              getImage();
+              getImage(ImageSource.camera);
               Navigator.pop(context, 'About Us');
             },
           ),
           CupertinoActionSheetAction(
             child: const Text('Open Gallery'),
             onPressed: () {
-              getGallery();
+              getImage(ImageSource.gallery);
               Navigator.pop(context, 'About Us');
             },
           ),
@@ -222,17 +201,18 @@ class _ProfileState extends State<Profile> {
 
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
-      'phone': _phoneNumber.text,
+      'phone': InputHelper.phoneRegular(_phoneNumber.text),
     };
-    var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().update_profile),
-        body: data);
+    var response = await http
+        .post(Uri.parse(Api.baseUrl + Api().update_profile), body: data);
 
     Utility().onLoading(context, false);
     if (response.statusCode == 200) {
       setState(() {
         _phoneNumber.text = "";
       });
+      Utility().toast(context, "Phone number updated");
+
       getProfileAPI();
     } else {
       log("Failure API");
@@ -243,11 +223,57 @@ class _ProfileState extends State<Profile> {
   validatePhoneNo() {
     if (_phoneNumber.text.isEmpty) {
       Utility().toast(context, Message().phoneNumberMsg);
-    } else if (_phoneNumber.text.length != 10) {
+    } else if (_phoneNumber.text.length != 14) {
       Utility().toast(context, Message().InvalidphoneNumberMsg);
+    } else if (_phoneNumber.text == phoneStr!) {
+      Utility().toast(context, Message().phoneNumberExists);
     } else {
+      Utility().toast(context, Message().phoneNumberUpdate);
       phoneNumberAPI();
     }
+  }
+
+  showPhoneDialog() {
+    Alert(
+        context: context,
+        title: "Phone Number",
+        content: Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: TextField(
+            controller: _phoneNumber,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                ),
+                hintText: "(xxx) xxx-xxxx",
+                hintStyle: TextStyle(fontSize: 20)),
+            keyboardType: TextInputType.phone,
+            inputFormatters: InputHelper.phoneFormatter,
+          ),
+        ),
+        buttons: [
+          DialogButton(
+            color: const Color(0xffc22ea1),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              validatePhoneNo();
+            },
+            child: const Text(
+              "Update",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'texgyreadventor-regular',
+              ),
+            ),
+          )
+        ]).show();
+
+    setState(() {
+      if (phoneStr != "xxx xxx-xxxx") {
+        _phoneNumber.text = InputHelper.phoneToFormat(phoneStr!);
+      }
+    });
   }
 
   @override
@@ -259,316 +285,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final userDetailCont = Container(
-      height: 278.0,
-      margin: const EdgeInsets.only(top: 80.0, left: 15.0, right: 15.0),
-      padding:
-          const EdgeInsets.only(top: 83.0, left: 10.0, right: 10.0, bottom: 15),
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          color: Color.fromRGBO(255, 255, 255, 0.15)),
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: Text(
-              userName,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontFamily: 'texgyreadventor-regular',
-                  fontWeight: FontWeight.w400),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          Center(
-            child: Text(
-              specialityStr!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 19,
-                  fontFamily: 'texgyreadventor-regular',
-                  fontWeight: FontWeight.w200),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Center(
-            child: Text(
-              addressStr!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontFamily: 'texgyreadventor-regular',
-                  fontWeight: FontWeight.w200),
-              maxLines: 3,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-          Container(
-            height: 1.0,
-            color: Colors.grey,
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          Row(
-            children: <Widget>[
-              const Icon(
-                Icons.email,
-                color: Colors.white,
-              ),
-              const SizedBox(
-                width: 5.0,
-              ),
-              Text(
-                emailStr!,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w200),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 3.0,
-          ),
-          Row(
-            children: <Widget>[
-              const Icon(
-                Icons.call,
-                color: Colors.white,
-              ),
-              const SizedBox(
-                width: 5.0,
-              ),
-              Text(
-                phoneStr!,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w200),
-              ),
-              const SizedBox(
-                width: 175.0,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  child: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  onTap: () {
-                    Alert(
-                        context: context,
-                        title: "Phone Number",
-                        content: Column(
-                          children: <Widget>[
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            TextField(
-                              controller: _phoneNumber,
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(5.0))),
-                                  hintText: "Phone Number"),
-                              keyboardType: TextInputType.phone,
-                              maxLength: 10,
-                            ),
-                          ],
-                        ),
-                        buttons: [
-                          DialogButton(
-                            color: const Color(0xffc22ea1),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).pop();
-                              validatePhoneNo();
-                            },
-                            child: const Text(
-                              "Update",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontFamily: 'texgyreadventor-regular'),
-                            ),
-                          )
-                        ]).show();
-                    setState(() {
-                      if (phoneStr != "xxx-xxxx-xxx") {
-                        _phoneNumber.text = phoneStr!;
-                      }
-                    });
-                  },
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-
-    final pointsCard = Container(
-      margin: const EdgeInsets.only(
-        top: 15.0,
-        left: 15.0,
-        right: 15.0,
-      ),
-      padding:
-          const EdgeInsets.only(top: 2.0, left: 2.0, right: 2.0, bottom: 13.0),
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          color: Colors.white),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin:
-                      const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0),
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xff4725a3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xff4725a3),
-                        blurRadius: 1.0,
-                        spreadRadius: 1.0,
-                      )
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      pointsStr!,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 26,
-                          fontFamily: 'texgyreadventor-regular',
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                const Text(
-                  "Available Points",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontFamily: 'texgyreadventor-regular',
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin:
-                      const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0),
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xff4725a3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xff4725a3),
-                        blurRadius: 1.0,
-                        spreadRadius: 1.0,
-                      )
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      rewardCardStr,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 26,
-                          fontFamily: 'texgyreadventor-regular',
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                const Text(
-                  "Reward Cards",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontFamily: 'texgyreadventor-regular',
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin:
-                      const EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0),
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xff4725a3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xff4725a3),
-                        blurRadius: 1.0,
-                        spreadRadius: 1.0,
-                      )
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      scannedNoStr,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 26,
-                          fontFamily: 'texgyreadventor-regular',
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                const Text(
-                  "Scanned Posters",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontFamily: 'texgyreadventor-regular',
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
     return OfflineBuilder(
       debounceDuration: Duration.zero,
       connectivityBuilder: (
@@ -582,90 +298,89 @@ class _ProfileState extends State<Profile> {
         return child;
       },
       child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('Assets/dashboard-bg.png'),
-                  fit: BoxFit.fill,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-            Column(
-              children: <Widget>[
-                userDetailCont,
-                const SizedBox(
-                  height: 15.0,
-                ),
-                pointsCard,
-                const SizedBox(
-                  height: 30.0,
-                ),
-              ],
-            ),
-            Container(
-              height: 130.0,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('Assets/coverImg.png'),
-                  fit: BoxFit.fill,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+        body: BGImageWithChild(
+          imgUrl: "dashboard-bg.png",
+          child: SizedBox(
+            height: double.infinity,
+            child: SingleChildScrollView(
               child: Stack(
-                fit: StackFit.loose,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
                     children: [
-                      Container(
-                        width: 140.0,
-                        height: 140.0,
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          shape: BoxShape.circle,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.white,
-                              blurRadius: 1.0,
-                              spreadRadius: 0.5,
-                            ),
-                          ],
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: (profilePicStr == ""
-                                    ? const AssetImage('Assets/as.png')
-                                    : NetworkImage(profilePicStr))
-                                as ImageProvider<Object>,
-                          ),
-                        ),
-                      ),
+                      userDetails(),
+                      const SizedBox(height: 15),
+                      PointsCard(
+                          pointsStr: pointsStr,
+                          rewardCardStr: rewardCardStr,
+                          scannedNoStr: scannedNoStr),
+                      const SizedBox(height: 30),
                     ],
                   ),
+                  Container(
+                    height: 130.0,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('Assets/coverImg.png'),
+                        fit: BoxFit.fill,
+                        alignment: Alignment.topCenter,
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 90.0, left: 100.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextButton(
-                          child: const CircleAvatar(
-                            backgroundColor: Color(0xff4725a3),
-                            radius: 20.0,
-                            child: Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Stack(
+                      fit: StackFit.loose,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 140.0,
+                              height: 140.0,
+                              decoration: BoxDecoration(
+                                color: Colors.white70,
+                                shape: BoxShape.circle,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.white,
+                                    blurRadius: 1.0,
+                                    spreadRadius: 0.5,
+                                  ),
+                                ],
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: (profilePicStr == ""
+                                          ? const AssetImage('Assets/as.png')
+                                          : NetworkImage(profilePicStr))
+                                      as ImageProvider<Object>,
+                                ),
+                              ),
                             ),
+                          ],
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 90.0, left: 100.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                child: const CircleAvatar(
+                                  backgroundColor: Color(0xff4725a3),
+                                  radius: 20.0,
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  log("Camera Pressed!");
+                                  actionSheetMethod(context);
+                                },
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            log("Camera Pressed!");
-                            actionSheetMethod(context);
-                          },
                         ),
                       ],
                     ),
@@ -673,6 +388,126 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget userDetails() {
+    return Container(
+      margin: const EdgeInsets.only(top: 80, left: 15, right: 15),
+      padding: const EdgeInsets.only(top: 83, left: 10, right: 10, bottom: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: const Color(0x1AFFFFFF),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          AppText(userName, fontSize: 25, fontWeight: FontWeight.w500),
+          if (specialityStr != null)
+            AppText(
+              specialityStr,
+              fontSize: 19,
+              fontWeight: FontWeight.w300,
+              padding: const EdgeInsets.only(bottom: 6),
+              textAlign: TextAlign.center,
+            ),
+          if (addressStr != null)
+            AppText(
+              addressStr,
+              fontSize: 16,
+              fontWeight: FontWeight.w200,
+              padding: const EdgeInsets.only(bottom: 8),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+            ),
+          const Divider(color: Colors.white, thickness: 1),
+          ListTile(
+            dense: true,
+            leading: const Icon(Icons.email, color: Colors.white),
+            title:
+                AppText(emailStr!, fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          ListTile(
+            dense: true,
+            leading: const Icon(Icons.call, color: Colors.white),
+            title: AppText(
+                phoneStr == "" || phoneStr == null
+                    ? InputHelper.phoneToFormat("xxxxxxxxxx")
+                    : InputHelper.phoneToFormat(phoneStr!),
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
+            trailing: IconButton(
+              onPressed: showPhoneDialog,
+              icon: const Icon(Icons.edit, color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PointsCard extends StatelessWidget {
+  const PointsCard({
+    Key? key,
+    required this.pointsStr,
+    required this.rewardCardStr,
+    required this.scannedNoStr,
+  }) : super(key: key);
+
+  final String? pointsStr;
+  final String rewardCardStr;
+  final String scannedNoStr;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          PointCircle(label: "Available Points", value: pointsStr!),
+          PointCircle(label: "Reward Cards", value: rewardCardStr),
+          PointCircle(label: "Scanned Posters", value: scannedNoStr),
+        ],
+      ),
+    );
+  }
+}
+
+class PointCircle extends StatelessWidget {
+  const PointCircle({
+    Key? key,
+    required this.label,
+    required this.value,
+  }) : super(key: key);
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 40,
+              backgroundColor: const Color(0xff4725a3),
+              child: AppText(value, fontSize: 26),
+            ),
+            const SizedBox(height: 8),
+            AppText(label, color: Colors.black, fontSize: 13),
           ],
         ),
       ),

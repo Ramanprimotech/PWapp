@@ -1,26 +1,17 @@
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:pwlp/widgets/button/elevated_btn.dart';
-import 'package:pwlp/widgets/utility/Utility.dart';
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-import 'dart:convert';
-import '../../utils/API_Constant.dart';
 import '../../Model/scanner/QRCodeCheckData.dart';
-// ignore_for_file: deprecated_member_use
+import 'package:pwlp/pw_app.dart';
 
 typedef VoidWithIntCallback = void Function(int);
 
 class Scanner extends StatefulWidget {
   final VoidWithIntCallback? changeScreen;
+
   const Scanner({Key? key, this.changeScreen}) : super(key: key);
+
   @override
   _ScannerState createState() => _ScannerState();
 }
@@ -31,6 +22,7 @@ class _ScannerState extends State<Scanner> {
   String result = "Scanner Screen";
   String imageStr = "";
   late QrCodeCheckData qrCodeCheckData;
+
   //Check Poster API
   scanMatchAPI(String name) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -40,17 +32,22 @@ class _ScannerState extends State<Scanner> {
     Map data = {
       'name': name,
       'specialty': sharedPreferences.getString("specialty"),
+      'device_id': "1234568iOSdummyValue123456789",
     };
+    log('This is the qr code ${data.toString()}');
 
-    var response = await http.post(
-        Uri.parse(Webservice().apiUrl + Webservice().check_qr_code),
+    var response = await http.post(Uri.parse(Api.baseUrl + Api().check_qr_code),
         body: data);
+    log(response.toString());
 
     Utility().onLoading(context, false);
+    log('This is the Response ${response.statusCode.toString()}');
     if (response.statusCode == 200) {
+      log('This is the Response ${response.body.toString()}');
+
       qrCodeCheckData = QrCodeCheckData.fromJson(json.decode(response.body));
       setState(() {
-        imageStr = "${Webservice().imagePath}" +
+        imageStr = "${Api.baseImageUrl}" +
             "${qrCodeCheckData.data![0].posterImage.toString()}";
         _isVisibleScannedCont = true;
         _isVisible = false;
@@ -78,9 +75,8 @@ class _ScannerState extends State<Scanner> {
       'points': "${qrCodeCheckData.data![0].point.toString()}"
     };
 
-    var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" + "${Webservice().save_poster}"),
-        body: data);
+    var response = await http
+        .post(Uri.parse("${Api.baseUrl}" + "${Api().save_poster}"), body: data);
     Utility().onLoading(context, false);
 
     if (response.statusCode == 200) {
@@ -125,6 +121,7 @@ class _ScannerState extends State<Scanner> {
           '#ff6666', 'Cancel', true, ScanMode.QR);
       if (result != "-1") {
         setState(() {
+          debugPrint("result --- $result");
           scanMatchAPI(result);
         });
       }
@@ -157,11 +154,10 @@ class _ScannerState extends State<Scanner> {
           ),
           Flexible(
             flex: 7,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 10.0, right: 30.0, bottom: 10.0, left: 30.0),
+            child: Center(
               child: Container(
-                margin: const EdgeInsets.only(right: 40.0, left: 40.0),
+                width: 250.0,
+                margin: const EdgeInsets.only(top: 10, bottom: 10),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('Assets/helpBG.png'),
@@ -171,9 +167,7 @@ class _ScannerState extends State<Scanner> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20.0,
-          ),
+          const SizedBox(height: 20),
           Flexible(
             flex: 3,
             child: SizedBox(
@@ -190,85 +184,62 @@ class _ScannerState extends State<Scanner> {
     );
     final scannedScreen = Visibility(
       visible: _isVisibleScannedCont,
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            flex: 2,
-            child: Container(
-              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: const Text(
-                "Scanned Successfully",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontFamily: 'texgyreadventor-regular',
-                    fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
-              ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            const Flexible(
+              flex: 2,
+              child: AppText("Scanned Successfully",
+                  padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                  fontSize: 20.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500),
             ),
-          ),
-          Flexible(
-            flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Image.network(
-                imageStr,
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          Flexible(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 55.0,
-                    width: 150.0,
+            Flexible(flex: 6, child: Image.network(imageStr, fit: BoxFit.fill)),
+            const SizedBox(height: 35),
+            Flexible(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Expanded(
                     child: CustomBtn(
                         btnLable: 'Scan Again',
                         onPressed: () {
                           _scanQR();
                         }),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 55.0,
-                    width: 150.0,
+                  const SizedBox(width: 16),
+                  Expanded(
                     child: CustomBtn(
                         btnLable: 'Confirm',
                         onPressed: () {
                           posterConfirmAPI();
                         }),
                   ),
-                )
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     return OfflineBuilder(
-        debounceDuration: Duration.zero,
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          if (connectivity == ConnectivityResult.none) {
-            return const ConnectivityMessage();
-          }
-          return child;
-        },
-        child: Scaffold(
-          body: Stack(children: <Widget>[
+      debounceDuration: Duration.zero,
+      connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
+        if (connectivity == ConnectivityResult.none) {
+          return const ConnectivityMessage();
+        }
+        return child;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -280,7 +251,9 @@ class _ScannerState extends State<Scanner> {
             ),
             helpCont,
             scannedScreen
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }

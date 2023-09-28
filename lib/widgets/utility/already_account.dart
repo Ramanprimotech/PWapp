@@ -1,29 +1,31 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:pwlp/pw_app.dart';
 
 // ignore: must_be_immutable
 class AlreadyAcc extends StatelessWidget {
   AlreadyAcc({Key? key, required this.recognizer}) : super(key: key);
   GestureRecognizer? recognizer;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10.0),
+      margin: const EdgeInsets.only(top: 48),
       child: Center(
         child: RichText(
           textAlign: TextAlign.left,
           text: TextSpan(
-            text: "Already have an Account? ",
-            style: const TextStyle(
-                fontSize: 14.0,
-                color: Colors.white,
-                fontFamily: 'texgyreadventor-regular',
-                fontWeight: FontWeight.w300),
             children: [
+              const WidgetSpan(
+                child: AppText(
+                  "Already have an Account? ",
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                ),
+              ),
               TextSpan(
                   text: "Login",
-                  style: const TextStyle(
-                    fontSize: 16.0,
+                  style: const
+                  TextStyle(
+                    fontSize: 18.0,
                     color: Colors.white,
                     fontFamily: 'texgyreadventor-regular',
                     fontWeight: FontWeight.w400,
@@ -36,8 +38,3 @@ class AlreadyAcc extends StatelessWidget {
     );
   }
 }
-
-/**TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.of(context).pushReplacementNamed('/Login');
-                  }, */

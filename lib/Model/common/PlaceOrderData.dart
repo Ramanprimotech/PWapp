@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final placeOrderData = placeOrderDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class PlaceOrderData {
@@ -10,8 +6,6 @@ class PlaceOrderData {
   String? customerIdentifier;
   String? accountIdentifier;
   String? accountNumber;
- // AmountCharged amountCharged;
- // Denomination denomination;
   String? utid;
   String? rewardName;
   Sender? sender;
@@ -32,8 +26,6 @@ class PlaceOrderData {
         this.customerIdentifier,
         this.accountIdentifier,
         this.accountNumber,
-       // this.amountCharged,
-      //  this.denomination,
         this.utid,
         this.rewardName,
         this.sender,
@@ -54,12 +46,6 @@ class PlaceOrderData {
     customerIdentifier = json['customerIdentifier'];
     accountIdentifier = json['accountIdentifier'];
     accountNumber = json['accountNumber'];
-//    amountCharged = json['amountCharged'] != null
-//        ? new AmountCharged.fromJson(json['amountCharged'])
-//        : null;
-//    denomination = json['denomination'] != null
-//        ? new Denomination.fromJson(json['denomination'])
-//        : null;
     utid = json['utid'];
     rewardName = json['rewardName'];
     sender =
@@ -86,12 +72,6 @@ class PlaceOrderData {
     data['customerIdentifier'] = this.customerIdentifier;
     data['accountIdentifier'] = this.accountIdentifier;
     data['accountNumber'] = this.accountNumber;
-//    if (this.amountCharged != null) {
-//      data['amountCharged'] = this.amountCharged.toJson();
-//    }
-//    if (this.denomination != null) {
-//      data['denomination'] = this.denomination.toJson();
-//    }
     data['utid'] = this.utid;
     data['rewardName'] = this.rewardName;
     if (this.sender != null) {
@@ -115,46 +95,6 @@ class PlaceOrderData {
   }
 }
 
-//class AmountCharged {
-//  int value;
-//  String currencyCode;
-//  int total;
-//
-//  AmountCharged({this.value, this.currencyCode, this.total});
-//
-//  AmountCharged.fromJson(Map<String, dynamic> json) {
-//    value = json['value'];
-//    currencyCode = json['currencyCode'];
-//    total = json['total'];
-//  }
-//
-//  Map<String, dynamic> toJson() {
-//    final Map<String, dynamic> data = new Map<String, dynamic>();
-//    data['value'] = this.value;
-//    data['currencyCode'] = this.currencyCode;
-//    data['total'] = this.total;
-//    return data;
-//  }
-//}
-
-//class Denomination {
-//  int value;
-//  String currencyCode;
-//
-//  Denomination({this.value, this.currencyCode});
-//
-//  Denomination.fromJson(Map<String, dynamic> json) {
-//    value = json['value'];
-//    currencyCode = json['currencyCode'];
-//  }
-
-//  Map<String, dynamic> toJson() {
-//    final Map<String, dynamic> data = new Map<String, dynamic>();
-//    data['value'] = this.value;
-//    data['currencyCode'] = this.currencyCode;
-//    return data;
-//  }
-//}
 
 class Sender {
   String? firstName;

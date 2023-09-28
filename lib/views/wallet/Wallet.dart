@@ -1,15 +1,7 @@
-import 'dart:async';
 import 'dart:developer';
-
-import 'package:date_format/date_format.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:pwlp/widgets/utility/connectivity_result_message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../../utils/API_Constant.dart';
-import '../../Model/wallet/WalletData.dart';
+import 'package:pwlp/pw_app.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({Key? key}) : super(key: key);
@@ -19,391 +11,236 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-  WalletData? walletData;
-  bool _isvissibleLoader = true;
+  late Future<List<WalletModel>> future;
 
-  getWalletAPI() async {
+  Future<List<WalletModel>> getWalletAPI() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {
+    Map body = {
       'user_id': sharedPreferences.getString("userID"),
     };
-    var response = await http.post(
-        Uri.parse("${Webservice().apiUrl}" + "${Webservice().get_user_wallet}"),
-        body: data);
+    var response = await http
+        .post(Uri.parse("${Api.baseUrl}${Api().get_user_wallet}"), body: body);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        walletData = WalletData.fromJson(json.decode(response.body));
-      });
+    dynamic data = json.decode(response.body);
+
+    if (data['success']) {
+      try {
+        return (data['data'] as List)
+            .map((e) => WalletModel.fromMap(e))
+            .toList();
+      } catch (e) {
+        return [];
+      }
     } else {
       log("Failure API");
-      setState(() {
-        _isvissibleLoader = false;
-      });
+      return [];
     }
   }
 
   @override
   void initState() {
-    getWalletAPI();
     super.initState();
+    future = getWalletAPI();
   }
 
   @override
   Widget build(BuildContext context) {
     return OfflineBuilder(
-        debounceDuration: Duration.zero,
-        connectivityBuilder: (
-          BuildContext context,
-          ConnectivityResult connectivity,
-          Widget child,
-        ) {
-          if (connectivity == ConnectivityResult.none) {
-            return const ConnectivityMessage();
-          }
-          return child;
-        },
-        child: Scaffold(
-          body: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('Assets/dashboard-bg.png'),
-                  fit: BoxFit.fill,
-                  alignment: Alignment.topCenter,
+      debounceDuration: Duration.zero,
+      connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
+        if (connectivity == ConnectivityResult.none) {
+          return const ConnectivityMessage();
+        }
+        return child;
+      },
+      child: Scaffold(
+        body: Container(
+          height: double.maxFinite,
+          width: double.maxFinite,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('Assets/dashboard-bg.png'),
+              fit: BoxFit.fill,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const AppText(
+                  "Activity",
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.w700,
+                  padding: EdgeInsets.symmetric(vertical: 24),
                 ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  const Flexible(
-                    flex: 1,
-                    child: Center(
-                      child: Text(
-                        "Activity",
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.white,
-                          fontFamily: 'texgyreadventor-regular',
-                        ),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 9,
-                    child: walletData != null
-                        ? ListView.builder(
-                            itemCount: walletData!.data!.length,
-                            itemBuilder: (context, index) {
-                              String dateStr = "";
-                              DateTime todayDate = DateTime.parse(walletData!
-                                  .data![index].createdAt
-                                  .toString());
-                              dateStr = formatDate(
-                                      todayDate, [dd, '-', mm, '-', yyyy])
-                                  .toString();
-                              if (walletData!.data![index].catgory.toString() ==
-                                  "wallet") {
-                                return Container(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      left: 10.0,
-                                      top: 20.0,
-                                      right: 10.0,
-                                    ),
-                                    padding: const EdgeInsets.all(15.0),
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0)),
-                                        color: Color.fromRGBO(
-                                            255, 255, 255, 0.15)),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Flexible(
-                                          flex: 6,
-                                          child: Column(
-                                            children: <Widget>[
-                                              const Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Redemption",
-                                                    style: TextStyle(
-                                                        fontSize: 17.0,
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            'texgyreadventor-regular',
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  )),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 5.0),
-                                                  child: RichText(
-                                                    textAlign: TextAlign.left,
-                                                    text: TextSpan(
-                                                      text: "Amount: ",
-                                                      style: const TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'texgyreadventor-regular',
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              "\$${walletData!.data![index].amount} ",
-                                                          style: const TextStyle(
-                                                              fontSize: 14.0,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'texgyreadventor-regular',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                      text: "Redeemed: ",
-                                                      style: const TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'texgyreadventor-regular',
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              "${walletData!.data![index].points} Points",
-                                                          style: const TextStyle(
-                                                              fontSize: 14.0,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'texgyreadventor-regular',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300),
-                                                        ),
-                                                      ]),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                      text: "Date: ",
-                                                      style: const TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'texgyreadventor-regular',
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      children: [
-                                                        TextSpan(
-                                                          text: dateStr,
-                                                          style: const TextStyle(
-                                                              fontSize: 14.0,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'texgyreadventor-regular',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300),
-                                                        ),
-                                                      ]),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 100.0,
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                image: AssetImage(
-                                                    'Assets/walletCard.png'),
-                                                fit: BoxFit.fill,
-                                                alignment: Alignment.topCenter,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Container(
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      left: 10.0,
-                                      top: 20.0,
-                                      right: 10.0,
-                                    ),
-                                    padding: const EdgeInsets.all(15.0),
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0)),
-                                        color: Color.fromRGBO(
-                                            255, 255, 255, 0.15)),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Flexible(
-                                          flex: 4,
-                                          child: Column(
-                                            children: <Widget>[
-                                              const Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Scanned Poster",
-                                                    style: TextStyle(
-                                                        fontSize: 17.0,
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            'texgyreadventor-regular',
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  )),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5.0, bottom: 3.0),
-                                                child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      "${walletData!.data![index].specialty}",
-                                                      style: const TextStyle(
-                                                          fontSize: 16.0,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'texgyreadventor-regular',
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    )),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                      text: "Earned: ",
-                                                      style: const TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'texgyreadventor-regular',
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              "${walletData!.data![index].points} Points",
-                                                          style: const TextStyle(
-                                                              fontSize: 14.0,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'texgyreadventor-regular',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300),
-                                                        ),
-                                                      ]),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: RichText(
-                                                  textAlign: TextAlign.start,
-                                                  text: TextSpan(
-                                                      text: "Date: ",
-                                                      style: const TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'texgyreadventor-regular',
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      children: [
-                                                        TextSpan(
-                                                          text: dateStr,
-                                                          style: const TextStyle(
-                                                              fontSize: 14.0,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'texgyreadventor-regular',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300),
-                                                        ),
-                                                      ]),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: Container(
-                                            height: 100.0,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: NetworkImage(
-                                                    "${Webservice().imagePath}" +
-                                                        "${walletData!.data![index].posterImage}"),
-                                                fit: BoxFit.fill,
-                                                alignment: Alignment.topCenter,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                          )
-                        : Center(
-                            child: _isvissibleLoader == true
-                                ? const CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white),
-                                  )
-                                : const Text(
-                                    "Here, you can see the posters you scanned and reward amount earned.",
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                  ),
+                FutureBuilder<List<WalletModel>>(
+                  future: future,
+                  builder: (_, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height * .6,
+                        alignment: Alignment.center,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
                           ),
-                  )
-                ],
-              )),
-        ));
+                        ),
+                      );
+                    }
+                    if (snapshot.data == null || snapshot.data!.isEmpty) {
+                      return Container(
+                          height: MediaQuery.of(context).size.height * .6,
+                          alignment: Alignment.center,
+                          child: const AppText(
+                            "Here you can see the posters you have scanned and the total reward amount earned.",
+                            fontSize: 21.0,
+                            padding: EdgeInsets.all(26),
+                            fontWeight: FontWeight.w500,
+                            maxLines: 8,
+                            textAlign: TextAlign.center,
+                          ));
+                    }
+                    List<WalletModel> items = snapshot.data!;
+
+                    return ListView.separated(
+                      itemCount: items.length + 1,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, top: 8, bottom: 100),
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        if (index == items.length) {
+                          return const SizedBox(height: 40);
+                        }
+                        final WalletModel wallet = items[index];
+                        return _WalletCard(wallet);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WalletCard extends StatelessWidget {
+  const _WalletCard(
+    this.wallet, {
+    Key? key,
+  }) : super(key: key);
+
+  final WalletModel wallet;
+
+  String get _date =>
+      formatDate(DateTime.parse(wallet.createdAt), [mm, '-', dd, '-', yyyy])
+          .toString();
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isWallet = wallet.catgory == "scanned_posters";
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white24,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                AppText(
+                  isWallet
+                      ? "Scanned Poster"
+                      : wallet.catgory.toString() == "redemption"
+                          ? wallet.catgory.toString() == "redemption"
+                              ? "Wallet"
+                              : "Redemption"
+                          : "Wallboard Poster",
+                  fontSize: 20,
+                ),
+                const SizedBox(height: 8),
+                if (wallet.specialty.isNotEmpty)
+                  _CardText(label: "Specialty", label2: wallet.specialty),
+                if (wallet.isApproved != "")
+                  _CardText(label: "Status", label2: wallet.isApproved),
+                if (wallet.points != "0")
+                  _CardText(
+                      label: isWallet ? "Redeemed: " : "Earned: ",
+                      label2: wallet.points),
+                if (_date.isNotEmpty)
+                  _CardText(label: "Date", label2: _date),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            flex: 2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: wallet.posterImage == null
+                  ? Image.asset("Assets/walletCard.png")
+                  : Image.network(
+                      Api.baseImageUrl + wallet.posterImage!,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CardText extends StatelessWidget {
+  const _CardText({
+    Key? key,
+    this.label2,
+    this.label,
+  }) : super(key: key);
+
+  final String? label;
+  final String? label2;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          AppText(
+            "$label: ",
+            fontSize: 15,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
+          Expanded(
+            child: AppText(label2 ?? "",
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                maxLines: 3),
+          ),
+        ],
+      ),
+    );
   }
 }

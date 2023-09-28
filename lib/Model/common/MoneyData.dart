@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final moneyData = moneyDataFromJson(jsonString);
-
 import 'dart:convert';
 
 class MoneyData {

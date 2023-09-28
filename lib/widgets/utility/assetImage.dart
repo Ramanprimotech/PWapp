@@ -1,29 +1,19 @@
 import 'package:flutter/material.dart';
 
-class AssetImages extends StatelessWidget {
-  AssetImages(
-      {Key? key, required this.imageFromAsset, required this.widgetName})
-      : super(key: key);
-  ImageProvider<Object> imageFromAsset;
-  Widget widgetName;
+class BGImageWithChild extends StatelessWidget {
+  const BGImageWithChild({Key? key, this.imgUrl, this.child}) : super(key: key);
+  final String? imgUrl;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imageFromAsset,
-              fit: BoxFit.fill,
-              alignment: Alignment.topCenter,
-            ),
-          ),
-        ),
-        SingleChildScrollView(
-          child: widgetName,
-        ),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.fill,
+        image: AssetImage("Assets/${imgUrl ?? "loginBg.png"}"),
+      )),
+      child: child,
     );
   }
 }
