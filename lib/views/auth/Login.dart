@@ -114,7 +114,7 @@ class _LoginState extends State<Login> {
             TextButton(
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.all(14.0),
-                primary: Colors.white,
+                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
