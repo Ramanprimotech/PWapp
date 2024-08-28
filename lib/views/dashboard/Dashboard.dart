@@ -123,12 +123,12 @@ class _DashboardState extends State<Dashboard> {
           title: Text(
             Message().AppBarTitle,
             style: const TextStyle(
-                fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
+                fontSize: 20.0, color: Colors.white, fontFamily: 'texgyreadventor-regular'),
           ),
           backgroundColor: const Color(0xff4725a3),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.menu),
+              icon: const Icon(Icons.menu, color: Colors.white),
               onPressed: () {
                 actionSheetMethod(context);
               },
@@ -140,14 +140,16 @@ class _DashboardState extends State<Dashboard> {
         floatingActionButton: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 0.2),
-            shape: BoxShape.circle,
+            shape: BoxShape.circle, // Ensures the container is circular
           ),
           child: FloatingActionButton(
             backgroundColor: const Color(0xff4725a3),
+            shape: CircleBorder(), // Ensures the button itself is circular
             child: SizedBox(
-                height: 35.0,
-                width: 35.0,
-                child: Image.asset("Assets/qr-scan.png")),
+              height: 35.0,
+              width: 35.0,
+              child: Image.asset("Assets/qr-scan.png"),
+            ),
             onPressed: () {
               setState(() {
                 _selectedTab = 2;
@@ -156,6 +158,7 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          height: 65,
           shape: const CircularNotchedRectangle(),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           color: const Color.fromRGBO(255, 255, 255, 1.0),
@@ -164,8 +167,8 @@ class _DashboardState extends State<Dashboard> {
             children: <Widget>[
               IconButton(
                 icon: _selectedTab == 0
-                    ? Image.asset("Assets/home-active.png")
-                    : Image.asset("Assets/home.png"),
+                    ? Image.asset("Assets/home-active.png",height: 30,width: 30,)
+                    : Image.asset("Assets/home.png",height: 30,width: 30,),
                 onPressed: () {
                   setState(() {
                     _selectedTab = 0;
@@ -177,8 +180,8 @@ class _DashboardState extends State<Dashboard> {
               ),
               IconButton(
                 icon: _selectedTab == 1
-                    ? Image.asset("Assets/reward-active.png")
-                    : Image.asset("Assets/reward.png"),
+                    ? Image.asset("Assets/reward-active.png",height: 35,width: 35,)
+                    : Image.asset("Assets/reward.png",height: 35,width: 35,),
                 onPressed: () {
                   setState(() {
                     _selectedTab = 1;

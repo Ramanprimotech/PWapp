@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
           title: Text(
             Message().AppBarTitle,
             style: const TextStyle(
-                fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
+                fontSize: 20.0, color: Colors.white, fontFamily: 'texgyreadventor-regular'),
           ),
           backgroundColor: const Color(0xff4725a3),
         ),
@@ -114,7 +114,6 @@ class _LoginState extends State<Login> {
             TextButton(
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.all(14.0),
-                backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

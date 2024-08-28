@@ -148,6 +148,7 @@ class _RegisterVCState extends State<RegisterVC> {
           leading: Visibility(
             visible: page > 0,
             child: BackButton(
+              color: Colors.white,
               onPressed: () {
                 _myPageView.animateToPage(page - 1,
                     duration: const Duration(microseconds: 10),
@@ -158,7 +159,7 @@ class _RegisterVCState extends State<RegisterVC> {
           title: Text(
             Message().AppBarTitle,
             style: const TextStyle(
-                fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
+                fontSize: 20.0, color: Colors.white, fontFamily: 'texgyreadventor-regular'),
           ),
           backgroundColor: const Color(0xff4725a3),
         ),

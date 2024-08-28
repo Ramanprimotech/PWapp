@@ -146,12 +146,12 @@ class _ContactUsState extends State<ContactUs> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: const Icon(Icons.arrow_back_ios_new)),
+                icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white,)),
             centerTitle: true,
             title: Text(
               Message().AppBarTitle,
               style: const TextStyle(
-                  fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
+                  fontSize: 20.0, color: Colors.white, fontFamily: 'texgyreadventor-regular'),
             ),
             backgroundColor: const Color(0xff4725a3),
           ),
