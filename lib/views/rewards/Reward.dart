@@ -197,13 +197,16 @@ class _RewardViewState extends State<RewardView> {
                               flex: 7,
                               child: Column(
                                 children: const <Widget>[
-                                  Text(
-                                    "PHYSICIAN'S WEEKLY",
-                                    style: TextStyle(
-                                        fontSize: 17.0,
-                                        color: Colors.white,
-                                        fontFamily: "Garamond",
-                                        fontWeight: FontWeight.w200),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10.0,left: 10.0),
+                                    child: Text(
+                                      "PHYSICIAN'S WEEKLY",
+                                      style: TextStyle(
+                                          fontSize: 17.0,
+                                          color: Colors.white,
+                                          fontFamily: "Garamond",
+                                          fontWeight: FontWeight.w200),
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Text(
