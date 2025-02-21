@@ -264,7 +264,7 @@ class _CongratulationVCState extends State<CongratulationVC> {
               title: Text(
                 Message().AppBarTitle,
                 style: const TextStyle(
-                    fontSize: 20.0, fontFamily: 'texgyreadventor-regular'),
+                    fontSize: 20.0, color: Colors.white, fontFamily: 'texgyreadventor-regular'),
               ),
               backgroundColor: const Color(0xff4725a3),
             ),

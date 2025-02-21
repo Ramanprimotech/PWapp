@@ -233,7 +233,7 @@ class _HomeState extends State<Home> {
                   Flexible(
                     flex: 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 15.0, left: 20.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,

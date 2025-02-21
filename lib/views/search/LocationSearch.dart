@@ -23,7 +23,7 @@ class _LocationSearchState extends State<LocationSearch> {
     Icons.search,
     color: Colors.white,
   );
-  Widget _appBarTitle = const Text('Search Address');
+  Widget _appBarTitle = const Text('Search Address',style: TextStyle(color: Colors.white),);
   String editText = "";
   String unit_location_desc = "";
 
