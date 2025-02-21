@@ -1,14 +1,12 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.8.10'
     repositories {
         google()
         mavenCentral()
     }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        
     }
 }
 
@@ -16,6 +14,56 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+    configurations.all {
+        resolutionStrategy {
+            // Force the browser library to a version that doesn't require API 34.
+            force 'androidx.browser:browser:1.5.0'
+
+            eachDependency { details ->
+                // Override fragment libraries
+                if (details.requested.group == "androidx.fragment") {
+                    details.useVersion "1.6.0"
+                }
+                // Override activity libraries
+                if (details.requested.group == "androidx.activity") {
+                    details.useVersion "1.7.2"
+                }
+                // The browser library is already forced above.
+                // Override window libraries
+                if (details.requested.group == "androidx.window") {
+                    details.useVersion "1.1.0"
+                }
+                // Override lifecycle libraries
+                if (details.requested.group == "androidx.lifecycle") {
+                    details.useVersion "2.6.1"
+                }
+                // Override core libraries
+                if (details.requested.group == "androidx.core") {
+                    details.useVersion "1.10.1"
+                }
+                // Override datastore libraries
+                if (details.requested.group == "androidx.datastore") {
+                    details.useVersion "1.0.0"
+                }
+                // Override experimental annotation library
+                if (details.requested.group == "androidx.annotation" &&
+                        details.requested.name.contains("experimental")) {
+                    details.useVersion "1.3.0"
+                }
+            }
+        }
+    }
+
+    // Force all Android subprojects to use compileSdkVersion 33
+    subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty("android")) {
+                project.android {
+                    compileSdkVersion 33
+                }
+            }
+        }
     }
 }
 
@@ -27,6 +75,94 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+
+
+/*
+buildscript {
+//    ext.kotlin_version = '1.7.10'
+//    ext.kotlin_version = '2.1.10'
+    ext.kotlin_version = '1.8.10'
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+//        classpath 'com.android.tools.build:gradle:7.2.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    }
+}
+
+*/
+/*allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}*//*
+
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            // Override fragment libraries
+            if (details.requested.group == "androidx.fragment") {
+                details.useVersion "1.6.0" // for example, use a version that supports API 31
+            }
+            // Override activity libraries
+            if (details.requested.group == "androidx.activity") {
+                details.useVersion "1.8.0" // adjust to a version compatible with API 31
+            }
+            // Override browser library
+            if (details.requested.group == "androidx.browser") {
+                details.useVersion "1.7.0"
+            }
+            // Override window libraries
+            if (details.requested.group == "androidx.window") {
+                details.useVersion "1.1.0"
+            }
+            // Override lifecycle libraries
+            if (details.requested.group == "androidx.lifecycle") {
+                // For many lifecycle artifacts, versions like 2.6.1 or earlier may be more appropriate
+                details.useVersion "2.6.1"
+            }
+            // Override core libraries
+            if (details.requested.group == "androidx.core") {
+                details.useVersion "1.12.0"
+            }
+            // Override datastore libraries
+            if (details.requested.group == "androidx.datastore") {
+                details.useVersion "1.0.0"
+            }
+            // Override experimental annotation library
+            if (details.requested.group == "androidx.annotation" && details.requested.name.contains("experimental")) {
+                details.useVersion "1.3.0"
+            }
+        }
+    }
+}
+
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
+*/

@@ -25,9 +25,10 @@ dependencies:
   flutter_offline:
   flutter_barcode_scanner: ^2.0.0
   path: ^1.8.1
-  package_info_plus: ^1.0.2
+  package_info_plus:
   crypto: ^3.0.2
-  device_info_plus: ^8.0.0
+#  device_info_plus: ^8.0.0
+  device_info_plus: ^11.3.0
   geolocator: ^9.0.2
   geocoding: ^2.0.5
   responsive_builder: ^0.7.0
