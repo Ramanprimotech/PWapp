@@ -116,7 +116,7 @@ class _WallboardState extends State<Wallboard> {
   Future getImageFromSource(ImageSource source) async {
     try {
       final image = await ImagePicker()
-          .pickImage(source: source);
+          .pickImage(source: source, maxHeight: 1500, maxWidth: 1500);
       if (image == null) {
         return;
       } else {

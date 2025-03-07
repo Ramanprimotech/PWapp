@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       Map payload = {"version": version};
       var response = await http.post(
-        Uri.parse("https://perks.physiciansweekly.com/api/version"),
+        Uri.parse("${Api.baseUrl}${Api().version}"),
         body: payload,
       );
       if (response.statusCode == 200) {
@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
       data.success == true ? isAllowed = true : false;
 
       if (!isAllowed) {
-        print("API[${data.version}] == APP[$version]");
+        debugPrint("API[${data.version}] == APP[$version]");
       }
 
       return isAllowed;
@@ -105,13 +105,13 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const AppText("Partner Perks",
-                    color: Colors.black, fontSize: 22),
+                    color: Colors.black, fontSize: 20),
                 AppText(
                   data.message ??
                       "Exciting changes are on the way. Thanks for your patience, we'll be back shortly.",
                   color: Colors.black,
-                  fontSize: 18,
-                  maxLines: 6,
+                  fontSize: 16,
+                  maxLines: 10,
                   textAlign: TextAlign.center,
                   padding: const EdgeInsets.only(top: 18, bottom: 16),
                 ),

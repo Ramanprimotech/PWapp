@@ -18,7 +18,7 @@ dependencies:
   flutter_progress_hud:
   shared_preferences: any
   provider: any
-  cached_network_image:
+  cached_network_image: ^3.2.3
   uuid: ^3.0.7
   image_picker: ^0.8.5+3
   date_format:

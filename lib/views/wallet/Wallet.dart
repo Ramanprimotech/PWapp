@@ -1,4 +1,6 @@
+
 import 'dart:developer';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:http/http.dart' as http;
 import 'package:pwlp/pw_app.dart';
@@ -150,59 +152,61 @@ class _WalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isWallet = wallet.catgory == "scanned_posters";
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.white24,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                AppText(
-                  isWallet
-                      ? "Scanned Poster"
-                      : wallet.catgory.toString() == "redemption"
-                          ? wallet.catgory.toString() == "redemption"
-                              ? "Wallet"
-                              : "Redemption"
-                          : "Wallboard Poster",
-                  fontSize: 20,
-                ),
-                const SizedBox(height: 8),
-                if (wallet.specialty.isNotEmpty)
-                  _CardText(label: "Specialty", label2: wallet.specialty),
-                if (wallet.isApproved != "")
-                  _CardText(label: "Status", label2: wallet.isApproved),
-                if (wallet.points != "0")
-                  _CardText(
-                      label: isWallet ? "Redeemed: " : "Earned: ",
-                      label2: wallet.points),
-                if (_date.isNotEmpty)
-                  _CardText(label: "Date", label2: _date),
-              ],
+    return GestureDetector(
+      onTap: () {
+        debugPrint(wallet.posterImage);
+        debugPrint('wallet.posterImage');
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white24,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AppText(
+                    isWallet
+                        ? "Scanned Poster"
+                        : wallet.catgory.toString() == "redemption"
+                            ? wallet.catgory.toString() == "redemption"
+                                ? "Wallet"
+                                : "Redemption"
+                            : "Wallboard Poster",
+                    fontSize: 20,
+                  ),
+                  const SizedBox(height: 8),
+                  if (wallet.specialty.isNotEmpty)
+                    _CardText(label: "Specialty", label2: wallet.specialty),
+                  if (wallet.isApproved != "")
+                    _CardText(label: "Status", label2: wallet.isApproved),
+                  if (wallet.points != "0")
+                    _CardText(
+                        label: isWallet ? "Redeemed: " : "Earned: ",
+                        label2: wallet.points),
+                  if (_date.isNotEmpty) _CardText(label: "Date", label2: _date),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            flex: 2,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: wallet.posterImage == null
-                  ? Image.asset("Assets/walletCard.png")
-                  : Image.network(
-                      Api.baseImageUrl + wallet.posterImage!,
-                      fit: BoxFit.cover,
-                    ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 2,
+              child: CachedNetworkImage(
+                imageUrl: "${Api.baseImageUrl}${wallet.posterImage!}",
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    Image.asset("Assets/walletCard.png"),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
