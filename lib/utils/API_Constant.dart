@@ -41,7 +41,7 @@ class Api {
   final get_notification = "get_notification";
   final contact_us = "contact-us-app";
   final userSession = "check_user";
-  final delete_account = "delete-account";
+  final userDelete = "delete-account";
 
   /// Tango Card Method Name
   final orders = "orders";

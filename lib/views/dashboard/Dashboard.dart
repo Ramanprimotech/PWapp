@@ -107,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                         "to",
                         () async {
                           bool isSuccess =
-                              await postUserId(apiUrl: Api().userSession);
+                              await postUserId(apiUrl: Api().userDelete);
 
                           if (isSuccess) {
                             SharedPreferences sharedPreferences =
