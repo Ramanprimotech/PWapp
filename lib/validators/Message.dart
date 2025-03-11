@@ -15,6 +15,7 @@ class Message {
   final Password = "Please enter your password";
   final PasswordCharacter = "Password must contain at least 6 characters";
   final userNotMatch = "Your session has timed out. Please log in or sign up again!";
+  final userDeleted = "Your account has been successfully deleted.";
   final PasswordMismatch = "Password mismatched";
   final PasswordEmpty = "Password is required ";
   final SuccessMsg = "Success Thanks for the detail.";

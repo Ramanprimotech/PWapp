@@ -7,6 +7,8 @@ import '../rewards/Reward.dart';
 import '../scanner/Scanner.dart';
 import 'package:pwlp/pw_app.dart';
 
+import '../user/api_call/api_call.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
 
@@ -94,6 +96,36 @@ class _DashboardState extends State<Dashboard> {
                 },
               ),
               CupertinoActionSheetAction(
+                child: const Text('Delete account'),
+                onPressed: () {
+                  dialogLogoutAlert(
+                    context,
+                    "one",
+                    () {
+                      dialogLogoutAlert(
+                        context,
+                        "to",
+                        () async {
+                          bool isSuccess =
+                              await postUserId(apiUrl: Api().userSession);
+
+                          if (isSuccess) {
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            sharedPreferences.clear();
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/Login', (Route<dynamic> route) => false);
+                            Utility().toast(context, Message().userDeleted);
+                          } else {
+                            Utility().toast(context, Message().ErrorMsg);
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              CupertinoActionSheetAction(
                 child: const Text('Logout'),
                 onPressed: () {
                   dialogLogoutAlert(context, "Do you want to Logout?", logout);
@@ -123,7 +155,9 @@ class _DashboardState extends State<Dashboard> {
           title: Text(
             Message().AppBarTitle,
             style: const TextStyle(
-                fontSize: 20.0, color: Colors.white, fontFamily: 'texgyreadventor-regular'),
+                fontSize: 20.0,
+                color: Colors.white,
+                fontFamily: 'texgyreadventor-regular'),
           ),
           backgroundColor: const Color(0xff4725a3),
           actions: <Widget>[
@@ -167,8 +201,16 @@ class _DashboardState extends State<Dashboard> {
             children: <Widget>[
               IconButton(
                 icon: _selectedTab == 0
-                    ? Image.asset("Assets/home-active.png",height: 30,width: 30,)
-                    : Image.asset("Assets/home.png",height: 30,width: 30,),
+                    ? Image.asset(
+                        "Assets/home-active.png",
+                        height: 30,
+                        width: 30,
+                      )
+                    : Image.asset(
+                        "Assets/home.png",
+                        height: 30,
+                        width: 30,
+                      ),
                 onPressed: () {
                   setState(() {
                     _selectedTab = 0;
@@ -180,8 +222,16 @@ class _DashboardState extends State<Dashboard> {
               ),
               IconButton(
                 icon: _selectedTab == 1
-                    ? Image.asset("Assets/reward-active.png",height: 35,width: 35,)
-                    : Image.asset("Assets/reward.png",height: 35,width: 35,),
+                    ? Image.asset(
+                        "Assets/reward-active.png",
+                        height: 35,
+                        width: 35,
+                      )
+                    : Image.asset(
+                        "Assets/reward.png",
+                        height: 35,
+                        width: 35,
+                      ),
                 onPressed: () {
                   setState(() {
                     _selectedTab = 1;

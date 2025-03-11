@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
             await SharedPreferences.getInstance();
         if (sharedPreferences.getString("userID") == null) {
           Navigator.of(context).pushReplacementNamed('/Login');
-        } else if(isSuccess){
+        } else if(!isSuccess){
           SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
           sharedPreferences.clear();
           Navigator.of(context)
