@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -200,7 +199,13 @@ class _WalletCard extends StatelessWidget {
               flex: 2,
               child: CachedNetworkImage(
                 imageUrl: "${Api.baseImageUrl}${wallet.posterImage!}",
-                placeholder: (context, url) => CircularProgressIndicator(),
+                placeholder: (context, url) => const Row(
+                  children: [
+                    SizedBox(
+                        height: 80, width: 80,
+                        child: CircularProgressIndicator()),
+                  ],
+                ),
                 errorWidget: (context, url, error) =>
                     Image.asset("Assets/walletCard.png"),
               ),

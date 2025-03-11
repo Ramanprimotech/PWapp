@@ -15,7 +15,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  /// Text Editting Controllers
   late TextEditingController _EmailTF;
   late TextEditingController _PasswordTF;
   late TextEditingController _forgotPsdController;

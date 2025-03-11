@@ -2,6 +2,8 @@ import 'package:http/http.dart' as http;
 import 'package:pwlp/Model/auth/version_response.dart';
 import 'package:pwlp/pw_app.dart';
 
+import '../user/api_call/api_call.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -17,11 +19,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ToastContext().init(context);
+    });
     startTime();
   }
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -76,6 +82,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() async {
+    bool isSuccess =
+    await postUserId(apiUrl: Api().userSession);
     await checkVersion(version: version.toString()).then((value) async {
       canNavigateInside = true;
       if (value == true) {
@@ -83,7 +91,13 @@ class _SplashScreenState extends State<SplashScreen> {
             await SharedPreferences.getInstance();
         if (sharedPreferences.getString("userID") == null) {
           Navigator.of(context).pushReplacementNamed('/Login');
-        } else {
+        } else if(isSuccess){
+          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          sharedPreferences.clear();
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/Login', (Route<dynamic> route) => false);
+          Utility().toast(context, Message().userNotMatch);
+        }else {
           Navigator.of(context).pushReplacementNamed('/Dashboard');
         }
       } else {

@@ -26,10 +26,11 @@ class _CongratulationVCState extends State<CongratulationVC> {
       'points': sharedPreferences.getString("points").toString(),
     };
     var response = await http.post(
-        Uri.parse("${Api.baseUrl}" + "${Api().get_user_blance}"),
+        Uri.parse("${Api.baseUrl}${Api().get_user_blance}"),
         body: data);
 
     if (response.statusCode == 200) {
+      debugPrint(response.toString());
       setState(() {
         moneyData = MoneyData.fromJson(json.decode(response.body));
         moneyD = double.parse(moneyData.data!.money!);

@@ -34,13 +34,18 @@ class _HomeState extends State<Home> {
   dashboardAPI() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences = await SharedPreferences.getInstance();
+    var userID = sharedPreferences.getString("userID");
     Map data = {
       'user_id': sharedPreferences.getString("userID"),
     };
     var response = await http.post(
-        Uri.parse("${Api.baseUrl}" "${Api().user_dashboard}"),
+        Uri.parse("${Api.baseUrl}${Api().user_dashboard}"),
         body: data);
     if (response.statusCode == 200) {
+      debugPrint('Start');
+      debugPrint('User ID ${userID.toString()}');
+      debugPrint('Response ${response.body.toString()}');
+      debugPrint('End');
       final user_dashboardData =
           DashboardData.fromJson(json.decode(response.body));
       double moneyD = double.parse(user_dashboardData.data!.money!);

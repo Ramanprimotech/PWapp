@@ -1,3 +1,4 @@
+
 ///Base URL
 abstract class BaseUrl {
   static const String live = "https://perks.physiciansweekly.com/api/";
@@ -12,12 +13,11 @@ abstract class BaseUrl {
       "https://integration-api.tangocard.com/raas/v2/";
 }
 
-const String kAppVersion = "2.0.1";
 
 class Api {
-  static const String baseUrl = BaseUrl.live;
-  static const String baseImageUrl = BaseUrl.liveImage;
-  static const String baseTangoCardUrl = BaseUrl.liveTangoCard;
+  static const String baseUrl = BaseUrl.stageUrl;
+  static const String baseImageUrl = BaseUrl.stageImage;
+  static const String baseTangoCardUrl = BaseUrl.stageTangoCard;
 
   /// Method Name
   final version = "version";
@@ -40,6 +40,8 @@ class Api {
   final add_poster_image = "add_poster_image";
   final get_notification = "get_notification";
   final contact_us = "contact-us-app";
+  final userSession = "check_user";
+  final delete_account = "delete-account";
 
   /// Tango Card Method Name
   final orders = "orders";
