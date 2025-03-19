@@ -1,20 +1,21 @@
 import 'package:http/http.dart' as http;
 import '../../../pw_app.dart';
 
-Future<bool> postUserId({String? apiUrl}) async {
+Future<bool> postUserId({String? apiUrl, bool isAccountDelete = false}) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   try {
     final response = await http
         .post(
-      Uri.parse('${Api.baseUrl}$apiUrl'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"user_id": sharedPreferences.getString("userID")}),
-    )
+          Uri.parse('${Api.baseUrl}$apiUrl'),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({"user_id": sharedPreferences.getString("userID")}),
+        )
         .timeout(const Duration(seconds: 10)); // Timeout after 10 seconds
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      if (responseBody["success"] == true) {
+      if (responseBody["success"] == true
+          || responseBody["status"] == "success") {
         debugPrint("Success: ${response.body}");
         return true;
       } else {

@@ -8,6 +8,9 @@ import '../scanner/Scanner.dart';
 import 'package:pwlp/pw_app.dart';
 
 import '../user/api_call/api_call.dart';
+import '../user/delete_account/delete_account.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -97,33 +100,39 @@ class _DashboardState extends State<Dashboard> {
               ),
               CupertinoActionSheetAction(
                 child: const Text('Delete account'),
-                onPressed: () {
-                  dialogLogoutAlert(
-                    context,
-                    "one",
-                    () {
-                      dialogLogoutAlert(
-                        context,
-                        "to",
-                        () async {
-                          bool isSuccess =
-                              await postUserId(apiUrl: Api().userDelete);
-
-                          if (isSuccess) {
-                            SharedPreferences sharedPreferences =
-                                await SharedPreferences.getInstance();
-                            sharedPreferences.clear();
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/Login', (Route<dynamic> route) => false);
-                            Utility().toast(context, Message().userDeleted);
-                          } else {
-                            Utility().toast(context, Message().ErrorMsg);
-                          }
-                        },
-                      );
-                    },
-                  );
-                },
+                onPressed: (){
+                  showDeleteAccountDialog(context);
+                }
+                // onPressed: (){
+                //   dialogLogoutAlert(
+                //     context,
+                //     "one",
+                //     () {
+                //       dialogLogoutAlert(
+                //         context,
+                //         "to",
+                //         () async {
+                //           // bool isSuccess =
+                //           //     await postUserId(apiUrl: Api().userDelete, isAccountDelete: false);
+                //           Nav
+                //           Utility().toast(context, Message().userDeleted);
+                //
+                //           // if (isSuccess) {
+                //           //   Utility().toast(context, Message().userDeleted);
+                //           //   SharedPreferences sharedPreferences =
+                //           //       await SharedPreferences.getInstance();
+                //           //   sharedPreferences.clear();
+                //           //   Navigator.of(context).pushNamedAndRemoveUntil(
+                //           //       '/Login', (Route<dynamic> route) => false);
+                //           //   Utility().toast(context, Message().userDeleted);
+                //           // } else {
+                //           //   Utility().toast(context, Message().ErrorMsg);
+                //           // }
+                //         },
+                //       );
+                //     },
+                //   );
+                // },
               ),
               CupertinoActionSheetAction(
                 child: const Text('Logout'),
@@ -147,6 +156,7 @@ class _DashboardState extends State<Dashboard> {
     }
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.transparent,
